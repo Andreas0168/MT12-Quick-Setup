@@ -432,4 +432,3 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	return editMode, lcdCnt, iSel, groupNum
 end
 return display
--- return {display = display}

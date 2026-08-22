@@ -392,4 +392,3 @@ end
 	return editMode, lcdCnt, iSel, groupNum
 end
 return display
--- return {display = display}

@@ -305,19 +305,19 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		x = x + 3
 	end
 
-	local battMin = getGeneralSettings().battMin --Draws the Battery Symbol
+	local battMin = getGeneralSettings().battMin --Draws the Battery Symbol and the Voltage in percent
 	local battVolt = getSourceValue(qs_sourceBat)
-	local battValue = floor((battVolt - battMin) / (getGeneralSettings().battMax - battMin) * 13)
-	battValue = battValue < 0 and 0 or battValue > 13 and 13 or battValue
+	local battPercent = math.ceil((battVolt - battMin) / (getGeneralSettings().battMax - battMin) * 100)
+	battPercent = battPercent < 0 and 0 or battPercent > 100 and 100 or battPercent
+	local battValue = math.ceil(battPercent * .13)
 	qs_setAll(93 - modelNameX * .33, battValue > 0 and 1 or 2, 6, 9, battValue > 0 and 0 or 90, .5, 1)
 	qs_gfRec(0, 0, 10, 14, 1, SOLID, ERASE)
 	qs_gfRec(0, 0, 10, 14, 0)
 	qs_line(2, -2, 8, -2)
 	qs_line(2, -1, 8, -1)
 	qs_gfRec(0, 14 - battValue, 10, 14, 1)
-	local bt = string.format('%.1f', battVolt)..'V'
-	drawText(92 - modelNameX * .33, 3, bt, SMLSIZE + RIGHT)
-	if battVolt <= battMin then qs_setPopup({getText(3)..bt, getText(4)}) end
+	drawText(93 - modelNameX * .33, 3, battPercent.."%", SMLSIZE + RIGHT)
+	if battVolt <= battMin then qs_setPopup({getText(3)..battPercent.."%", getText(4)}) end
 
 	if glV6 ~= trimThr and valSrcThr > -19 and valSrcThr < 19 then
 		trimThr = glV6 qs_init(1) qs_init(1)

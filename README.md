@@ -31,9 +31,12 @@ A professional **Lua script** for the RadioMaster MT12 transmitter, specifically
 ## 🛠️ Installation
 
 1. Connect your RadioMaster MT12 to your PC via USB (in SD Card storage mode) or remove the MicroSD card.
-2. Copy the script files into the following directory on the SD card:
+2. Copy all files from the folders, just as they appear in the zip file, directly onto the SD card.:
    ```text
-   /SCRIPTS/TELEMETRY/
+   /BACKUP
+   /QSetup
+   /SCRIPTS
+   /SOUNDS
    ```
 3. Safely eject the card/transmitter and restart your MT12.
 
@@ -85,7 +88,6 @@ Ein professionelles **Lua-Skript** für die RadioMaster MT12 Fernsteuerung, spez
    /QSetup
    /SCRIPTS
    /SOUNDS
-   /
    ```
 3. Trenne die Verbindung sicher und starte die MT12 neu.
 

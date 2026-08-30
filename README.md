@@ -31,7 +31,7 @@ A professional **Lua script** for the RadioMaster MT12 transmitter, specifically
 ## 🛠️ Installation
 
 1. Connect your RadioMaster MT12 to your PC via USB (in SD Card storage mode) or remove the MicroSD card.
-2. Copy all files from the folders, just as they appear in the zip file, directly onto the SD card.:
+2. Copy all files from the folders, just as they appear in the zip file, directly onto the SD card:
    ```text
    /BACKUP
    /QSetup

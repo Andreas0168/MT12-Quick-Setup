@@ -42,7 +42,7 @@ A professional **Lua script** for the RadioMaster MT12 transmitter, specifically
 
 ## 📖 How to Use
 
-1. Go to the **Model** tab (telemetry) within the MT12 **Model Settings**.
+1. Go to the **Model** tab in the MT12 **Model Settings**..
 2. Select an empty slot for a new model.
 3. Press the scroll wheel and select **Restore Model**.
 4. Select **QSetup-2026-08-30** for standard configuration or **QS4WS-2026-08-30** for 4-wheel steering.
@@ -94,7 +94,7 @@ Ein professionelles **Lua-Skript** für die RadioMaster MT12 Fernsteuerung, spez
 
 ## 📖 Nutzung
 
-1. Gehe in den **Modelleinstellungen** der MT12 auf die Registerkarte **Modell** (Telemetrie).
+1. Gehe in den **Modelleinstellungen** der MT12 auf die Registerkarte **Modell**.
 2. Wähle einen freien Slot für ein neues Modell.
 3. Drücke die Radtaste und wähle **Modell wiederherstellen**.
 4. Wähle **QSetup-2026-08-30** für Standard oder **QS4WS-2026-08-30** für 4-fach Lenkung aus.

@@ -42,11 +42,12 @@ A professional **Lua script** for the RadioMaster MT12 transmitter, specifically
 
 ## 📖 How to Use
 
-1. Open your **Model Settings** on the MT12 and navigate to the **Telemetry** tab.
-2. Scroll down to the **Screen Settings** section.
-3. Choose an empty slot, change the type to **Script**, and select `QSETUP`.
-4. Return to the home screen and press and hold the **PAGE** button to launch the Lua script.
-5. Use the roller wheel and keys of the MT12 to navigate between the main menu and the submenus.
+1. Go to the **Model** tab (telemetry) within the MT12 **Model Settings**.
+2. Select an empty slot for a new model.
+3. Press the scroll wheel and select **Restore Model**.
+4. Select **QSetup-2026-08-30** for standard configuration or **QS4WS-2026-08-30** for 4-wheel steering.
+5. Return to the main menu using **EXIT** and press the **TELE** button.
+6. Use the MT12's scroll wheel and buttons to navigate between the main menu and submenus.
 
 ## 📝 License
 
@@ -93,11 +94,12 @@ Ein professionelles **Lua-Skript** für die RadioMaster MT12 Fernsteuerung, spez
 
 ## 📖 Nutzung
 
-1. Gehe in den **Modelleinstellungen** der MT12 auf die Registerkarte **Telemetry** (Telemetrie).
-2. Scrolle nach unten zu den **Screeneinstellungen** (Bildschirme).
-3. Wähle einen freien Slot, ändere den Typ auf **Script** und wähle `QSETUP` aus.
-4. Kehre zum Hauptbildschirm zurück und halte die **TELE**-Taste gedrückt, um das Lua-Skript zu starten.
-5. Nutze das Drehrad und die Tasten der MT12, um zwischen dem Hauptmenü und den Untermenüs zu navigieren.
+1. Gehe in den **Modelleinstellungen** der MT12 auf die Registerkarte **Modell** (Telemetrie).
+2. Wähle einen freien Slot für ein neues Modell.
+3. Drücke die Radtaste und wähle **Modell wiederherstellen**.
+4. Wähle **QSetup-2026-08-30** für Standard oder **QS4WS-2026-08-30** für 4-fach Lenkung aus.
+5. Gehe mit **EXIT** zurück in das Hauptmenü und drücke die Taste **TELE**.
+6. Nutze das Drehrad und die Tasten der MT12, um zwischen dem Hauptmenü und den Untermenüs zu navigieren.
 
 ## 📝 Lizenz
 

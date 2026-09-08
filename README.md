@@ -1,4 +1,4 @@
-Here is a setup tool for the Radiomaster MT12 to quickly setup the most of your RC-Car and save this for every truck and more.
+Here is a setup tool for the Radiomaster MT12 to quickly setup the most of your RC-Car and save this for every track and more.
 If you like that you can support me with a donation via PayPal to a.kassner@live.de.
 To download it click on MT12 Quick Setup.zip
 

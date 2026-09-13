@@ -46,7 +46,7 @@ A professional **Lua script** for the RadioMaster MT12 transmitter, specifically
 2. Select an empty slot for a new model.
 3. Press the scroll wheel and select **Restore Model**.
 4. Select **QSetup** for standard configuration or **QS4WS** for 4-wheel steering.
-5. Press the dial button again and select the new model.
+5. Press the scroll wheel again and select the new model.
 6. Return to the main menu using **EXIT** and press the **TELE** button.
 7. Use the MT12's scroll wheel and buttons to navigate between the main menu and submenus.
 

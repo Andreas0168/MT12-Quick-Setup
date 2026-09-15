@@ -39,6 +39,7 @@ A professional **Lua script** for the RadioMaster MT12 transmitter, specifically
    /SOUNDS
    ```
 3. Safely eject the card/transmitter and restart your MT12.
+<img width="198" height="46" alt="ASPdotNET_logo" src="https://github.com/user-attachments/assets/6276b576-471e-4fd0-af4b-ec1c6a78209e" />
 
 ## 📖 How to Use
 

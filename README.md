@@ -55,6 +55,7 @@ A professional **Lua script** for the RadioMaster MT12 transmitter, specifically
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 <img width="128" height="64" alt="screen-2026-09-15-080341" src="https://github.com/user-attachments/assets/5f887a36-4f50-4a5e-a236-d1bfefe1ef53" />
+[screen-2026-09-15-080341.bmp](https://github.com/user-attachments/files/32260182/screen-2026-09-15-080341.bmp)
 
 # MT12 Quick Setup
 

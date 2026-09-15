@@ -54,7 +54,45 @@ A professional **Lua script** for the RadioMaster MT12 transmitter, specifically
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-<img width="128" height="64" alt="screen-2026-09-15-080341" src="https://github.com/user-attachments/assets/5f887a36-4f50-4a5e-a236-d1bfefe1ef53" />
+<img width="256" height="128" alt="screen-2026-09-15-080341" src="https://github.com/user-attachments/assets/3b632f9e-d798-4a69-b7b9-a6013e1b633a" />
+<img width="256" height="128" alt="screen-2026-09-15-080346" src="https://github.com/user-attachments/assets/863a4a9d-d793-4880-88af-a2a51e18df58" />
+<img width="256" height="128" alt="screen-2026-09-15-080410" src="https://github.com/user-attachments/assets/8871ec79-8c01-4163-ba3b-6160090be7f0" />
+<img width="256" height="128" alt="screen-2026-09-15-080423" src="https://github.com/user-attachments/assets/4a8313c9-1dd9-4264-b2bd-2d1191eb7428" />
+<img width="256" height="128" alt="screen-2026-09-15-080509" src="https://github.com/user-attachments/assets/2c5f65f2-9d7f-4e18-b11e-3d79317bdaae" />
+<img width="256" height="128" alt="screen-2026-09-15-080547" src="https://github.com/user-attachments/assets/9b685c73-820b-48b7-8a37-47d7d1a1e4e3" />
+<img width="256" height="128" alt="screen-2026-09-15-080607" src="https://github.com/user-attachments/assets/078616dd-ac80-455c-8494-6b916873e23e" />
+<img width="256" height="128" alt="screen-2026-09-15-080611" src="https://github.com/user-attachments/assets/c89e01de-e048-4f6e-b983-63a2f5b43ae0" />
+<img width="256" height="128" alt="screen-2026-09-15-080618" src="https://github.com/user-attachments/assets/f10e526a-a4ba-42d5-84f6-98c31a997fbf" />
+<img width="256" height="128" alt="screen-2026-09-15-080630" src="https://github.com/user-attachments/assets/8ef636d7-35d3-4715-8bd8-3c68c0bf6f97" />
+<img width="256" height="128" alt="screen-2026-09-15-080639" src="https://github.com/user-attachments/assets/61622b9a-b5fb-4004-b01c-6995e0dbd74b" />
+<img width="256" height="128" alt="screen-2026-09-15-080656" src="https://github.com/user-attachments/assets/5064a3f1-619c-4567-b04b-efa620ea6446" />
+<img width="256" height="128" alt="screen-2026-09-15-080717" src="https://github.com/user-attachments/assets/9b0cbfa2-3fc7-4008-8629-f8c25e22ccdc" />
+<img width="256" height="128" alt="screen-2026-09-15-080741" src="https://github.com/user-attachments/assets/07397ae4-bf79-4cec-9efe-f2514a9385bb" />
+<img width="256" height="128" alt="screen-2026-09-15-080753" src="https://github.com/user-attachments/assets/58c92cbe-1f71-4d86-9e1d-f236fb99904e" />
+<img width="256" height="128" alt="screen-2026-09-15-080815" src="https://github.com/user-attachments/assets/e19e5693-513b-4f4e-ba99-6a654a67f959" />
+<img width="256" height="128" alt="screen-2026-09-15-080836" src="https://github.com/user-attachments/assets/666813c8-8956-4082-a6cc-4a814b667fdd" />
+<img width="256" height="128" alt="screen-2026-09-15-080908" src="https://github.com/user-attachments/assets/15799ff8-9a8f-474a-bb78-871504828ea2" />
+<img width="256" height="128" alt="screen-2026-09-15-080922" src="https://github.com/user-attachments/assets/df2b16b0-75d1-4660-b829-d49b14e34f49" />
+<img width="256" height="128" alt="screen-2026-09-15-080933" src="https://github.com/user-attachments/assets/da406dfb-cc4d-4936-8f70-3c57617c7593" />
+<img width="256" height="128" alt="screen-2026-09-15-080947" src="https://github.com/user-attachments/assets/890e56dc-5def-454e-9e73-e931f7dc0770" />
+<img width="256" height="128" alt="screen-2026-09-15-081047" src="https://github.com/user-attachments/assets/a7c1f29a-ab29-461e-b8aa-de8e61db297d" />
+<img width="256" height="128" alt="screen-2026-09-15-081105" src="https://github.com/user-attachments/assets/90b585e4-ebbf-4266-8a9a-e08d5b10ca47" />
+<img width="256" height="128" alt="screen-2026-09-15-081206" src="https://github.com/user-attachments/assets/d6ae7a2a-604b-43f8-91db-7521f0e2e153" />
+<img width="256" height="128" alt="screen-2026-09-15-081214" src="https://github.com/user-attachments/assets/1183f3cb-7208-426c-9990-ebc10aa82508" />
+<img width="256" height="128" alt="screen-2026-09-15-081222" src="https://github.com/user-attachments/assets/a05ff6ce-4f1a-435d-b2de-8710eb902ada" />
+<img width="256" height="128" alt="screen-2026-09-15-081233" src="https://github.com/user-attachments/assets/80f11277-4214-4375-8078-63e4e7d97309" />
+<img width="256" height="128" alt="screen-2026-09-15-081241" src="https://github.com/user-attachments/assets/2f8dd09b-7257-4a59-98c9-ba711464efad" />
+<img width="256" height="128" alt="screen-2026-09-15-081255" src="https://github.com/user-attachments/assets/a03ee107-a039-42fe-a5c3-eba46ec34346" />
+<img width="256" height="128" alt="screen-2026-09-15-081310" src="https://github.com/user-attachments/assets/85fbf406-a815-4e07-bc1b-c0df43d1b0f9" />
+<img width="256" height="128" alt="screen-2026-09-15-081318" src="https://github.com/user-attachments/assets/e0277e13-aee0-4061-9729-3610e6603ab5" />
+<img width="256" height="128" alt="screen-2026-09-15-081331" src="https://github.com/user-attachments/assets/337704e8-8b98-415f-aa5d-68654a000226" />
+<img width="256" height="128" alt="screen-2026-09-15-081355" src="https://github.com/user-attachments/assets/c72b6deb-3857-4239-803d-070d4240f93a" />
+<img width="256" height="128" alt="screen-2026-09-15-081434" src="https://github.com/user-attachments/assets/ab7343c3-2fb7-4cac-b068-a4eee998b525" />
+<img width="256" height="128" alt="screen-2026-09-15-081439" src="https://github.com/user-attachments/assets/03a2c574-c016-4988-b7c0-1f1f04633519" />
+<img width="256" height="128" alt="screen-2026-09-15-081512" src="https://github.com/user-attachments/assets/82075ecf-9a30-4c60-9953-2ec097e63499" />
+<img width="256" height="128" alt="screen-2026-09-15-081615" src="https://github.com/user-attachments/assets/fd1515d3-1697-4995-b2a7-53d87c6ad8b4" />
+<img width="256" height="128" alt="screen-2026-09-15-081623" src="https://github.com/user-attachments/assets/6e89c4fc-574b-4e66-9625-39306c1d3a17" />
+<img width="256" height="128" alt="screen-2026-09-15-081642" src="https://github.com/user-attachments/assets/74449f6d-53d6-4d8a-8f5e-701d88380251" />
 
 # MT12 Quick Setup
 

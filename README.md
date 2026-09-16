@@ -77,6 +77,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <img width="256" height="128" alt="screen-2026-09-15-080922" src="https://github.com/user-attachments/assets/df2b16b0-75d1-4660-b829-d49b14e34f49" />
 <img width="256" height="128" alt="screen-2026-09-16-144650" src="https://github.com/user-attachments/assets/bfb8951d-89f2-4d80-befc-0e6573b29de1" />
 <img width="256" height="128" alt="screen-2026-09-15-080933" src="https://github.com/user-attachments/assets/da406dfb-cc4d-4936-8f70-3c57617c7593" />
+<img width="256" height="128" alt="screen-2026-09-16-144655" src="https://github.com/user-attachments/assets/a06b12e0-e635-48c1-bac0-6972c609ecbb" />
 <img width="256" height="128" alt="screen-2026-09-15-080947" src="https://github.com/user-attachments/assets/890e56dc-5def-454e-9e73-e931f7dc0770" />
 <img width="256" height="128" alt="screen-2026-09-15-081047" src="https://github.com/user-attachments/assets/a7c1f29a-ab29-461e-b8aa-de8e61db297d" />
 <img width="256" height="128" alt="screen-2026-09-15-081105" src="https://github.com/user-attachments/assets/90b585e4-ebbf-4266-8a9a-e08d5b10ca47" />

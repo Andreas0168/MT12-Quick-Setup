@@ -155,7 +155,7 @@ HINWEIS: Die von mir erstellten Scripts laufen nur auf den Firmware-Versionen 2.
 Zum installieren einer passenden Firmware gehe zu
 https://buddy.edgetx.org/#/flash?source=cloudbuild&version=v2.10.6&target=mt12&selectedFlags=language%3DDE
 
-Benutzung auf eigenes Risiko. Ich übernehme keinerlei auf Haftung auf korekte Funktion oder jeder Art von Schäden welche durch die Nutzung meiner Scripts verursacht wurden.
+Benutzung auf eigenes Risiko. Ich übernehme keinerlei Haftung auf korekte Funktion oder jeder Art von Schäden welche durch die Nutzung meiner Scripts verursacht wurden.
 
 ## 📝 Lizenz
 

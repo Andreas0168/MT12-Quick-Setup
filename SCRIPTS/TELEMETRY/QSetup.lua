@@ -558,7 +558,7 @@ local function qs_run(event)
 		pageRun = pageLoad
 		runScript = runScript()
 		collectgarbage("collect")
-		if fstat(fn..'.lua') then del(fn..'.lua') end
+		--if fstat(fn..'.lua') then del(fn..'.lua') end
 	end
 	lcd.clear()
 	local iSel, grp = gsItemSel(), groupNum

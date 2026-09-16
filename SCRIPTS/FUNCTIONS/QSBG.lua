@@ -15,7 +15,7 @@ local ltLastSwitch = 0
 local ltDiff = 0
 local speakCnt = 0
 
-if fstat('/SCRIPTS/FUNCTIONS/QSBG.lua') then del('/SCRIPTS/FUNCTIONS/QSBG.lua') end
+--if fstat('/SCRIPTS/FUNCTIONS/QSBG.lua') then del('/SCRIPTS/FUNCTIONS/QSBG.lua') end
 
 local function qs_run()
 	if not qs_sourceThr then return end

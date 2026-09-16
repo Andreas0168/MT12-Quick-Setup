@@ -56,7 +56,7 @@ local function background()
 end
 
 local function init()
-	local fn = '/SCRIPTS/RGBLED/QSLED.lua' if fstat(fn) then del(fn) end
+--	local fn = '/SCRIPTS/RGBLED/QSLED.lua' if fstat(fn) then del(fn) end
 end
 
 return { run=run, background=background, init=init }

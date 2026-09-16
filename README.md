@@ -50,6 +50,10 @@ A professional **Lua script** for the RadioMaster MT12 transmitter, specifically
 6. Return to the main menu using **EXIT** and press the **TELE** button.
 7. Use the MT12's scroll wheel and buttons to navigate between the main menu and submenus.
 
+NOTE: The scripts I created run only on firmware versions 2.10.0 through 2.10.6.
+To install a compatible firmware version, go to https://buddy.edgetx.org/#/flash?source=cloudbuild&version=v2.10.6&target=mt12
+
+Use at your own risk. I assume no liability for correct operation or for any damage caused by the use of my scripts.
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
@@ -146,6 +150,11 @@ Ein professionelles **Lua-Skript** für die RadioMaster MT12 Fernsteuerung, spez
 5. Drücke die Radtaste erneut und wähle das neue Modell aus.
 6. Gehe mit **EXIT** zurück in das Hauptmenü und drücke die Taste **TELE**.
 7. Nutze das Drehrad und die Tasten der MT12, um zwischen dem Hauptmenü und den Untermenüs zu navigieren.
+
+HINWEIS: Die von mir erstellten Scripts laufen nur auf die Firmware-Versionen 2.10.0 bis 2.10.6.
+Zum installieren einer passenden Firmware gehe zu https://buddy.edgetx.org/#/flash?source=cloudbuild&version=v2.10.6&target=mt12&selectedFlags=language%3DDE
+
+Benutzung auf eigenes Risiko. Ich übernehme keinerlei auf Haftung auf korekte Funktion oder jeder Art von Schäden welche durch die Nutzung meiner Scripts verursacht wurden.
 
 ## 📝 Lizenz
 

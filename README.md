@@ -91,7 +91,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 <img width="256" height="128" alt="screen-2026-09-15-081512" src="https://github.com/user-attachments/assets/82075ecf-9a30-4c60-9953-2ec097e63499" />
 <img width="256" height="128" alt="screen-2026-09-15-081615" src="https://github.com/user-attachments/assets/fd1515d3-1697-4995-b2a7-53d87c6ad8b4" />
 <img width="256" height="128" alt="screen-2026-09-15-081623" src="https://github.com/user-attachments/assets/6e89c4fc-574b-4e66-9625-39306c1d3a17" />
-<img width="256" height="128" alt="screen-2026-09-15-081642" src="https://github.com/user-attachments/assets/74449f6d-53d6-4d8a-8f5e-701d88380251" />
+//<img width="256" height="128" alt="screen-2026-09-15-081642" src="https://github.com/user-attachments/assets/74449f6d-53d6-4d8a-8f5e-701d88380251" />
 
 # MT12 Quick Setup
 

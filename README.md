@@ -152,7 +152,7 @@ Ein professionelles **Lua-Skript** für die RadioMaster MT12 Fernsteuerung, spez
 7. Nutze das Drehrad und die Tasten der MT12, um zwischen dem Hauptmenü und den Untermenüs zu navigieren.
 
 HINWEIS: Die von mir erstellten Scripts laufen nur auf den Firmware-Versionen 2.10.0 bis 2.10.6.
-Zum installieren einer passenden Firmware gehe zu
+Zum installieren einer passenden Firmware gehe zu  
 https://buddy.edgetx.org/#/flash?source=cloudbuild&version=v2.10.6&target=mt12&selectedFlags=language%3DDE
 
 Benutzung auf eigenes Risiko. Ich übernehme keinerlei Haftung auf korekte Funktion oder jeder Art von Schäden welche durch die Nutzung meiner Scripts verursacht wurden.

@@ -211,11 +211,11 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 						lcd.drawText(64, 57, 'Avg: ' .. msStrg(floor(total / ltNumber)) .. ' Best: ' .. msStrg(qs_ltBest), CENTER)
 					end
 					if qs_ltActive == 1 then
-						if qs_ltLapTime == -1 then
-							drawText(64, 0, getText(31), MIDSIZE + CENTER)
-						else
+						if qs_ltLapTime then
 							drawText(1, 0, getText(26) .. ltNumber + 1, MIDSIZE)
 							drawText(127, 0, msStrg(qs_ltLapTime), MIDSIZE + RIGHT)
+						else
+							drawText(64, 0, getText(31), MIDSIZE + CENTER)
 						end
 						lcd.drawFilledRectangle(0, 0, 128, 12, 0)
 					else drawTitel(getText(25), MIDSIZE) end

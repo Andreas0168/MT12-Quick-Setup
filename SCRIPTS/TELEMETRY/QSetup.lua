@@ -24,7 +24,7 @@ local evt_SYS_LONG = 142
 local evt_EXIT_FIRST = 97
 
 qs_ACC = {
-	0,			-- on =
+	 0,		-- on =
 	.5,		-- forward =
 	.5			-- brake =
 }
@@ -95,6 +95,8 @@ local items = {
 	 6, 1}
 }
 
+local Start = 1
+ 
 local qs_sourceStr = 75		-- 75
 qs_sourceThr = 76				-- 76
 
@@ -150,8 +152,8 @@ function qs_playSignal(Frq, Dur)
 	playTone(Frq, Dur, 0, PLAY_BACKGROUND + PLAY_NOW,0)
 end
 
-local popupCnt = 30
-local popupText = {'Hello!', 'Welcome to', 'Quick Setup!'}
+local popupCnt = 0
+local popupText = {}
 local popupX = 26
 local popupY = 16
 local popupInv = 10
@@ -560,11 +562,13 @@ local function qs_run(event)
 		collectgarbage("collect")
 		--if fstat(fn..'.lua') then del(fn..'.lua') end
 	end
+
 	lcd.clear()
 	local iSel, grp = gsItemSel(), groupNum
 	editMode, lcdCnt, iSel, grp = runScript(groupNum, event, gsSiteNum(), iSel, qs_lang, editMode, lcdCnt,
 	channelStr, channelThr, getSourceValue(qs_sourceStr), getSourceValue(qs_sourceThr))
 	gsItemSel(iSel)
+
 	if grp ~= groupNum then pushGroup(grp) lcdCnt = 1 editMode = 1 end
 
 	-- local s = getSites()  -- Site indicator for menue navigation on the upper edge
@@ -594,16 +598,24 @@ local function qs_run(event)
 	return 0
 end
 
+-- init --
 function qs_init(ri)
 	if not ri then						-- initializes the following once
 		qs_rcCar = model.getInfo()
+		qs_sourceStr = getFieldInfo('ste').id			-- 75
+		qs_sourceThr = getFieldInfo('thr').id			-- 76
 		qs_sourceBat = getFieldInfo('tx-voltage').id	-- 241
 		qs_sourceSB = getFieldInfo('sb').id				-- 101
 		qs_sourceSC = getFieldInfo('sc').id				-- 102
 		qs_ltSwitch = 1
 		readConf()
 
-		local fn = '/SCRIPTS/TELEMETRY/QSetup.lua' if fstat(fn) then del(fn) end
+		if Start == 1 then Start = 0
+			local welcome = {'Hello!|Welcome to|Quick Setup!', 'Hallo!|Wilkommen zu|Quick Setup!'}
+			qs_setPopup({welcome[qs_lang]},30)
+		end
+
+		--local fn = '/SCRIPTS/TELEMETRY/QSetup.lua' if fstat(fn) then del(fn) end
 
 		local trims = {94, 93, 92, 95}
 		for n = 3, 6 do

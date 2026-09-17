@@ -66,7 +66,7 @@ local function qs_run()
 		ltLastSwitch = switch
 	else
 		ltRun = 0
-		qs_ltLapTime = -1
+		qs_ltLapTime = nil
 	end
 
 	local r, g, b = 0, 0, 0

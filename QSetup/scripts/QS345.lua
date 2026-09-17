@@ -1,5 +1,3 @@
-local evt_TELE_FIRST = 109
-
 local drawText = lcd.drawText
 local drawList = qs_drawList
 local saveDir = qs_path..'save/'

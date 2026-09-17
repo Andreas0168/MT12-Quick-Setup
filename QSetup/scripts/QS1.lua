@@ -1,7 +1,3 @@
-local evt_TELE_FIRST = 109
-local evt_SYS_LONG = 142
-local evt_MDL_FIRST = 108
-
 local saveDir = qs_path..'save/'
 local drawText = lcd.drawText
 local drehung = 0

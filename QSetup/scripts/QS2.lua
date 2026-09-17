@@ -1,6 +1,3 @@
-local evt_PAGER_FIRST = 101
-local evt_MDL_FIRST = 108
-
 local secondLine = 0
 local editValue = 0
 

@@ -1,26 +1,26 @@
 local evt_PAGEL_FIRST = 100
 local evt_PAGEL_REPT = 68
--- local evt_PAGEL_BREAK = 36
+-- evt_PAGEL_BREAK = 36
 
-local evt_PAGER_FIRST = 101
+ evt_PAGER_FIRST = 101
 local evt_PAGER_REPT = 69
--- local evt_PAGER_BREAK = 37
+-- evt_PAGER_BREAK = 37
 
-local evt_MDL_FIRST = 108
--- local evt_MDL__BREAK = 44
+ evt_MDL_FIRST = 108
+-- evt_MDL__BREAK = 44
 local evt_MDL_LONG = 140
--- local evt_MDL_REPT = 76
+-- evt_MDL_REPT = 76
 
--- local evt_TELE_FIRST = 109
--- local evt_TELE_BREAK = 45
--- local evt_TELE_LONG = 141
--- local evt_TELE_REPT = 77
+ evt_TELE_FIRST = 109
+-- evt_TELE_BREAK = 45
+-- evt_TELE_LONG = 141
+-- evt_TELE_REPT = 77
 
 local evt_SYS_FIRST = 110
--- local evt_SYS_BREAK = 46
-local evt_SYS_LONG = 142
+-- evt_SYS_BREAK = 46
+ evt_SYS_LONG = 142
 
--- local evt_ENTER_REPT = 66
+-- evt_ENTER_REPT = 66
 local evt_EXIT_FIRST = 97
 
 qs_ACC = {
@@ -152,11 +152,7 @@ function qs_playSignal(Frq, Dur)
 	playTone(Frq, Dur, 0, PLAY_BACKGROUND + PLAY_NOW,0)
 end
 
-local popupCnt = 0
-local popupText = {}
-local popupX = 26
-local popupY = 16
-local popupInv = 10
+local popupCnt, popupText, popupX, popupY, popupInv = 0, {}, 26, 16, 10
 function qs_setPopup(t, c, i)
 	popupInv = i or 10
 	popupText = {}
@@ -177,8 +173,7 @@ function qs_setPopup(t, c, i)
 	popupY = w >= 0 and w or 0
 end
 
-local adjCnt = 0
-local adjSndCnt = 0
+local adjCnt, adjSndCnt = 0, 0
 function qs_adjVal(value, vMin, vMax, step, event, freq)
 	adjCnt = adjCnt - 1
 	adjSndCnt = adjSndCnt - 1
@@ -209,11 +204,7 @@ function qs_adjVal(value, vMin, vMax, step, event, freq)
 	return value
 end
 
-local degre = math.pi / 180
-local gfx, gfy = 0, 0
-local gfrx, gfry = 10, 8
-local gfscale = 1
-local gfsin, gfcos = 1, 1
+local degre, gfx, gfy, gfrx, gfry, gfscale, gfsin, gfcos = math.pi / 180, 0, 0, 10, 8, 1, 1, 1
 
 function qs_setAngel(angle)
 	angle = angle * degre
@@ -227,12 +218,10 @@ local function rotatePoint(x, y)
 	return (x * gfcos - y * gfsin + gfrx) * gfscale + gfx, (x * gfsin + y * gfcos + gfry) * gfscale + gfy
 end
 
-local drawLine = lcd.drawLine
-local drawText = lcd.drawText
+local drawLine, drawText = lcd.drawLine, lcd.drawText
 
 function qs_line(x1, y1, x2, y2, pat, f)
-	local pat = pat or SOLID
-	local f = f or FORCE
+	local pat, f = pat or SOLID, f or FORCE
 	x1, y1 = rotatePoint(x1, y1)
 	x2, y2 = rotatePoint(x2, y2)
 	drawLine(x1, y1, x2, y2, pat, f)
@@ -245,8 +234,7 @@ end
 --end
 
 local function gfFTriangle(x1, y1, x2, y2, x3, y3, pat, f)
-	local pat = pat or SOLID
-	local f = f or FORCE
+	local pat, f = pat or SOLID, f or FORCE
 	if y1 > y3 then x1, y1, x3, y3 = x3, y3, x1, y1 end
 	if y1 > y2 then x1, y1, x2, y2 = x2, y2, x1, y1 end
 	if y2 > y3 then x2, y2, x3, y3 = x3, y3, x2, y2 end
@@ -261,12 +249,7 @@ local function gfFTriangle(x1, y1, x2, y2, x3, y3, pat, f)
 end
 
 function qs_gfRec(x1, y1, x2, y2, fill, pat, f)
-	local pat = pat or SOLID
-	local f = f or FORCE
-	local x3 = x1
-	local y3 = y2
-	local x4 = x2
-	local y4 = y1
+	local pat, f, x3, y3, x4, y4 = pat or SOLID, f or FORCE, x1, y2, x2, y1
 	x1, y1 = rotatePoint(x1, y1)
 	x2, y2 = rotatePoint(x2, y2)
 	x3, y3 = rotatePoint(x3, y3)
@@ -612,7 +595,7 @@ function qs_init(ri)
 
 		if Start == 1 then Start = 0
 			local welcome = {'Hello!|Welcome to|Quick Setup!', 'Hallo!|Wilkommen zu|Quick Setup!'}
-			qs_setPopup({welcome[qs_lang]},30)
+			qs_setPopup({welcome[qs_lang]},15)
 		end
 
 		--local fn = '/SCRIPTS/TELEMETRY/QSetup.lua' if fstat(fn) then del(fn) end

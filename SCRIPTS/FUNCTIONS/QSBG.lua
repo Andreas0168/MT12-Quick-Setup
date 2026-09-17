@@ -25,7 +25,7 @@ local function qs_run()
 		local Time = getTime()
 		if speakCnt > 0 then speakCnt = speakCnt - 1 end
 		local switch = getSourceValue(qs_ltSwitch == 0 and qs_sourceSB or qs_sourceSC) < 0 and 0 or 1
-		ltNum = #qs_ltList + 1
+		local ltNum = #qs_ltList + 1
 		if ltNum <= 1000 then
 			if ltRun == 0 then				-- waiting to start
 				if srcThrVal >= 950 then
@@ -66,7 +66,7 @@ local function qs_run()
 		ltLastSwitch = switch
 	else
 		ltRun = 0
-		qs_ltLapTime = nil
+		qs_ltLapTime = -1
 	end
 
 	local r, g, b = 0, 0, 0

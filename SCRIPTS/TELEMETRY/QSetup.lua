@@ -16,7 +16,7 @@ local evt_MDL_LONG = 140
 -- evt_TELE_LONG = 141
 -- evt_TELE_REPT = 77
 
-local evt_SYS_FIRST = 110
+ evt_SYS_FIRST = 110
 -- evt_SYS_BREAK = 46
  evt_SYS_LONG = 142
 

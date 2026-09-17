@@ -179,7 +179,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 				elseif iSel == 2 then		-- Show lap times
 					local ltNumber, sel, lf, y = #qs_ltList - 1, qs_listFirst[3022][2], qs_listFirst[3022][1], 13
-					if event == 101 then sel = sel == ltNumber and 1 or ltNumber end	-- PAGE> to move to 1 and last
+					if event == evt_PAGER_FIRST then sel = sel == ltNumber and 1 or ltNumber end	-- PAGE> to move to 1 and last
 					if event == evt_TELE_FIRST then		-- TELE to move selector to best time(s)
 						for n = 1, ltNumber do
 							sel = sel == ltNumber and 1 or sel + 1
@@ -211,16 +211,16 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 						lcd.drawText(64, 57, 'Avg: ' .. msStrg(floor(total / ltNumber)) .. ' Best: ' .. msStrg(qs_ltBest), CENTER)
 					end
 					if qs_ltActive == 1 then
-						if qs_ltLapTime then
+						if qs_ltLapTime == -1 then
+							drawText(64, 0, getText(31), MIDSIZE + CENTER)
+						else
 							drawText(1, 0, getText(26) .. ltNumber + 1, MIDSIZE)
 							drawText(127, 0, msStrg(qs_ltLapTime), MIDSIZE + RIGHT)
-						else
-							drawText(64, 0, getText(31), MIDSIZE + CENTER)
 						end
 						lcd.drawFilledRectangle(0, 0, 128, 12, 0)
 					else drawTitel(getText(25), MIDSIZE) end
 					if ltNumber < 1 and qs_ltActive == 0 then qs_setPopup({'[i]', getText(27)}, 1) end		-- nothing to show
-					if event == 110 then qs_ltActive = qs_ltActive ~= 0 and 0 or 1
+					if event == evt_SYS_FIRST then qs_ltActive = qs_ltActive ~= 0 and 0 or 1
 						playFile(qs_ltActive == 1 and 'trnstart.wav' or '') end
 
 				elseif iSel == 3 then

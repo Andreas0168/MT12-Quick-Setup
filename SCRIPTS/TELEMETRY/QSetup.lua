@@ -122,6 +122,8 @@ qs_tmrDir = {0, 0, 0}
 
 local floor = math.floor
 local sub = string.sub
+local FilledRectangle = lcd.drawFilledRectangle
+local Rectangle = lcd.drawRectangle
 
 local function gsSiteNum(num)
 	if not num then return items[groupNum][2] end
@@ -273,7 +275,7 @@ function qs_drawTitel(text, font)
 	local y = 0
 	if font == MIDSIZE and #text > 16 then font, y = 0, 2 end
 	if font == 0 and #text > 21 then font, y = SMLSIZE, 3 end
-	lcd.drawFilledRectangle(0, 0, 128, 12, 0)
+	FilledRectangle(0, 0, 128, 12, 0)
 	drawText(64, y, text, font + CENTER + INVERS)
 end
 
@@ -314,14 +316,14 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 			local unit = not u and ' ' or sub(u, pl[n], pl[n])
 			if unit == '|' then
 				if sel == n then
-					lcd.drawRectangle(112, y - 1, 14, 9, FORCE)
+					Rectangle(112, y - 1, 14, 9, FORCE)
 					if eMode == 2 then
 						val = val == 0 and 1 or 0 
 						qs_playSignal(val == 0 and 800 or 1200, 30) eMode = 3
 					end
 				end
-				lcd.drawRectangle(113, y, 12, 7, FORCE)
-				lcd.drawFilledRectangle(val == 0 and 115 or 119, y + 2, 4, 3, FORCE)
+				Rectangle(113, y, 12, 7, FORCE)
+				FilledRectangle(val == 0 and 115 or 119, y + 2, 4, 3, FORCE)
 			else
 				if eMode == 2 and sel == n then
 					val = qs_adjVal(val, minmax[pl[n]], minmax[pl[n] + #minmax / 2], getRotEncSpeed(), event)
@@ -330,8 +332,8 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 				local rx, ry, rw, rh = 103, y - 1, 25, 9
 				if unit == '-' then
 					local x = (val - minmax[pl[n]]) * 20 / (minmax[pl[n] + #minmax / 2] - minmax[pl[n]]) + 104
-					lcd.drawFilledRectangle(103, y + 3, 25, 1, FORCE)
-					lcd.drawFilledRectangle(x > 125 and 125 or x, y, 3, 7, FORCE)
+					FilledRectangle(103, y + 3, 25, 1, FORCE)
+					FilledRectangle(x > 125 and 125 or x, y, 3, 7, FORCE)
 				else
 					rx, ry, rw, rh = 1, y - 1, 0, 9
 					if font == MIDSIZE then rx, ry, rw, rh = 3, y - 4, 4, 12 end
@@ -341,7 +343,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 					rw = 128 - rx
 				end
 				if sel == n then
-					if eMode == 1 or (eMode == 2 and blinkList > 8) then lcd.drawFilledRectangle(rx, ry, rw, rh) end
+					if eMode == 1 or (eMode == 2 and blinkList > 8) then FilledRectangle(rx, ry, rw, rh) end
 				end
 			end
 			p[pl[n]] = val * convert
@@ -467,17 +469,17 @@ function qs_inputText(inputText, maxChars, editMode, event, fbdChars)
 		else y, x = 56, (n - 33) * 10 - 5 + xp
 		end
 		if n == 11 then
-			lcd.drawFilledRectangle(x - 1, y + 5, 7, 2, 0)
-			lcd.drawFilledRectangle(x, y + 5, 5, 1, 0)
+			FilledRectangle(x - 1, y + 5, 7, 2, 0)
+			FilledRectangle(x, y + 5, 5, 1, 0)
 		else
 			local lc = sub(inputChars[uppCase], n, n)
 			drawText(x, y, lc, 0)
 			local lx = lcd.getLastPos()
-			if lx < x + 4 then drawText(x, y, ' ', 0)  -- lcd.drawFilledRectangle(x, y, 8, 7, ERASE)
+			if lx < x + 4 then drawText(x, y, ' ', 0)  -- FilledRectangle(x, y, 8, 7, ERASE)
 				drawText(x + (lx - x) / 2 + 1, y, lc, 0) end
 		end
-		if kbSkin % 2 >= 1 then lcd.drawFilledRectangle(x - 2, y - 1, 9, 9, 0) end
-		if kbCsr == n then lcd.drawFilledRectangle(x - 2, y - 1, 9, 9, 0) end
+		if kbSkin % 2 >= 1 then FilledRectangle(x - 2, y - 1, 9, 9, 0) end
+		if kbCsr == n then FilledRectangle(x - 2, y - 1, 9, 9, 0) end
 	end
 	y = 12
 	drawText(0, y, inputText, MIDSIZE)
@@ -486,13 +488,13 @@ function qs_inputText(inputText, maxChars, editMode, event, fbdChars)
 		drawText(0, y, inputText, 0) 
 		x, y = 67 - lcd.getLastPos() / 2, 15
 	end
-	lcd.drawFilledRectangle(0, 12, 128, 13, ERASE)
+	FilledRectangle(0, 12, 128, 13, ERASE)
 	for n = 1, #inputText do
 		drawText(x, y, sub(inputText, n, n), (y == 12 and MIDSIZE or 0)) -- + (n == InputCsr and (INVERS + BLINK) or 0))
-		if n == InputCsr and blkCsr > 6 then lcd.drawFilledRectangle(x - 1, y == 12 and y + 1 or y, 1, y == 12 and 11 or 8, FORCE) end
+		if n == InputCsr and blkCsr > 6 then FilledRectangle(x - 1, y == 12 and y + 1 or y, 1, y == 12 and 11 or 8, FORCE) end
 		x = lcd.getLastPos() + (y == 12 and -1 or 0)
 	end
-	if kbSkin % 4 >= 2 then lcd.drawFilledRectangle(0, 12, 128, 52, 0) end
+	if kbSkin % 4 >= 2 then FilledRectangle(0, 12, 128, 52, 0) end
 	return sub(inputText, 1, #inputText - 1)
 end
 
@@ -563,16 +565,16 @@ local function qs_run(event)
 		if event == EVT_ROT_LEFT or event == EVT_ROT_RIGHT then popupCnt = 0 end
 		local w = 128 - popupX - popupX
 		local h = 63 - popupY - popupY
-		lcd.drawFilledRectangle(popupX, popupY, w, h, ERASE)
-		lcd.drawRectangle(popupX + 1, popupY + 1, w - 2, h - 2, FORCE)
-		lcd.drawFilledRectangle(popupX + 2, popupY + 2, w - 4, 8, FORCE)
+		FilledRectangle(popupX, popupY, w, h, ERASE)
+		Rectangle(popupX + 1, popupY + 1, w - 2, h - 2, FORCE)
+		FilledRectangle(popupX + 2, popupY + 2, w - 4, 8, FORCE)
 		for n = 1, #popupText do
 			drawText(64, n * 8 + popupY - (n == 1 and 6 or 4), popupText[n], CENTER + (n == 1 and INVERS or n == popupInv and INVERS or 0))
 		end
 		lcdCnt = 0
 	end
 
-	if qs_skin % 32 >= 16 then lcd.drawFilledRectangle(0, 0, 128, 64, 0) end  -- reverse screen if activated
+	if qs_skin % 32 >= 16 then FilledRectangle(0, 0, 128, 64, 0) end  -- reverse screen if activated
 
 	if editMode > 2 and editMode < 5 then editMode = 1
 		lcdCnt = 0 end

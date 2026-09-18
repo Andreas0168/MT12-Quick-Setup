@@ -1,4 +1,4 @@
-local drawText = lcd.drawText
+﻿local drawText = lcd.drawText
 local drawList = qs_drawList
 local saveDir = qs_path..'save/'
 local blink = 0

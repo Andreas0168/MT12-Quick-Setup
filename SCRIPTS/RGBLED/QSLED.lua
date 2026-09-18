@@ -1,4 +1,4 @@
-local ledCycle = {
+﻿local ledCycle = {
 	0.25,
 	0.5,
 	0.75,

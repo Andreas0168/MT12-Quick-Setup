@@ -1,4 +1,4 @@
-local absPWM = 100
+﻿local absPWM = 100
 local absFreq = 2
 local absActive = 0
 

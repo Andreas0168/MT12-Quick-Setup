@@ -1,4 +1,4 @@
-local evt_PAGEL_FIRST = 100
+﻿local evt_PAGEL_FIRST = 100
 local evt_PAGEL_REPT = 68
 -- evt_PAGEL_BREAK = 36
 
@@ -7,7 +7,7 @@ local evt_PAGER_REPT = 69
 -- evt_PAGER_BREAK = 37
 
  evt_MDL_FIRST = 108
--- evt_MDL__BREAK = 44
+local evt_MDL__BREAK = 44
 local evt_MDL_LONG = 140
 -- evt_MDL_REPT = 76
 
@@ -453,10 +453,9 @@ function qs_inputText(inputText, maxChars, editMode, event, fbdChars)
 		inputText = sub(inputText, 1, InputCsr - 2)..sub(inputText, InputCsr, #inputText)
 		InputCsr = InputCsr - 1 blkCsr = 15 
 	end
-	if event == evt_MDL_FIRST then uppCase = uppCase == 1 and 2 or 1 end
+	if event == evt_MDL__BREAK then uppCase = 3 - uppCase end
 	if event == evt_MDL_LONG then
-		kbSkin = kbSkin < 3 and kbSkin + 1 or 0
-		uppCase = uppCase == 1 and 2 or 1
+		kbSkin = kbSkin < 3 and kbSkin + 1 or 0 uppCase = 3 - uppCase
 		qs_writeConf()
 	end
 	kbCsr = qs_adjVal(kbCsr, 1, #inputChars[uppCase], -(math.floor((getRotEncSpeed() + 3) / 4)), event, 800)

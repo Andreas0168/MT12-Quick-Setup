@@ -1,4 +1,4 @@
-local saveDir = qs_path..'save/'
+﻿local saveDir = qs_path..'save/'
 local drawText = lcd.drawText
 local drehung = 0
 local menue = 0

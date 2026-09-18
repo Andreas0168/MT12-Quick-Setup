@@ -1,4 +1,4 @@
-local secondLine = 0
+﻿local secondLine = 0
 local editValue = 0
 
 local listFirst = qs_listFirst

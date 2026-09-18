@@ -152,7 +152,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					end
 				elseif iSel == 4 then											-- Edit modelname
 					drawTitel(getText(6), MIDSIZE)
-					fileName, editMode = qs_inputText(fileName, 10, editMode, event, ','), 2
+					fileName, editMode = qs_inputText(fileName, 10, editMode, event, '+[]<>!"?\\%&/()*|^;:='), 2
 					if event == evt_TELE_FIRST then
 						qs_rcCar.name = fileName
 						editMode, event = 3, 0

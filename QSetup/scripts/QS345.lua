@@ -270,8 +270,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 		elseif siteNum == 4 then  -- my about site
 			drawText(64,2, 'Quick Setup MT12', MIDSIZE + CENTER)
-			drawText(63,14, 'v24.06.26', CENTER)
-			drawText(63,44, 'Developed 2024 by', CENTER)
+			drawText(63,14, 'v26.09.18', CENTER)
+			drawText(63,44, 'Developed 2026 by', CENTER)
 			drawText(64,51, 'Andreas Kassner', MIDSIZE + CENTER)
 			if editMode == 1 then editValue = lg
 			elseif editMode == 2 then qs_lang = qs_adjVal(lg, 1, 2, 1, event, 1000)

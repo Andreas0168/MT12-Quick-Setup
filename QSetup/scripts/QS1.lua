@@ -376,10 +376,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			drawText(29, 38, offset, iSel == 3 and INVERS or 0)
 			if editMode == 2 then
 				if iSel == 1 then
---					qs_4wsMode = qs_adjVal(ws4Mode, 1, 4, 1, event, 800)
---					qs_setPopup({'Steer-Mode', ws4Text[qs_4wsMode]}, 1)
---					if ws4Mode ~= qs_4wsMode then qs_init(1) ws4Mode = qs_4wsMode end
-					qs_4wsMode = qs_adjVal(ws4Mode, 1, 4, 1, EVT_ROT_LEFT, 800)
+					qs_4wsMode = ws4Mode < 4 and ws4Mode + 1 or 1
 					editMode = 3
 					qs_init(1) ws4Mode = qs_4wsMode
 				elseif iSel == 2 then

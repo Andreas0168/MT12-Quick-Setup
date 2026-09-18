@@ -138,7 +138,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 			if iSel == 3 then editMode = 1
 			elseif iSel == 1 and editMode == 2 then 
-				qs_clock = qs_clock == 0 and 1 or 0
+				qs_clock = 1 - qs_clock
 				editMode = 3 qs_writeConf()
 				qs_setPopup({getText(13), qs_clock == 0 and getText(14) or getText(15)})
 			elseif iSel == 2 then
@@ -220,7 +220,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					model.setTimer(timer, buffer) end
 				return editMode, lcdCnt, iSel, groupNum
 			elseif func == 1 then
-				qs_tmrDir[timer + 1] = qs_tmrDir[timer + 1] == 0 and 1 or 0
+				qs_tmrDir[timer + 1] = 1 - qs_tmrDir[timer + 1]
 				qs_playSignal(qs_tmrDir[timer + 1] == 0 and 800 or 1200, 15)
 				editMode = 3
 			elseif func == 2 then
@@ -229,7 +229,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				editMode = 3
 			elseif func == 3 then
 				local buffer = model.getTimer(timer)
-				buffer.mode = buffer.mode == 0 and 1 or 0
+				buffer.mode = 1 - buffer.mode
 				model.setTimer(timer, buffer)
 				playFile(buffer.mode == 0 and 'stop.wav' or 'start.wav')
 				editMode = 3
@@ -380,7 +380,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					editMode = 3
 					qs_init(1) ws4Mode = qs_4wsMode
 				elseif iSel == 2 then
-					qs_4wsRev = qs_4wsRev == 1 and 0 or 1
+					qs_4wsRev = 1 - qs_4wsRev
 					qs_writeConf()
 					qs_init(1)
 					editMode = 3
@@ -417,7 +417,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	if editMode == 1 then
 		if event == evt_TELE_FIRST then groupNum = 2
 		elseif event == evt_MDL_FIRST then groupNum = 3
-		elseif event == evt_SYS_LONG then qs_ABS[1] = qs_ABS[1] == 0 and 1 or 0
+		elseif event == evt_SYS_LONG then qs_ABS[1] = 1 - qs_ABS[1]
 			qs_setPopup({getText(6), qs_ABS[1] == 0 and getText(16) or getText(17)})
 		end
 	end

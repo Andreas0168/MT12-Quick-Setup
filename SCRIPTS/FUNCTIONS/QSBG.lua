@@ -109,7 +109,7 @@ local function qs_run()
 					absPWM = absPWM - subtr
 					brakeState = absPWM > 0 and 1 or 0
 					if absPWM < 1 then absPWM = absPWM + 100 end
-					if qs_ABS[4] == 1 then brakeState = brakeState == 0 and 1 or 0 end
+					if qs_ABS[4] == 1 then brakeState = 1 - brakeState end
 					brakeCnt = 1
 				end
 			end
@@ -136,7 +136,7 @@ local function qs_run()
 			end
 			brakeRate = model.getGlobalVariable(3, 0)
 			absPWM, absFreq = 100, 1
-			brakeState = qs_ABS[4] == 0 and 1 or 0
+			brakeState = 1 - qs_ABS[4]
 			brakeCnt = 1
 		end
 	else

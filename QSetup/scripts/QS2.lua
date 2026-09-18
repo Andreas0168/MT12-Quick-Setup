@@ -253,7 +253,7 @@ end
 		drawTitel(getText(13), MIDSIZE)
 		if editMode == 2 then
 			local output = model.getOutput(iSel - 1)
-			output.revert = output.revert == 0 and 1 or 0
+			output.revert = 1 - output.revert
 			model.setOutput(iSel - 1, output)
 			editMode = 1
 			qs_playSignal(output.revert == 0 and 800 or 1200, 30)

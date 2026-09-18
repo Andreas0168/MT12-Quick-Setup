@@ -171,7 +171,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			end
 			if editMode == 2 then
 				if iSel == 1 then			-- Start and stop timing
-					qs_ltActive = qs_ltActive ~= 0 and 0 or 1
+					qs_ltActive = 1 - qs_ltActive
 					editMode = 3
 					if qs_ltActive == 1 then
 						qs_setPopup({getText(30)}, 80)
@@ -220,7 +220,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 						lcd.drawFilledRectangle(0, 0, 128, 12, 0)
 					else drawTitel(getText(25), MIDSIZE) end
 					if ltNumber < 1 and qs_ltActive == 0 then qs_setPopup({'[i]', getText(27)}, 1) end		-- nothing to show
-					if event == evt_SYS_FIRST then qs_ltActive = qs_ltActive ~= 0 and 0 or 1
+					if event == evt_SYS_FIRST then qs_ltActive = 1 - qs_ltActive
 						playFile(qs_ltActive == 1 and 'trnstart.wav' or '') end
 
 				elseif iSel == 3 then
@@ -246,7 +246,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					editMode = 3
 					qs_setPopup({'[i]', getText(28)})
 				elseif iSel == 4 then		-- switch the trigger for laps
-					qs_ltSwitch = qs_ltSwitch == 0 and 1 or 0
+					qs_ltSwitch = 1 - qs_ltSwitch
 					editMode = 3
 				elseif iSel == 5 then
 					local val = qs_adjVal(qs_ltTW / 100, 0, 40, 1, event)

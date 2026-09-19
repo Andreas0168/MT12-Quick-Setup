@@ -355,10 +355,7 @@ end
 
 function qs_getModelName()
 	local name = qs_rcCar.name
-	if name == '' then
-		local num = tonumber(string.sub(qs_rcCar.filename, 6, 7)) + 1
-		name = 'MODEL'..(num < 10 and '0' or '')..num
-	end
+	if name == '' then name = string.sub(string.upper(qs_rcCar.filename),1,7) end
 	return name
 end
 

@@ -74,6 +74,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		local t = model.getGlobalVariable(n < 4 and n or n + 2, 0)
 		if t ~= glVars[n] then fld = n val = t end
 		glVars[n] = t
+		qs_init(1)
 	end
 	if fld == 0 then qs_setPopup({getText(32), val..'%'}) end
 	if fld == 1 then
@@ -84,8 +85,12 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	if fld == 3 then qs_setPopup({getText(35), val..'%'}) end
 	if fld == 4 then
 		qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
-		' '..string.format('%.1f', (val < 0 and -val or val) * .5)..'%'})
+		' '..(val < 0 and -val or val) * 5 ..'%'})
 	end
+--	if fld == 4 then
+--		qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
+--		' '..string.format('%.1f', (val < 0 and -val or val) * .5)..'%'})
+--	end
 
 	lcdCnt = 0
 

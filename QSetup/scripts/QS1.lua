@@ -9,7 +9,8 @@ local evtActive, evtStart, evtDist, evtRuns = 0, 0, 5, 1
 
 local yn = 0
 
-local trimThr = model.getGlobalVariable(6, 0)
+local glVars = {}
+for n = 0, 4 do glVars[n] = model.getGlobalVariable(n < 4 and n or n + 2, 0) end
 
 local ws4Text = {'Front only', 'Front/Back', 'Back only', 'Front/Back rev.'}
 
@@ -34,6 +35,8 @@ local words = {
 	'Set Event', 'Start Time', 'Distance', 'Runs', 'Run ', ' in',	-- 27
 	'Stop Event?', 'no', 'yes',												-- 30
 	'Start time',																	-- 31
+	'Steering Rate', 'Steering Trim',										-- 33
+	'Forward Rate', 'Brake Rate',												-- 35
 
 	'Lnk', 'Gas', 
 	'ACHTUNG!|Batteriespannung|am Limit: ', 'Bitte laden!',
@@ -45,7 +48,9 @@ local words = {
 	'Trim Gas', 'Bremse', 'Vorwärts',
 	'Setze Ereignis', 'Startzeit', 'Zeitabstand', 'Läufe', 'Lauf ', nil,
 	'Ereignis beenden?', 'nein', 'ja',
-	'Startzeit'
+	'Startzeit',
+	'Lenkung Rate', 'Lenkung Trim',
+	'Vorwärtsrate', 'Bremsrate'
 }
 
 local d = {}
@@ -60,10 +65,34 @@ local blinkCnt = 0
 local blink
 
 local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chnStr, chnThr, valSrcStr, valSrcThr)
+	local function getText(n)							-- give the right word for selected language
+		return words[lg * 35 - 35 + n] or words[n]
+	end
+	
+	local fld, val = -1, 0
+	for n = 0, 4 do
+		local t = model.getGlobalVariable(n < 4 and n or n + 2, 0)
+		if t ~= glVars[n] then fld = n val = t end
+		glVars[n] = t
+	end
+
+	if fld == 0 then qs_setPopup({getText(32), val..'%'}) end
+	if fld == 1 then
+		qs_setPopup({getText(33), (val < 0 and 'L ' or val > 0 and 'R ' or '') ..
+		string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'})
+	end
+	if fld == 2 then qs_setPopup({getText(34), val..'%'}) end
+	if fld == 3 then qs_setPopup({getText(35), val..'%'}) end
+
+	if fld == 4 then
+		qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
+		' '..string.format('%.1f', (val < 0 and -val or val) * .5)..'%'})
+	end
+
+
 	lcdCnt = 0
 
 	local floor = math.floor
-	local glV6 = model.getGlobalVariable(6, 0)
 
 	local rtc, x, y, w, h = getRtcTime() 
 	local modelName = qs_getModelName()
@@ -72,10 +101,6 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	else blinkCnt = blinkCnt + 1 end
 	blink = blinkCnt > 10 and true or false
 
-	local function getText(n)							-- give the right word for selected language
-		return words[lg * 31 - 31 + n] or words[n]
-	end
-	
 	local function lZeroes(v)
 		return v < 10 and '0'..v or ''..v
 	end
@@ -285,7 +310,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		trim = trim < -43 and -43 or trim > 43 and 43 or trim
 		local x2 = x + (trim < 0 and -1 or trim > 0 and 1 or 0) + trim
 		for y = y, y + 1 do lcd.drawLine(x, y, x2, y, SOLID, FORCE) end
-		trim = glV6 * (w - 5) / 800
+		trim = glVars[4] * (w - 5) / 800
 	end
 	if qs_skin % 16 >= 8 then lcd.drawFilledRectangle(19, 47, 91, 17, 0) end
 
@@ -315,27 +340,21 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	drawText(93 - modelNameX * .33, 3, battPercent.."%", SMLSIZE + RIGHT)
 	if battVolt <= battMin then qs_setPopup({getText(3)..battPercent.."%", getText(4)}) end
 
-	if glV6 ~= trimThr and valSrcThr > -19 and valSrcThr < 19 then
-		trimThr = glV6 qs_init(1) qs_init(1)
-		qs_setPopup({getText(19), (glV6 < 0 and getText(20) or glV6 > 0 and getText(21) or '')..
-		' '..string.format('%.1f', (glV6 < 0 and -glV6 or glV6) * .5)..'%'})
-	end
-
 	if siteNum < 4 then drawText(32, 13, qs_username, SMLSIZE + CENTER) end
 
 	if siteNum == 1 or siteNum == 2 then  -- qs_items for 
 		x, y, w = 1, 23, 63 -- print subtrim, steering rate, forward rate and brake rate
 		drawText(x, y, getText(5), SMLSIZE)
-		lcd.drawNumber(x + 32, y, model.getGlobalVariable(2, 0), SMLSIZE + RIGHT)
+		lcd.drawNumber(x + 32, y, glVars[2], SMLSIZE + RIGHT)
 		drawText(x + 48, y, getText(6), SMLSIZE + (qs_ABS[1] == 1 and INVERS or 0))
 		drawText(x, y + 8, getText(7), SMLSIZE)
-		local trim = model.getGlobalVariable(1, 0) * .5
+		local trim = glVars[1] * .5
 		drawText(x + 37, y + 8, trim < 0 and getText(8) or trim > 0 and getText(9) or '', SMLSIZE)
 		lcd.drawNumber(x + w, y + 8, (trim < 0 and -trim or trim) * 10, SMLSIZE + RIGHT + PREC1)
 		drawText(x, y + 16, getText(10), SMLSIZE)
-		lcd.drawNumber(x + 31, y + 16, model.getGlobalVariable(0, 0),SMLSIZE + RIGHT)
+		lcd.drawNumber(x + 31, y + 16, glVars[0],SMLSIZE + RIGHT)
 		drawText(x + 32, y + 16, getText(11), SMLSIZE)
-		lcd.drawNumber(x + w, y + 16, model.getGlobalVariable(3, 0),SMLSIZE + RIGHT)
+		lcd.drawNumber(x + w, y + 16, glVars[3],SMLSIZE + RIGHT)
 		if qs_skin % 4 >= 2 then lcd.drawFilledRectangle(x - 1, y - 1, w + 1, 24, 0) end
 	end
 

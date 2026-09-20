@@ -80,13 +80,16 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		qs_setPopup({getText(33), (val < 0 and 'L ' or val > 0 and 'R ' or '') ..
 		string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'})
 	end
-	if fld == 2 then qs_setPopup({getText(34), val..'%'}) end
-	if fld == 3 then qs_setPopup({getText(35), val..'%'}) end
-	if fld == 4 then
-		qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
-		' '..(val < 0 and -val or val) * 5 ..'%'})
-		qs_init(1)
+	if valSrcThr > -19 and valSrcThr < 19 then
+		if fld == 2 then qs_setPopup({getText(34), val..'%'}) end
+		if fld == 3 then qs_setPopup({getText(35), val..'%'}) end
+		if fld == 4 then
+			qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
+			' '..(val < 0 and -val or val) * 5 ..'%'})
+			qs_init(1)
+		end
 	end
+
 --	if fld == 4 then
 --		qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
 --		' '..string.format('%.1f', (val < 0 and -val or val) * .5)..'%'})

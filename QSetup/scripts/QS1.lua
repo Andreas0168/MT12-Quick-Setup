@@ -75,7 +75,6 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		if t ~= glVars[n] then fld = n val = t end
 		glVars[n] = t
 	end
-
 	if fld == 0 then qs_setPopup({getText(32), val..'%'}) end
 	if fld == 1 then
 		qs_setPopup({getText(33), (val < 0 and 'L ' or val > 0 and 'R ' or '') ..
@@ -83,12 +82,10 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 	if fld == 2 then qs_setPopup({getText(34), val..'%'}) end
 	if fld == 3 then qs_setPopup({getText(35), val..'%'}) end
-
 	if fld == 4 then
 		qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
 		' '..string.format('%.1f', (val < 0 and -val or val) * .5)..'%'})
 	end
-
 
 	lcdCnt = 0
 

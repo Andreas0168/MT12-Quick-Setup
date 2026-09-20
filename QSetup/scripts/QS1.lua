@@ -305,7 +305,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	local battVolt = getSourceValue(qs_sourceBat)
 	local battPercent = math.ceil((battVolt - battMin) / (getGeneralSettings().battMax - battMin) * 100)
 	battPercent = battPercent < 0 and 0 or battPercent > 100 and 100 or battPercent
-	local battValue = math.ceil(battPercent * .13)
+	local battValue = math.ceil(battPercent * .12)
 	qs_setAll(93 - modelNameX * .33, battValue > 0 and 1 or 2, 6, 9, battValue > 0 and 0 or 90, .5, 1)
 	qs_gfRec(0, 0, 10, 14, 1, SOLID, ERASE)
 	qs_gfRec(0, 0, 10, 14, 0)

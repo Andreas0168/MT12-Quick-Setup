@@ -95,7 +95,7 @@ local items = {
 	 6, 1}
 }
 
-local Start = 1
+local Start = 0
  
 local qs_sourceStr = 75		-- 75
 qs_sourceThr = 76				-- 76
@@ -594,9 +594,8 @@ function qs_init(ri)
 		qs_ltSwitch = 1
 		readConf()
 
-		if Start == 1 then Start = 0
-			local welcome = {'Hello!|Welcome to|Quick Setup!', 'Hallo!|Wilkommen zu|Quick Setup!'}
-			qs_setPopup({welcome[qs_lang]},15)
+		if Start == 0 then Start = 1
+			qs_setPopup({qs_lang == 1 and 'Hello!|Welcome to|Quick Setup!' or 'Hallo!|Wilkommen zu|Quick Setup!'},15)
 		end
 
 		--local fn = '/SCRIPTS/TELEMETRY/QSetup.lua' if fstat(fn) then del(fn) end

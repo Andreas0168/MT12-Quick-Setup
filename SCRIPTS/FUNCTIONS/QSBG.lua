@@ -6,10 +6,6 @@ local brakeState = 1
 local brakeRate = model.getGlobalVariable(3, 0)
 local brakeCnt = 0
 
-local thrTrim = model.getGlobalVariable(6, 0)
-local fwdRate = model.getGlobalVariable(2, 0)
-local accActive = 0
-
 local ltRun = 0
 local ltLastSwitch = 0
 local ltDiff = 0
@@ -72,7 +68,7 @@ local function qs_run()
 	local r, g, b = 0, 0, 0
 
 	if qs_ACC[1] == 1 then
-		if srcThrVal >= 0 then
+		if srcThrVal >= 20 then
 			r, g, b = 255, 0, 255
 		elseif srcThrVal <= -20 then
 			r, g, b = 255, 0, 0
@@ -138,10 +134,6 @@ local function background()
 end
 
 local function init()
-	if thrTrim < -20 or thrTrim > 20 then
-		thrTrim = 0
-		model.setGlobalVariable(6, 0, thrTrim)
-	end
 end
 
 return { run = qs_run, init = init, background = background}

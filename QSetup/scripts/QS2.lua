@@ -371,7 +371,6 @@ end
 		3, 20, 14, 64, ACC, '|%%', {0, 0, 0,   1, 100, 100}, editMode, nil, {1, .05, .05})
 		if editMode == 1 then editValue = ACC[iSel]
 		elseif editMode == 3 and editValue ~= ACC[iSel] then qs_writeConf()
-		
 			local accFwd = ACC[1] == 0 and 0 or ACC[2] * 10
 			local accBrk = ACC[1] == 0 and 0 or -(ACC[3] * 10)
 			if iSel == 1 or iSel == 2 then
@@ -382,7 +381,6 @@ end
 				local mixACC = model.getMix(chnThr, 1) mixACC.offset = accBrk
 				model.deleteMix(chnThr, 1) model.insertMix(chnThr, 1, mixACC)
 			end
-
 		elseif editMode == 4 then ACC[iSel] = editValue end
 
 	elseif siteNum == 7 then

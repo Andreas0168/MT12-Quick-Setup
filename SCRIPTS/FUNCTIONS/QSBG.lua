@@ -70,6 +70,7 @@ local function qs_run()
 	end
 
 	local r, g, b = 0, 0, 0
+
 	if qs_ACC[1] == 1 then
 		if srcThrVal >= 0 then
 			r, g, b = 255, 0, 255

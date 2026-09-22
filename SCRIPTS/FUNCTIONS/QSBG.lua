@@ -70,30 +70,12 @@ local function qs_run()
 	end
 
 	local r, g, b = 0, 0, 0
-	if qs_ACC[1] == 10 then
-		if srcThrVal >= 20 then
-			accActive = 1
-			model.setGlobalVariable(6, 0, fwdRate * qs_ACC[2] + thrTrim)
+	if qs_ACC[1] == 1 then
+		if srcThrVal >= 0 then
 			r, g, b = 255, 0, 255
 		elseif srcThrVal <= -20 then
-			accActive = 1
-			model.setGlobalVariable(6, 0, thrTrim - brakeRate * qs_ACC[3])
 			r, g, b = 255, 0, 0
-		else
-			if accActive == 1 then
-				model.setGlobalVariable(6, 0, thrTrim)
-				accActive = 0
-			end
-			fwdRate = model.getGlobalVariable(2, 0)
-			thrTrim = model.getGlobalVariable(6, 0)
 		end
-	else
-		if accActive == 1 then
-			model.setGlobalVariable(6, 0, thrTrim)
-			accActive = 0
-		end
-		fwdRate = model.getGlobalVariable(2, 0)
-		thrTrim = model.getGlobalVariable(6, 0)
 	end
 
 	if qs_ABS[1] == 1 then

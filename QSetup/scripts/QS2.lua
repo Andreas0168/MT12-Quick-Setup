@@ -381,7 +381,6 @@ end
 		local t = p[1] - 1000
 		if t ~= output.offset then output.offset = t model.setOutput(7, output) end
 		for n = 0, 1 do drawText(64, n * 8 + 48, getText(n + 39), SMLSIZE + CENTER) end
-
 	end
 
 	if event == evt_MDL_FIRST and editMode == 1 then qs_popGroup() groupNum = 3 end

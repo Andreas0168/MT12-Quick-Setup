@@ -70,7 +70,7 @@ local function qs_run()
 	end
 
 	local r, g, b = 0, 0, 0
-	if qs_ACC[1] == 1 then
+	if qs_ACC[1] == 10 then
 		if srcThrVal >= 20 then
 			accActive = 1
 			model.setGlobalVariable(6, 0, fwdRate * qs_ACC[2] + thrTrim)

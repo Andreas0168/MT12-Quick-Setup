@@ -505,11 +505,6 @@ end
 
 --Main
 ------------------------------------------------------------------------------------------------------------
---local pages = {'QS1', 'QS2', 'QS345', 'QS345', 'QS345'}
---local scriptDir = qs_path..'scripts/'
---local pageRun = ''
---local runScript
-
 local function qs_run(event)
 	if editMode == 2 then lcd.resetBacklightTimeout() lcdCnt = 0 end
 	if event == 0 then

@@ -123,8 +123,7 @@ local function qs_run()
 		end
 		brakeRate = model.getGlobalVariable(3, 0)
 	end
-	if srcThrVal < 0 then srcThrVal = -srcThrVal end
-	srcThrVal = srcThrVal / 1024
+	srcThrVal = (srcThrVal == < 0 and -srcThrVal or srcThrVal) / 1024 or 
 	setRGBLedColor(0, r * srcThrVal, g * srcThrVal, b * srcThrVal)
 end
 

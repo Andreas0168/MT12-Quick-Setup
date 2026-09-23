@@ -97,7 +97,7 @@ local items = {
 
 local Start = 0
  
-local qs_sourceStr = 75		-- 75
+qs_sourceStr = 75		-- 75
 qs_sourceThr = 76				-- 76
 
 qs_sourceBat = 0

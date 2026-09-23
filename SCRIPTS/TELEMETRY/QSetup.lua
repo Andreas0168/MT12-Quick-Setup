@@ -597,7 +597,7 @@ function qs_init(ri)
 		if Start == 0 then Start = 1
 			qs_setPopup({qs_lang == 1 and 'Hello!|Welcome to|Quick Setup!' or 'Hallo!|Wilkommen zu|Quick Setup!'})
 		end
-
+ 
 		--local fn = '/SCRIPTS/TELEMETRY/QSetup.lua' if fstat(fn) then del(fn) end
 
 		local trims = {94, 93, 92, 95}

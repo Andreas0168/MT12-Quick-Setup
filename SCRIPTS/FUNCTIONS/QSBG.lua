@@ -68,10 +68,8 @@ local function qs_run()
 	local r, g, b = 0, 0, 0
 
 	if qs_ACC[1] == 1 then
-		if srcThrVal >= 20 then
-			r, g, b = 255, 0, 255
-		elseif srcThrVal <= -20 then
-			r, g, b = 255, 0, 0
+		if srcThrVal >= 20 then r, b = 255, 255
+		elseif srcThrVal <= -20 then r = 255
 		end
 	end
 

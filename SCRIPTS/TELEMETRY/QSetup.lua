@@ -125,6 +125,11 @@ local sub = string.sub
 local FilledRectangle = lcd.drawFilledRectangle
 local Rectangle = lcd.drawRectangle
 
+local pages = {'QS1', 'QS2', 'QS345', 'QS345', 'QS345'}
+local scriptDir = qs_path..'scripts/'
+local pageRun = ''
+local runScript
+
 local function gsSiteNum(num)
 	if not num then return items[groupNum][2] end
 	items[groupNum][2] = num
@@ -500,10 +505,11 @@ end
 
 --Main
 ------------------------------------------------------------------------------------------------------------
-local pages = {'QS1', 'QS2', 'QS345', 'QS345', 'QS345'}
-local scriptDir = qs_path..'scripts/'
-local pageRun = ''
-local runScript
+--local pages = {'QS1', 'QS2', 'QS345', 'QS345', 'QS345'}
+--local scriptDir = qs_path..'scripts/'
+--local pageRun = ''
+--local runScript
+
 local function qs_run(event)
 	if editMode == 2 then lcd.resetBacklightTimeout() lcdCnt = 0 end
 	if event == 0 then

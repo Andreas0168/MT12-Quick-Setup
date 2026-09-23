@@ -380,17 +380,6 @@ end
 					model.deleteMix(chnThr, n) model.insertMix(chnThr, n, mix)
 				end
 			end
-
---[[
-			if iSel == 1 or iSel == 2 then
-				local mix = model.getMix(chnThr, 0) mix.offset = accFwd
-				model.deleteMix(chnThr, 0) model.insertMix(chnThr, 0, mix)
-			end
-			if iSel == 1 or iSel == 3 then
-				local mix = model.getMix(chnThr, 1) mix.offset = accBrk
-				model.deleteMix(chnThr, 1) model.insertMix(chnThr, 1, mix)
-			end
-]]
 		elseif editMode == 4 then ACC[iSel] = editValue end
 
 	elseif siteNum == 7 then

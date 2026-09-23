@@ -89,7 +89,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			qs_init(1)
 		end
 	end
- 
+
 	lcdCnt = 0
 
 	local floor = math.floor

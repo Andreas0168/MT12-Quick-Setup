@@ -373,7 +373,6 @@ end
 		elseif editMode == 3 and editValue ~= ACC[iSel] then qs_writeConf()
 			local accFwd = ACC[1] == 0 and 0 or ACC[2] * 10
 			local accBrk = ACC[1] == 0 and 0 or -(ACC[3] * 10)
-
 			for n = 0, 1 do
 				if iSel == 1 or iSel == n + 2 then
 					local mix = model.getMix(chnThr, n) mix.offset = n == 0 and accFwd or accBrk

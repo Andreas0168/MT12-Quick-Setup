@@ -374,12 +374,12 @@ end
 			local accFwd = ACC[1] == 0 and 0 or ACC[2] * 10
 			local accBrk = ACC[1] == 0 and 0 or -(ACC[3] * 10)
 			if iSel == 1 or iSel == 2 then
-				local mixACC = model.getMix(chnThr, 0) mixACC.offset = accFwd
-				model.deleteMix(chnThr, 0) model.insertMix(chnThr, 0, mixACC)
+				local mix = model.getMix(chnThr, 0) mix.offset = accFwd
+				model.deleteMix(chnThr, 0) model.insertMix(chnThr, 0, mix)
 			end
 			if iSel == 1 or iSel == 3 then
-				local mixACC = model.getMix(chnThr, 1) mixACC.offset = accBrk
-				model.deleteMix(chnThr, 1) model.insertMix(chnThr, 1, mixACC)
+				local mix = model.getMix(chnThr, 1) mix.offset = accBrk
+				model.deleteMix(chnThr, 1) model.insertMix(chnThr, 1, mix)
 			end
 		elseif editMode == 4 then ACC[iSel] = editValue end
 

@@ -79,7 +79,6 @@ local function qs_run()
 			Reduce = getOutputValue(qs_chnStr)
 			Reduce = (1 - qs_ABS[6]) * ((1024 - (Reduce < 0 and -Reduce or Reduce)) / 1024) + qs_ABS[6]
 		end
-
 		if srcThrVal <= qs_ABS[5] then
 			absActive = 1
 			if qs_ABS[3] == 1 then
@@ -105,7 +104,6 @@ local function qs_run()
 					brakeState = 0
 				else
 					model.setGlobalVariable(3, 0, brakeRate * Reduce)
---					model.setGlobalVariable(3, 0, brakeRate * qs_ABS[6])
 					brakeCnt = qs_ABS[8]
 					brakeState = 1
 				end

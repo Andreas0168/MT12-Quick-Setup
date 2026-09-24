@@ -15,23 +15,23 @@ local words = {
 	'Rate', 'Trim', 'Expo', 'Endp. L', 'Endp. R', 							--  8
 	'Forward', 																			--  9
 	'Channel', 'Steering', 'Throttle', 'Direction', 'Endpoints', 		-- 14
-	'Steering out:', 'Steering in:', 'Forward:', 'Brake:', 				-- 18
-	'Forward back:', 'Brake back:', 												-- 20
+	{'Steering out', 'Steering in', 'Forward', 'Brake',
+	'Forward back', 'Brake back'}, 											-- 15
 	{'ABS on', 'Audio-Feedback', 'ABS-PWM', 'Reduction first',
 	'Trigger', 'Reduction', 'Cycles full', 'Cycles reduce',
-	'PWM-Percent', 'Cycles minimum', 'Only Steer'},							-- 21
-	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 23
-	'Basic setup',																		-- 24
-	'min:', 'max:',																	-- 26
-	'Speed-Settings',																	-- 27
-	'This is only for', 'RadioLink R6FG Receiver',							-- 29
+	'PWM-Percent', 'Cycles minimum', 'Only Steer'},							-- 16
+	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 18
+	'Basic setup',																		-- 19
+	'min:', 'max:',																	-- 21
+	'Speed-Settings',																	-- 22
+	'This is only for', 'RadioLink R6FG Receiver',							-- 24
 
 	'Lenkung', 'Vorw.', 'Bremse',
 	nil, nil, nil, nil, nil,
 	'Vorwärts',
 	'Kanal', 'Lenkung', 'Gas', 'Richtung', 'Endpunkte',
-	'Lenkung raus:', 'Lenkung rein:', 'Vorwärts:', 'Bremse:',
-	'Vorw. zurück:', 'Bremse zurück:',
+	{'Lenkung raus', 'Lenkung rein', 'Vorwärts', 'Bremse',
+	'Vorw. zurück', 'Bremse zurück'},
 	{'ABS an', 'Audio-Feedback', 'ABS-PWM', 'Zuerst reduziert',
 	'Trigger', 'Reduktion', 'Zyklen voll', 'Zyklen reduziert',
 	'PWM-Percent', 'Zyklen minimum', 'Nur Lenkung'},
@@ -52,7 +52,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	local drawList = qs_drawList
 
 	local function getText(n)
-		return words[lg * 29 - 29 + n] or words[n]
+		return words[lg * 24 - 24 + n] or words[n]
 	end
 
 	local function getSetParam(i, v)
@@ -287,9 +287,9 @@ end
 			model.setOutput(chn, output)
 			lcd.drawNumber(129, 22, val, RIGHT + XXLSIZE + PREC1)
 			if chn == chnThr then
-				drawText(0, 4, MinMax == 0 and (getText(3)..' '..getText(25)) or (getText(12)..' '..getText(26)), MIDSIZE)
+				drawText(0, 4, MinMax == 0 and (getText(3)..' '..getText(20)) or (getText(12)..' '..getText(21)), MIDSIZE)
 			else
-				drawText(0, 4, channelText(chn)..' '..(MinMax == 0 and getText(25) or getText(26)), MIDSIZE)
+				drawText(0, 4, channelText(chn)..' '..(MinMax == 0 and getText(20) or getText(21)), MIDSIZE)
 			end
 		elseif editMode == 1 then
 			drawTitel(getText(14), MIDSIZE)
@@ -306,7 +306,7 @@ end
 				for n = 0, 1 do
 					local mark = i * 2 + n + 1
 					local val = n == 0 and model.getOutput(i).min or model.getOutput(i).max
-					drawText(99, n * 8 + y + 1, n == 0 and getText(25) or getText(26), RIGHT)
+					drawText(99, n * 8 + y + 1, n == 0 and getText(20) or getText(21), RIGHT)
 					lcd.drawNumber(128, n * 8 + y + 1, val, PREC1 + RIGHT + (mark == iSel and INVERS or 0))
 					if iSel == mark then editValue = val end
 				end
@@ -320,7 +320,7 @@ end
 		local mixFwd = model.getMix(chnThr, 0)
 		local mixBrk = model.getMix(chnThr, 1)
 		if editMode == 1 then
-			drawTitel(getText(27), MIDSIZE)
+			drawTitel(getText(22), MIDSIZE)
 			local y, lf = 13, listFirst[2040]
 			if iSel < lf then lf = iSel elseif iSel - 3 > lf then lf = iSel - 3 end
 			listFirst[2040] = lf
@@ -329,7 +329,7 @@ end
 					i == 3 and mixFwd.speedUp or i == 4 and mixBrk.speedDown or
 					i == 5 and mixFwd.speedDown or mixBrk.speedUp) * 5
 				if i == iSel then editValue = val end
-				drawText(128, y + 3, getText(14 + i)..'            s', RIGHT)
+				drawText(128, y + 3, getText(15)[i]..'            s', RIGHT)
 				lcd.drawNumber(121, y, val, RIGHT + MIDSIZE + PREC2 + (iSel == i and INVERS or 0))
 				y = y + 13
 			end
@@ -337,7 +337,7 @@ end
 			editValue = qs_adjVal(editValue, 0, 1250, 5 * getRotEncSpeed(), event)
 			lcd.drawNumber(114, 22, editValue, RIGHT + XXLSIZE + PREC2)
 			drawText(128, 44, 'S', DBLSIZE + RIGHT)
-			drawText(0, 4, getText(14 + iSel), MIDSIZE)
+			drawText(0, 4, getText(15)[iSel], MIDSIZE)
 		elseif editMode == 3 then
 			editValue = editValue / 5
 			if iSel == 1 then mixStrL.speedDown = editValue mixStrR.speedUp = editValue 
@@ -358,7 +358,7 @@ end
 		local ABS = qs_ABS
 		local v = iSel + (iSel > 6 and ABS[3] * 2 or 0)
 		local disp = ABS[3] == 0 and '++++++++  +' or '++++++  +++'
-		editMode = drawList('ABS-System', iSel, getText(21), event, 5, 14, 10, 64, ABS, '||||%%--% |',
+		editMode = drawList('ABS-System', iSel, getText(16), event, 5, 14, 10, 64, ABS, '||||%%--% |',
 		{0, 0, 0, 0, 10, 10, 1, 1, 1, 1, 0,  1, 1, 1, 1, 100, 100, 20, 20, 100, 20, 1}, editMode, disp, {1, 1, 1, 1, -10.24, .01})
 		if editMode == 1 then editValue = ABS[v]
 		elseif editMode == 3 and editValue ~= ABS[v] then qs_writeConf()
@@ -366,7 +366,7 @@ end
 
 	elseif siteNum == 6 then
 		local ACC = qs_ACC
-		editMode = drawList(getText(22), iSel, getText(23), event,
+		editMode = drawList(getText(17), iSel, getText(18), event,
 		3, 20, 14, 64, ACC, '|%%', {0, 0, 0,   1, 100, 100}, editMode, nil, {1, .05, .05})
 		if editMode == 1 then editValue = ACC[iSel]
 		elseif editMode == 3 and editValue ~= ACC[iSel] then qs_writeConf()
@@ -387,7 +387,7 @@ end
 		1, 30, 14, MIDSIZE, p, '%', {0,   100}, editMode, nil, {20})
 		local t = p[1] - 1000
 		if t ~= output.offset then output.offset = t model.setOutput(7, output) end
-		for n = 0, 1 do drawText(64, n * 8 + 48, getText(n + 28), SMLSIZE + CENTER) end
+		for n = 0, 1 do drawText(64, n * 8 + 48, getText(n + 23), SMLSIZE + CENTER) end
 	end
 
 	if event == evt_MDL_FIRST and editMode == 1 then qs_popGroup() groupNum = 3 end

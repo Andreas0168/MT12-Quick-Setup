@@ -107,9 +107,11 @@ qs_sourceSC = 0
 
 qs_4wsMode = 1
 qs_4wsRev = 0
-local channelStr = 0
-qs_channelStB = -1
-local channelThr = 1
+qs_chnStB = -1
+
+qs_chnStr = 0
+qs_chnThr = 1
+
 local glVarsLast = 0
 
 qs_rcCar = {}
@@ -344,7 +346,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 					rx, ry, rw, rh = 1, y - 1, 0, 9
 					if font == MIDSIZE then rx, ry, rw, rh = 3, y - 4, 4, 12 end
 					drawText(128, y, unit, RIGHT)
-					lcd.drawNumber(120, y - rw, val, RIGHT + font)
+					lcd.drawNumber(122, y - rw, val, RIGHT + font)
 					rx = lcd.getLastLeftPos() - rx
 					rw = 128 - rx
 				end
@@ -552,7 +554,7 @@ local function qs_run(event)
 	lcd.clear()
 	local iSel, grp = gsItemSel(), groupNum
 	editMode, lcdCnt, iSel, grp = runScript(groupNum, event, gsSiteNum(), iSel, qs_lang, editMode, lcdCnt,
-	channelStr, channelThr, getSourceValue(qs_sourceStr), getSourceValue(qs_sourceThr))
+	qs_chnStr, qs_chnThr, getSourceValue(qs_sourceStr), getSourceValue(qs_sourceThr))
 	gsItemSel(iSel)
 
 	if grp ~= groupNum then pushGroup(grp) lcdCnt = 1 editMode = 1 end
@@ -619,10 +621,10 @@ function qs_init(ri)
 	local aux = 1
 	for n = 0, 5 do
 		local buffer = model.getOutput(n)
-		if buffer.name == 'Str' then channelStr = n
+		if buffer.name == 'Str' then qs_chnStr = n
 
 		elseif buffer.name == 'StB' then
-			qs_channelStB = n
+			qs_chnStB = n
 			local StF, StB = true, false
 			if qs_4wsMode >= 2 then StB = true end
 			if qs_4wsMode == 3 then StF = false end
@@ -634,7 +636,7 @@ function qs_init(ri)
 			model.setOutput(n, buffer)
 
 		elseif buffer.name == 'Thr' then
-			channelThr = n
+			qs_chnThr = n
 			local offset = model.getGlobalVariable(6, 0) / 10
 			local csf = model.getCustomFunction(0)
 			csf.param = n

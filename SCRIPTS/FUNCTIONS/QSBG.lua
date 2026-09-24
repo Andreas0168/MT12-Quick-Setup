@@ -76,7 +76,7 @@ local function qs_run()
 	if qs_ABS[1] == 1 then
 		local Reduce = qs_ABS[6]
 		if qs_ABS[11] == 1 then
-			Reduce = getSourceValue(qs_sourceStr)
+			Reduce = getOutputValue(qs_chnStr)
 			Reduce = (1 - qs_ABS[6]) * ((1024 - (Reduce < 0 and -Reduce or Reduce)) / 1024) + qs_ABS[6]
 		end
 

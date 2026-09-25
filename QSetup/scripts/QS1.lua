@@ -9,8 +9,10 @@ local evtActive, evtStart, evtDist, evtRuns = 0, 0, 5, 1
 
 local yn = 0
 
+local drvMode = 0
+
 local glVars = {}
-for n = 0, 4 do glVars[n] = model.getGlobalVariable(n < 4 and n or n + 2, 0) end
+for n = 0, 4 do glVars[n] = model.getGlobalVariable(n < 4 and n or n + 2, qs_drvMode) end
 
 local ws4Text = {'Front only', 'Front/Back', 'Back only', 'Front/Back rev.'}
 
@@ -71,11 +73,11 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	
 	local fld, val = -1, 0
 	for n = 0, 4 do
-		local t = model.getGlobalVariable(n < 4 and n or n + 2, 0)
+		local t = model.getGlobalVariable(n < 4 and n or n + 2, qs_drvMode)
 		if t ~= glVars[n] then fld = n val = t end
 		glVars[n] = t
 	end
-	if valSrcThr > -19 and valSrcThr < 19 then
+	if valSrcThr > -19 and valSrcThr < 19 and qs_drvMode == drvMode then
 		if fld == 0 then qs_setPopup({getText(32), val..'%'}) end
 		if fld == 1 then
 			qs_setPopup({getText(33), (val < 0 and 'L ' or val > 0 and 'R ' or '') ..
@@ -90,6 +92,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		end
 	end
 
+	drvMode = qs_drvMode
 	lcdCnt = 0
 
 	local floor = math.floor
@@ -304,7 +307,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		lcd.drawFilledRectangle(x - 19, y, 19, h + h - 1, 0)
 		lcd.drawFilledRectangle(x + w, y, 18, h + h - 1, 0)
 	end
-	local trim = model.getGlobalVariable(1, 0) * (w - 5) / 800
+	local trim = model.getGlobalVariable(1, qs_drvMode) * (w - 5) / 800
 	x = x + w / 2
 	for y = y + 3, y + 11, 8 do
 		trim = trim < -43 and -43 or trim > 43 and 43 or trim
@@ -361,7 +364,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	if siteNum == 1 then
 		x, y, w, h = 65, 13, 47, 9  -- Draws the other 4 channels
 		local y1 = y
-		local StB = qs_channelStB
+		local StB = qs_chnStB
 		for i = 0, 5 do
 			if i ~= chnStr and i ~= chnThr then
 				drawText(x + 16, y1 + 2, getText(12)..i + 1, RIGHT + SMLSIZE)
@@ -379,11 +382,11 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	if siteNum == 5 then
-		if qs_channelStB == -1 then
+		if qs_chnStB == -1 then
 			qs_setPopup({'!|No setup for 4WS'}, 1)
 			editMode = 1
 		else
-			local buffer = model.getOutput(qs_channelStB)
+			local buffer = model.getOutput(qs_chnStB)
 			local offset = buffer.offset
 			local ws4Mode = qs_4wsMode
 			drawText(0, 10, '4W-Steering', MIDSIZE)
@@ -406,7 +409,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				elseif iSel == 3 then
 					buffer.offset = qs_adjVal(offset, -200, 200, getRotEncSpeed(), event)
 					qs_setPopup({'Steer-Trim', buffer.offset}, 1)
-					if offset ~= buffer.offset then model.setOutput(qs_channelStB, buffer) end
+					if offset ~= buffer.offset then model.setOutput(qs_chnStB, buffer) end
 				end
 			end
 			local fLine, bLine = -3, 0

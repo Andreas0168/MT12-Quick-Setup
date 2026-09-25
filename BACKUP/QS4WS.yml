@@ -1,4 +1,4 @@
-semver: 2.10.1
+semver: 2.10.6
 header: 
    name: "QS4WS"
    modelId: 
@@ -72,8 +72,8 @@ mixData:
    flightModes: 000000000
    delayUp: 0
    delayDown: 0
-   speedUp: 0
-   speedDown: 0
+   speedUp: 8
+   speedDown: 30
    name: "StrL"
  -
    weight: 100
@@ -88,8 +88,8 @@ mixData:
    flightModes: 000000000
    delayUp: 0
    delayDown: 0
-   speedUp: 0
-   speedDown: 0
+   speedUp: 30
+   speedDown: 8
    name: "StrR"
  -
    weight: 100
@@ -136,8 +136,8 @@ mixData:
    flightModes: 000000000
    delayUp: 0
    delayDown: 0
-   speedUp: 0
-   speedDown: 0
+   speedUp: 8
+   speedDown: 30
    name: "StrL"
  -
    weight: 100
@@ -152,8 +152,8 @@ mixData:
    flightModes: 000000000
    delayUp: 0
    delayDown: 0
-   speedUp: 0
-   speedDown: 0
+   speedUp: 30
+   speedDown: 8
    name: "StrR"
  -
    weight: 100
@@ -429,13 +429,13 @@ customFn:
       def: "Tmr1,1"
 flightModeData: 
    0:
-      name: ""
+      name: "Mode 1"
       swtch: "NONE"
       fadeIn: 0
       fadeOut: 0
       gvars: 
          0:
-            val: 100
+            val: 75
          1:
             val: 0
          2:
@@ -452,6 +452,198 @@ flightModeData:
             val: 150
          8:
             val: 60
+   1:
+      name: "Mode 2"
+      swtch: "SA1"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 100
+         1:
+            val: 0
+         2:
+            val: 100
+         3:
+            val: 100
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   2:
+      name: "Mode 3"
+      swtch: "SA2"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 100
+         1:
+            val: 0
+         2:
+            val: 99
+         3:
+            val: 100
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   3:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 100
+         1:
+            val: 0
+         2:
+            val: 100
+         3:
+            val: 100
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   4:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 100
+         1:
+            val: 0
+         2:
+            val: 100
+         3:
+            val: 100
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   5:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 100
+         1:
+            val: 0
+         2:
+            val: 100
+         3:
+            val: 100
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   6:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 100
+         1:
+            val: 0
+         2:
+            val: 100
+         3:
+            val: 100
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   7:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 100
+         1:
+            val: 0
+         2:
+            val: 100
+         3:
+            val: 100
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   8:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 100
+         1:
+            val: 0
+         2:
+            val: 100
+         3:
+            val: 100
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
 thrTraceSrc: TH
 gvars: 
    0:

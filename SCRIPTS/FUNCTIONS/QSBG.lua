@@ -3,7 +3,7 @@ local absFreq = 2
 local absActive = 0
 
 local brakeState = 1
-local brakeRate = model.getGlobalVariable(3, 0)
+local brakeRate = 100
 local brakeCnt = 0
 
 local ltRun = 0
@@ -14,7 +14,7 @@ local speakCnt = 0
 --if fstat('/SCRIPTS/FUNCTIONS/QSBG.lua') then del('/SCRIPTS/FUNCTIONS/QSBG.lua') end
 
 local function qs_run()
-	if not qs_sourceThr then return end
+	if not qs_sourceThr or not qs_drvMode then return end
 	local srcThrVal = getSourceValue(qs_sourceThr)
 
 	if qs_ltActive == 1 then			-- Laptime active?
@@ -99,11 +99,11 @@ local function qs_run()
 				brakeCnt = brakeCnt - 1
 			else
 				if brakeState == 1 then
-					model.setGlobalVariable(3, 0, brakeRate)
+					model.setGlobalVariable(3, qs_drvMode, brakeRate)
 					brakeCnt = qs_ABS[7]
 					brakeState = 0
 				else
-					model.setGlobalVariable(3, 0, brakeRate * Reduce)
+					model.setGlobalVariable(3, qs_drvMode, brakeRate * Reduce)
 					brakeCnt = qs_ABS[8]
 					brakeState = 1
 				end
@@ -113,20 +113,20 @@ local function qs_run()
 			end
 		else
 			if absActive == 1 then
-				model.setGlobalVariable(3, 0, brakeRate)
+				model.setGlobalVariable(3, qs_drvMode, brakeRate)
 				absActive = 0
 			end
-			brakeRate = model.getGlobalVariable(3, 0)
+			brakeRate = model.getGlobalVariable(3, qs_drvMode)
 			absPWM, absFreq = 100, 1
 			brakeState = 1 - qs_ABS[4]
 			brakeCnt = 1
 		end
 	else
 		if absActive == 1 then
-			model.setGlobalVariable(3, 0, brakeRate)
+			model.setGlobalVariable(3, qs_drvMode, brakeRate)
 			absActive = 0
 		end
-		brakeRate = model.getGlobalVariable(3, 0)
+		brakeRate = model.getGlobalVariable(3, qs_drvMode)
 	end
 	srcThrVal = (srcThrVal < 0 and -srcThrVal or srcThrVal) / 1024
 	setRGBLedColor(0, r * srcThrVal, g * srcThrVal, b * srcThrVal)

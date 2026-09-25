@@ -10,6 +10,8 @@ if not listFirst[2010] then
 	listFirst[2040] = 1
 end
 
+local param = {}
+
 local words = {
 	'Steering', 'Forward', 'Brake', 												--  3
 	'Rate', 'Trim', 'Expo', 'Endp. L', 'Endp. R', 							--  8
@@ -19,7 +21,7 @@ local words = {
 	'Forward back', 'Brake back'}, 											-- 15
 	{'ABS on', 'Audio-Feedback', 'ABS-PWM', 'Reduction first',
 	'Trigger', 'Reduction', 'Cycles full', 'Cycles reduce',
-	'PWM-Percent', 'Cycles minimum', 'Only Steer'},							-- 16
+	'PWM-Percent', 'Cycles minimum', 'Only on steer'},							-- 16
 	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 18
 	'Basic setup',																		-- 19
 	'min:', 'max:',																	-- 21
@@ -34,7 +36,7 @@ local words = {
 	'Vorw. zurück', 'Bremse zurück'},
 	{'ABS an', 'Audio-Feedback', 'ABS-PWM', 'Zuerst reduziert',
 	'Trigger', 'Reduktion', 'Zyklen voll', 'Zyklen reduziert',
-	'PWM-Percent', 'Zyklen minimum', 'Nur Lenkung'},
+	'PWM-Percent', 'Zyklen minimum', 'Nur beim lenken'},
 	'Beschleunigung', {'Aktiviert', 'Vorwärts', 'Bremse'},
 	'Das Wichtigste',
 	nil, nil,
@@ -60,7 +62,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		-- if v == nil then
 			-- if i == 'a' then return -(model.getOutput(chnStr).min / 10)
 			-- elseif i == 'b' then return model.getOutput(chnStr).max / 10
-			-- else return model.getGlobalVariable(toNum(i), 0)
+			-- else return model.getGlobalVariable(toNum(i), qs_drvMode)
 			-- end
 		-- else
 			-- local out
@@ -69,7 +71,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				-- elseif i == 'b' then out.max = v * 10
 				-- end
 			-- model.setOutput(chnStr, out)
-			-- else model.setGlobalVariable(toNum(i), 0, v)
+			-- else model.setGlobalVariable(toNum(i), qs_drvMode, v)
 			-- end
 		-- end
 	-- end
@@ -77,7 +79,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		if v == nil then
 			if i == 7 then return -(model.getOutput(chnStr).min / 10)
 			elseif i == 8 then return model.getOutput(chnStr).max / 10
-			else return model.getGlobalVariable(i - 1, 0)
+			else return model.getGlobalVariable(i - 1, qs_drvMode)
 			end
 		else
 			local out
@@ -86,7 +88,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				elseif i == 8 then out.max = v * 10
 				end
 				model.setOutput(chnStr, out)
-			else model.setGlobalVariable(i - 1, 0, v)
+			else model.setGlobalVariable(i - 1, qs_drvMode, v)
 			end
 		end
 	end
@@ -320,37 +322,26 @@ end
 		local mixFwd = model.getMix(chnThr, 0)
 		local mixBrk = model.getMix(chnThr, 1)
 		if editMode == 1 then
-			drawTitel(getText(22), MIDSIZE)
-			local y, lf = 13, listFirst[2040]
-			if iSel < lf then lf = iSel elseif iSel - 3 > lf then lf = iSel - 3 end
-			listFirst[2040] = lf
-			for i = lf, lf + 3 do
-				local val = (i == 1 and mixStrL.speedDown or i == 2 and mixStrL.speedUp or
-					i == 3 and mixFwd.speedUp or i == 4 and mixBrk.speedDown or
-					i == 5 and mixFwd.speedDown or mixBrk.speedUp) * 5
-				if i == iSel then editValue = val end
-				drawText(128, y + 3, getText(15)[i]..'            s', RIGHT)
-				lcd.drawNumber(121, y, val, RIGHT + MIDSIZE + PREC2 + (iSel == i and INVERS or 0))
-				y = y + 13
-			end
-		elseif editMode == 2 then
-			editValue = qs_adjVal(editValue, 0, 1250, 5 * getRotEncSpeed(), event)
-			lcd.drawNumber(114, 22, editValue, RIGHT + XXLSIZE + PREC2)
-			drawText(128, 44, 'S', DBLSIZE + RIGHT)
-			drawText(0, 4, getText(15)[iSel], MIDSIZE)
-		elseif editMode == 3 then
-			editValue = editValue / 5
-			if iSel == 1 then mixStrL.speedDown = editValue mixStrR.speedUp = editValue 
-			elseif iSel == 2 then mixStrL.speedUp = editValue mixStrR.speedDown = editValue
-			elseif iSel == 3 then mixFwd.speedUp = editValue
-			elseif iSel == 4 then mixBrk.speedDown = editValue
-			elseif iSel == 5 then mixFwd.speedDown = editValue
-			elseif iSel == 6 then mixBrk.speedUp = editValue
-			end
-			if iSel < 3 then model.deleteMix(chnStr, 0) model.deleteMix(chnStr, 0) 
-				model.insertMix(chnStr, 0, mixStrR) model.insertMix(chnStr, 0, mixStrL)
-			elseif iSel == 3 or iSel == 5 then model.deleteMix(chnThr, 0) model.insertMix(chnThr, 0, mixFwd)
-			elseif iSel == 4 or iSel == 6 then model.deleteMix(chnThr, 1) model.insertMix(chnThr, 1, mixBrk)
+			param = {mixStrL.speedDown, mixStrL.speedUp, mixFwd.speedUp, mixBrk.speedDown, mixFwd.speedDown, mixBrk.speedUp}
+		end
+		editMode = drawList(getText(22), iSel, getText(15), event, 5, 14, 10, 64, param,
+		'ssssss', {0, 0, 0, 0, 0, 0,   50, 50, 50, 50, 50, 50}, editMode, nil, {2, 2, 2, 2, 2, 2}, PREC1)
+		if editMode == 3 then
+			mixStrL.speedDown = param[1] mixStrR.speedUp = param[1] 
+			mixStrL.speedUp = param[2] mixStrR.speedDown = param[2]
+			mixFwd.speedUp = param[3]
+			mixBrk.speedDown = param[4]
+			mixFwd.speedDown = param[5]
+			mixBrk.speedUp = param[6]
+			model.deleteMix(chnStr, 0) model.insertMix(chnStr, 0, mixStrL) model.deleteMix(chnStr, 1) model.insertMix(chnStr, 1, mixStrR)
+			model.deleteMix(chnThr, 0) model.insertMix(chnThr, 0, mixFwd)
+			model.deleteMix(chnThr, 1) model.insertMix(chnThr, 1, mixBrk)
+			if qs_chnStB ~= -1 then
+				mixStrL = model.getMix(qs_chnStB, 0)
+				mixStrR = model.getMix(qs_chnStB, 1)
+				mixStrL.speedDown = param[1] mixStrR.speedUp = param[1] 
+				mixStrL.speedUp = param[2] mixStrR.speedDown = param[2]
+				model.deleteMix(qs_chnStB, 0) model.insertMix(qs_chnStB, 0, mixStrL) model.deleteMix(qs_chnStB, 1) model.insertMix(qs_chnStB, 1, mixStrR) 
 			end
 		end
 

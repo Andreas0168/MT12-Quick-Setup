@@ -98,6 +98,8 @@ local items = {
 
 local Start = 0
  
+qs_drvMode, qs_drvName = getFlightMode()
+
 qs_sourceStr = 75		-- 75
 qs_sourceThr = 76				-- 76
 
@@ -113,6 +115,7 @@ qs_chnStr = 0
 qs_chnThr = 1
 
 local glVarsLast = 0
+local driveModeLast = 0
 
 qs_rcCar = {}
 qs_username = "your name"
@@ -289,7 +292,8 @@ end
 
 qs_listFirst = {}
 local blinkList = 0
-function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eMode, disp, c)
+function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eMode, disp, c, prc)
+	prc = prc or 0
 	if not sel then return end
 	if titel then qs_drawTitel(titel, MIDSIZE) end
 	local gs = groupNum * 1000 + gsSiteNum() * 10
@@ -346,7 +350,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 					rx, ry, rw, rh = 1, y - 1, 0, 9
 					if font == MIDSIZE then rx, ry, rw, rh = 3, y - 4, 4, 12 end
 					drawText(128, y, unit, RIGHT)
-					lcd.drawNumber(122, y - rw, val, RIGHT + font)
+					lcd.drawNumber(122, y - rw, val, RIGHT + font + prc)
 					rx = lcd.getLastLeftPos() - rx
 					rw = 128 - rx
 				end
@@ -510,10 +514,12 @@ end
 ------------------------------------------------------------------------------------------------------------
 local function qs_run(event)
 	if editMode == 2 then lcd.resetBacklightTimeout() lcdCnt = 0 end
+	qs_drvMode, qs_drvName = getFlightMode()
 	if event == 0 then
 		if lcdCnt > 1 then lcdCnt = lcdCnt - 1
 			local glVars = 0
 			for i = 0, 3 do glVars = glVars + model.getGlobalVariable(i, 0) end
+			glVars = glVars + qs_drvMode
 			if glVars ~= glVarsLast then lcdCnt = 1
 				glVarsLast = glVars
 			end

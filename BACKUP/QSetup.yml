@@ -1,14 +1,26 @@
-semver: 2.10.1
+semver: 2.10.6
 header: 
    name: "QSetup"
    modelId: 
       0:
-         val: 62
+         val: 63
 timers: 
    0:
       start: 900
       swtch: "NONE"
-      value: 297
+      value: 900
+      mode: OFF
+      countdownBeep: 2
+      minuteBeep: 0
+      persistent: 0
+      countdownStart: -1
+      showElapsed: 0
+      extraHaptic: 1
+      name: "Tm1"
+   1:
+      start: 1200
+      swtch: "NONE"
+      value: 0
       mode: OFF
       countdownBeep: 2
       minuteBeep: 0
@@ -16,8 +28,8 @@ timers:
       countdownStart: -1
       showElapsed: 0
       extraHaptic: 0
-      name: "TM1"
-   1:
+      name: "Tm2"
+   2:
       start: 2100
       swtch: "NONE"
       value: 0
@@ -28,19 +40,7 @@ timers:
       countdownStart: -1
       showElapsed: 0
       extraHaptic: 0
-      name: "TM2"
-   2:
-      start: 0
-      swtch: "NONE"
-      value: 0
-      mode: OFF
-      countdownBeep: 2
-      minuteBeep: 0
-      persistent: 0
-      countdownStart: -1
-      showElapsed: 0
-      extraHaptic: 0
-      name: "TM3"
+      name: "Tm3"
 telemetryProtocol: 0
 thrTrim: 0
 noGlobalFunctions: 0
@@ -72,8 +72,8 @@ mixData:
    flightModes: 000000000
    delayUp: 0
    delayDown: 0
-   speedUp: 0
-   speedDown: 0
+   speedUp: 2
+   speedDown: 8
    name: "StrL"
  -
    weight: 100
@@ -88,8 +88,8 @@ mixData:
    flightModes: 000000000
    delayUp: 0
    delayDown: 0
-   speedUp: 0
-   speedDown: 0
+   speedUp: 8
+   speedDown: 2
    name: "StrR"
  -
    weight: 100
@@ -104,7 +104,7 @@ mixData:
    flightModes: 000000000
    delayUp: 0
    delayDown: 0
-   speedUp: 0
+   speedUp: 4
    speedDown: 0
    name: "Forw"
  -
@@ -113,7 +113,7 @@ mixData:
    srcRaw: I1
    carryTrim: 0
    mixWarn: 0
-   mltpx: REPL
+   mltpx: ADD
    speedPrec: 0
    offset: 0
    swtch: "L4"
@@ -123,22 +123,6 @@ mixData:
    speedUp: 0
    speedDown: 0
    name: "Brake"
- -
-   weight: 100
-   destCh: 2
-   srcRaw: P2
-   carryTrim: 0
-   mixWarn: 0
-   mltpx: ADD
-   speedPrec: 0
-   offset: 0
-   swtch: "NONE"
-   flightModes: 000000000
-   delayUp: 0
-   delayDown: 0
-   speedUp: 0
-   speedDown: 0
-   name: ""
  -
    weight: 100
    destCh: 3
@@ -178,7 +162,7 @@ limitData:
       ppmCenter: 0
       offset: GV2
       symetrical: 0
-      revert: 0
+      revert: 1
       curve: 0
       name: "Str"
    1:
@@ -187,7 +171,7 @@ limitData:
       ppmCenter: 0
       offset: GV7
       symetrical: 0
-      revert: 0
+      revert: 1
       curve: 0
       name: "Thr"
    2:
@@ -226,6 +210,15 @@ limitData:
       revert: 0
       curve: 0
       name: "AUX4"
+   7:
+      min: 0
+      max: 0
+      ppmCenter: 0
+      offset: -1000
+      symetrical: 0
+      revert: 0
+      curve: 0
+      name: ""
 expoData: 
  -
    mode: 3
@@ -236,7 +229,7 @@ expoData:
    swtch: "NONE"
    flightModes: 000000000
    weight: GV1
-   name: "Steer"
+   name: "StL"
    offset: 0
    curve: 
       type: 1
@@ -318,19 +311,25 @@ logicalSw:
       duration: 0
    2:
       func: FUNC_VPOS
-      def: "TH,1"
+      def: "TH,2"
       andsw: "NONE"
       delay: 0
       duration: 0
    3:
       func: FUNC_VNEG
-      def: "TH,-1"
+      def: "TH,-2"
       andsw: "NONE"
       delay: 0
       duration: 0
    4:
       func: FUNC_STICKY
       def: "SD2,SD2"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
+   5:
+      func: FUNC_STICKY
+      def: "FL22,FL22"
       andsw: "NONE"
       delay: 0
       duration: 0
@@ -367,10 +366,46 @@ customFn:
       swtch: "ON"
       func: ADJUST_GVAR
       def: "6,Src,T5,1"
+   8:
+      swtch: "L6"
+      func: PLAY_TRACK
+      def: "start,1,!1x"
+   9:
+      swtch: "!L6"
+      func: PLAY_TRACK
+      def: "stop,1,!1x"
+   10:
+      swtch: "FL20"
+      func: RESET
+      def: "Tmr1,1"
 flightModeData: 
    0:
-      name: ""
+      name: "Mode 1"
       swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 90
+         1:
+            val: 0
+         2:
+            val: 100
+         3:
+            val: 100
+         4:
+            val: 100
+         5:
+            val: 40
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 100
+   1:
+      name: "Mode 2"
+      swtch: "SA1"
       fadeIn: 0
       fadeOut: 0
       gvars: 
@@ -383,15 +418,183 @@ flightModeData:
          3:
             val: 100
          4:
-            val: 60
+            val: 30
          5:
-            val: -60
+            val: -10
          6:
             val: 0
          7:
-            val: 150
+            val: 0
          8:
-            val: 60
+            val: 0
+   2:
+      name: "Mode 3"
+      swtch: "SA2"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 72
+         1:
+            val: 0
+         2:
+            val: 100
+         3:
+            val: 45
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   3:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 0
+         1:
+            val: 0
+         2:
+            val: 0
+         3:
+            val: 0
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   4:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 0
+         1:
+            val: 0
+         2:
+            val: 0
+         3:
+            val: 0
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   5:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 0
+         1:
+            val: 0
+         2:
+            val: 0
+         3:
+            val: 0
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   6:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 0
+         1:
+            val: 0
+         2:
+            val: 0
+         3:
+            val: 0
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   7:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 0
+         1:
+            val: 0
+         2:
+            val: 0
+         3:
+            val: 0
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
+   8:
+      name: ""
+      swtch: "NONE"
+      fadeIn: 0
+      fadeOut: 0
+      gvars: 
+         0:
+            val: 0
+         1:
+            val: 0
+         2:
+            val: 0
+         3:
+            val: 0
+         4:
+            val: 0
+         5:
+            val: 0
+         6:
+            val: 0
+         7:
+            val: 0
+         8:
+            val: 0
 thrTraceSrc: TH
 gvars: 
    0:
@@ -407,7 +610,7 @@ gvars:
       max: 824
       popup: 1
       prec: 1
-      unit: 0
+      unit: 1
    2:
       name: "FwR"
       min: 1024
@@ -442,14 +645,14 @@ gvars:
       max: 824
       popup: 0
       prec: 1
-      unit: 0
+      unit: 1
    7:
       name: ""
       min: 1024
       max: 924
       popup: 0
       prec: 0
-      unit: 0
+      unit: 1
    8:
       name: "ExB"
       min: 924
@@ -480,13 +683,6 @@ moduleData:
             receiverTelemetryOff: 0
             receiverHigherChannels: 0
             optionValue: 56
-trainerData: 
-   mode: SLAVE
-   channelsStart: 0
-   channelsCount: 0
-   frameLength: 0
-   delay: 0
-   pulsePol: 0
 inputNames: 
    0:
       val: "St"

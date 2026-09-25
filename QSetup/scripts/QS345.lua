@@ -391,7 +391,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	if rwSetup == 2 then							-- Write Setup (rwSetup = 2)
 		local f = io.open(rwFN, 'w')
 		for c = 0, 8 do
-			io.write(f, model.getGlobalVariable(c, 0)..', ')
+			io.write(f, model.getGlobalVariable(c, qs_drvMode)..', ')
 		end
 		for c = chnStr, chnThr, chnThr - chnStr do
 			for m = 1, model.getMixesCount(c) do
@@ -405,7 +405,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	elseif rwSetup == 1 then					-- Read Setup (rwSetup = 1)
 		local d = {}
 		if qs_readData(rwFN, d) then
-			for p = 1, 9 do model.setGlobalVariable(p - 1, 0, d[p]) end
+			for p = 1, 9 do model.setGlobalVariable(p - 1, qs_drvMode, d[p]) end
 			local p = 10
 			for c = chnStr, chnThr, chnThr - chnStr do
 				for m = 1, model.getMixesCount(c) do

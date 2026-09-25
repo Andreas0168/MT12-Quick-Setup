@@ -22,7 +22,7 @@ local words = {
 	{'ABS on', 'Audio-Feedback', 'ABS-PWM', 'Reduction first',
 	'Trigger', 'Reduction', 'Cycles full', 'Cycles reduce',
 	'PWM-Percent', 'Cycles minimum', 'Only on steer',
-	'Steering threshold',},															-- 16
+	'Steer. threshold',},															-- 16
 	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 18
 	'Basic setup',																		-- 19
 	'min:', 'max:',																	-- 21

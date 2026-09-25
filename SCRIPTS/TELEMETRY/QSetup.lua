@@ -633,13 +633,11 @@ function qs_init(ri)
 		elseif buffer.name == 'StB' then
 			qs_chnStB = n
 			local StF, StB = true, false
-			if qs_4wsMode >= 2 then StB = true end
 			if qs_4wsMode == 3 then StF = false end
+			if qs_4wsMode >= 2 then StB = true end
 			setStickySwitch(6, StF)
 			setStickySwitch(7, StB)
-			if qs_4wsMode == 4 then buffer.revert = 1 - qs_4wsRev
-			else buffer.revert = qs_4wsRev
-			end
+			buffer.revert = qs_4wsMode == 4 and 1 - qs_4wsRev or qs_4wsRev
 			model.setOutput(n, buffer)
 
 		elseif buffer.name == 'Thr' then

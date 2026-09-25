@@ -18,10 +18,11 @@ local words = {
 	'Forward', 																			--  9
 	'Channel', 'Steering', 'Throttle', 'Direction', 'Endpoints', 		-- 14
 	{'Steering out', 'Steering in', 'Forward', 'Brake',
-	'Forward back', 'Brake back'}, 											-- 15
+	'Forward back', 'Brake back'}, 												-- 15
 	{'ABS on', 'Audio-Feedback', 'ABS-PWM', 'Reduction first',
 	'Trigger', 'Reduction', 'Cycles full', 'Cycles reduce',
-	'PWM-Percent', 'Cycles minimum', 'Only on steer'},							-- 16
+	'PWM-Percent', 'Cycles minimum', 'Only on steer',
+	'Steering threshold',},															-- 16
 	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 18
 	'Basic setup',																		-- 19
 	'min:', 'max:',																	-- 21
@@ -36,7 +37,8 @@ local words = {
 	'Vorw. zurück', 'Bremse zurück'},
 	{'ABS an', 'Audio-Feedback', 'ABS-PWM', 'Zuerst reduziert',
 	'Trigger', 'Reduktion', 'Zyklen voll', 'Zyklen reduziert',
-	'PWM-Percent', 'Zyklen minimum', 'Nur beim lenken'},
+	'PWM-Percent', 'Zyklen minimum', 'Nur beim lenken',
+	'Lenkungsschwelle'},
 	'Beschleunigung', {'Aktiviert', 'Vorwärts', 'Bremse'},
 	'Das Wichtigste',
 	nil, nil,
@@ -348,9 +350,9 @@ end
 	elseif siteNum == 5 then		-- setup ABS-System
 		local ABS = qs_ABS
 		local v = iSel + (iSel > 6 and ABS[3] * 2 or 0)
-		local disp = ABS[3] == 0 and '++++++++  +' or '++++++  +++'
-		editMode = drawList('ABS-System', iSel, getText(16), event, 5, 14, 10, 64, ABS, '||||%%--% |',
-		{0, 0, 0, 0, 10, 10, 1, 1, 1, 1, 0,  1, 1, 1, 1, 100, 100, 20, 20, 100, 20, 1}, editMode, disp, {1, 1, 1, 1, -10.24, .01})
+		local disp = ABS[3] == 0 and '++++++++  ++' or '++++++  ++++'
+		editMode = drawList('ABS-System', iSel, getText(16), event, 5, 14, 10, 64, ABS, '||||%%--% |%',
+		{0, 0, 0, 0, 10, 10, 1, 1, 1, 1, 0, 0,  1, 1, 1, 1, 100, 100, 20, 20, 100, 20, 1, 100}, editMode, disp, {1, 1, 1, 1, -10.24, .01})
 		if editMode == 1 then editValue = ABS[v]
 		elseif editMode == 3 and editValue ~= ABS[v] then qs_writeConf()
 		elseif editMode == 4 then ABS[v] = editValue end

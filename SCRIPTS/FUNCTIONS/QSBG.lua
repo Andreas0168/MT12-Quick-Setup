@@ -77,7 +77,11 @@ local function qs_run()
 		local Reduce = qs_ABS[6]
 		if qs_ABS[11] == 1 then
 			Reduce = getOutputValue(qs_chnStr)
-			Reduce = (1 - qs_ABS[6]) * ((1024 - (Reduce < 0 and -Reduce or Reduce)) / 1024) + qs_ABS[6]
+			if qs_ABS[12] > 0 then
+				Reduce = ((Reduce < 0 and -Reduce or Reduce) / 10.24) >= qs_ABS[12] and qs_ABS[6] or brakeRate
+			else
+				Reduce = (1 - qs_ABS[6]) * ((1024 - (Reduce < 0 and -Reduce or Reduce)) / 1024) + qs_ABS[6]
+			end
 		end
 		if srcThrVal <= qs_ABS[5] then
 			absActive = 1

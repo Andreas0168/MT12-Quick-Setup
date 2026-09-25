@@ -40,7 +40,8 @@ qs_ABS = {
 	1,			-- reduce = 
 	50,		-- pwmPercent = 
 	2,			-- pwmFreq = 
-	0			-- only on steering = 
+	0,			-- only on steering = 
+	0			-- steering threshold (0 = automatic) =
 }
 
 qs_ltActive = -1
@@ -78,7 +79,7 @@ local items = {
 	32, 1,
 	64, 1,
 	 6, 1,
-	 9, 1,
+	 10, 1,
 	 3, 1,
 	 1, 1}
 ,

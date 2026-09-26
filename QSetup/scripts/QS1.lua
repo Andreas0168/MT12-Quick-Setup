@@ -338,21 +338,21 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	drawText(93 - modelNameX * .33, 3, battPercent.."%", SMLSIZE + RIGHT)
 	if battVolt <= battMin then qs_setPopup({getText(3)..battPercent.."%", getText(4)}) end
 
-	if siteNum < 4 then drawText(32, 13, qs_username, SMLSIZE + CENTER) end
+	if siteNum < 4 then drawText(0, 13, qs_username, SMLSIZE) end
 
 	if siteNum == 1 or siteNum == 2 then  -- qs_items for 
-		x, y, w = 1, 23, 63 -- print subtrim, steering rate, forward rate and brake rate
+		x, y, w = 0, 23, 64 -- print subtrim, steering rate, forward rate and brake rate
 		drawText(x, y, getText(5), SMLSIZE)
 		lcd.drawNumber(x + 32, y, qs_glVars[2], SMLSIZE + RIGHT)
-		drawText(x + 34, y, 'M'..qs_drvMode + 1, SMLSIZE + INVERS)
-		drawText(x + 48, y, getText(6), SMLSIZE + (qs_ABS[1] == 1 and INVERS or 0))
+		drawText(x + 36, y, 'M'..qs_drvMode + 1, SMLSIZE + INVERS)
+		drawText(x + 49, y, getText(6), SMLSIZE + (qs_ABS[1] == 1 and INVERS or 0))
 		drawText(x, y + 8, getText(7), SMLSIZE)
 		local trim = qs_glVars[1] * .5
-		drawText(x + 37, y + 8, trim < 0 and getText(8) or trim > 0 and getText(9) or '', SMLSIZE)
+		drawText(x + 38, y + 8, trim < 0 and getText(8) or trim > 0 and getText(9) or '', SMLSIZE)
 		lcd.drawNumber(x + w, y + 8, (trim < 0 and -trim or trim) * 10, SMLSIZE + RIGHT + PREC1)
 		drawText(x, y + 16, getText(10), SMLSIZE)
 		lcd.drawNumber(x + 31, y + 16, qs_glVars[0],SMLSIZE + RIGHT)
-		drawText(x + 32, y + 16, getText(11), SMLSIZE)
+		drawText(x + 33, y + 16, getText(11), SMLSIZE)
 		lcd.drawNumber(x + w, y + 16, qs_glVars[3],SMLSIZE + RIGHT)
 		if qs_skin % 4 >= 2 then lcd.drawFilledRectangle(x - 1, y - 1, w + 1, 24, 0) end
 	end

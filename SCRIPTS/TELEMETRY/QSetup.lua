@@ -115,8 +115,8 @@ qs_chnStB = -1
 qs_chnStr = 0
 qs_chnThr = 1
 
-local glVarsLast = 0
-local driveModeLast = 0
+qs_glFld = -1
+qs_glVars = {}
 
 qs_rcCar = {}
 qs_username = "your name"
@@ -515,18 +515,23 @@ end
 ------------------------------------------------------------------------------------------------------------
 local function qs_run(event)
 	if editMode == 2 then lcd.resetBacklightTimeout() lcdCnt = 0 end
+
+	local drvMode = qs_drvMode
 	qs_drvMode, qs_drvName = getFlightMode()
+	qs_glFld = -1
+	for n = 0, 4 do
+		local t = model.getGlobalVariable(n < 4 and n or n + 2, qs_drvMode)
+		if t ~= qs_glVars[n] then qs_glFld = n end
+		qs_glVars[n] = t
+	end
+
 	if event == 0 then
-		if lcdCnt > 1 then lcdCnt = lcdCnt - 1
-			local glVars = 0
-			for i = 0, 3 do glVars = glVars + model.getGlobalVariable(i, 0) end
-			glVars = glVars + qs_drvMode
-			if glVars ~= glVarsLast then lcdCnt = 1
-				glVarsLast = glVars
-			end
-			return 1
+		if lcdCnt > 1 then
+			lcdCnt = lcdCnt - 1
+			if qs_glFld == -1 and drvMode == qs_drvMode then return 1 end
 		else lcdCnt = 72000 end
 	end
+
 	if event == EVT_ENTER_FIRST then editMode = editMode + 1
 	elseif event == evt_EXIT_FIRST then
 		if editMode == 2 then editMode = 4
@@ -571,6 +576,10 @@ local function qs_run(event)
 	-- local x = 63 - s * 3 + gsSiteNum() * 6
 	-- drawLine(x - 5, 0, x, 0, SOLID, 0)
 
+		if Start == 0 then Start = 1
+			qs_setPopup({qs_lang == 1 and 'Hello!|Welcome to|Quick Setup!' or 'Hallo!|Wilkommen zu|Quick Setup!'})
+		end
+
 	if popupCnt > 0 then
 		popupCnt = popupCnt - 1
 		if event == EVT_ROT_LEFT or event == EVT_ROT_RIGHT then popupCnt = 0 end
@@ -604,10 +613,6 @@ function qs_init(ri)
 		qs_sourceSC = getFieldInfo('sc').id				-- 102
 		qs_ltSwitch = 1
 		readConf()
-
-		if Start == 0 then Start = 1
-			qs_setPopup({qs_lang == 1 and 'Hello!|Welcome to|Quick Setup!' or 'Hallo!|Wilkommen zu|Quick Setup!'})
-		end
 
 		--local fn = '/SCRIPTS/TELEMETRY/QSetup.lua' if fstat(fn) then del(fn) end
 

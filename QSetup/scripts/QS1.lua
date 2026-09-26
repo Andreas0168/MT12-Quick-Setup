@@ -9,10 +9,7 @@ local evtActive, evtStart, evtDist, evtRuns = 0, 0, 5, 1
 
 local yn = 0
 
-local drvMode = 0
-
-local glVars = {}
-for n = 0, 4 do glVars[n] = model.getGlobalVariable(n < 4 and n or n + 2, qs_drvMode) end
+local drvMode = qs_drvMode
 
 local ws4Text = {'Front only', 'Front/Back', 'Back only', 'Front/Back rev.'}
 
@@ -70,25 +67,23 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	local function getText(n)							-- give the right word for selected language
 		return words[lg * 35 - 35 + n] or words[n]
 	end
-	
-	local fld, val = -1, 0
-	for n = 0, 4 do
-		local t = model.getGlobalVariable(n < 4 and n or n + 2, qs_drvMode)
-		if t ~= glVars[n] then fld = n val = t end
-		glVars[n] = t
-	end
-	if valSrcThr > -19 and valSrcThr < 19 and qs_drvMode == drvMode then
-		if fld == 0 then qs_setPopup({getText(32), val..'%'}) end
-		if fld == 1 then
-			qs_setPopup({getText(33), (val < 0 and 'L ' or val > 0 and 'R ' or '') ..
-			string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'})
-		end
-		if fld == 2 then qs_setPopup({getText(34), val..'%'}) end
-		if fld == 3 then qs_setPopup({getText(35), val..'%'}) end
-		if fld == 4 then
-			qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
-			' '..string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'})
-			qs_init(1)
+
+	local fld = qs_glFld
+	if fld > -1 then
+		if valSrcThr > -19 and valSrcThr < 19 and qs_drvMode == drvMode then
+			local val = qs_glVars[fld]
+			if fld == 0 then qs_setPopup({getText(32), val..'%'},7) end
+			if fld == 1 then
+				qs_setPopup({getText(33), (val < 0 and 'L ' or val > 0 and 'R ' or '') ..
+				string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'},7)
+			end
+			if fld == 2 then qs_setPopup({getText(34), val..'%'},7) end
+			if fld == 3 then qs_setPopup({getText(35), val..'%'},7) end
+			if fld == 4 then
+				qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
+				' '..string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'})
+				qs_init(1)
+			end
 		end
 	end
 
@@ -313,7 +308,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		trim = trim < -43 and -43 or trim > 43 and 43 or trim
 		local x2 = x + (trim < 0 and -1 or trim > 0 and 1 or 0) + trim
 		for y = y, y + 1 do lcd.drawLine(x, y, x2, y, SOLID, FORCE) end
-		trim = glVars[4] * (w - 5) / 800
+		trim = qs_glVars[4] * (w - 5) / 800
 	end
 	if qs_skin % 16 >= 8 then lcd.drawFilledRectangle(19, 47, 91, 17, 0) end
 
@@ -348,16 +343,17 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	if siteNum == 1 or siteNum == 2 then  -- qs_items for 
 		x, y, w = 1, 23, 63 -- print subtrim, steering rate, forward rate and brake rate
 		drawText(x, y, getText(5), SMLSIZE)
-		lcd.drawNumber(x + 32, y, glVars[2], SMLSIZE + RIGHT)
+		lcd.drawNumber(x + 32, y, qs_glVars[2], SMLSIZE + RIGHT)
+		drawText(x + 34, y, 'M'..qs_drvMode + 1, SMLSIZE + INVERS)
 		drawText(x + 48, y, getText(6), SMLSIZE + (qs_ABS[1] == 1 and INVERS or 0))
 		drawText(x, y + 8, getText(7), SMLSIZE)
-		local trim = glVars[1] * .5
+		local trim = qs_glVars[1] * .5
 		drawText(x + 37, y + 8, trim < 0 and getText(8) or trim > 0 and getText(9) or '', SMLSIZE)
 		lcd.drawNumber(x + w, y + 8, (trim < 0 and -trim or trim) * 10, SMLSIZE + RIGHT + PREC1)
 		drawText(x, y + 16, getText(10), SMLSIZE)
-		lcd.drawNumber(x + 31, y + 16, glVars[0],SMLSIZE + RIGHT)
+		lcd.drawNumber(x + 31, y + 16, qs_glVars[0],SMLSIZE + RIGHT)
 		drawText(x + 32, y + 16, getText(11), SMLSIZE)
-		lcd.drawNumber(x + w, y + 16, glVars[3],SMLSIZE + RIGHT)
+		lcd.drawNumber(x + w, y + 16, qs_glVars[3],SMLSIZE + RIGHT)
 		if qs_skin % 4 >= 2 then lcd.drawFilledRectangle(x - 1, y - 1, w + 1, 24, 0) end
 	end
 

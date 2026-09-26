@@ -17,22 +17,23 @@ local words = {
 	'Rate', 'Trim', 'Expo', 'Endp. L', 'Endp. R', 							--  8
 	'Forward', 																			--  9
 	'Channel', 'Steering', 'Throttle', 'Direction', 'Endpoints', 		-- 14
+	'Speed-Settings',																	-- 15
 	{'Steering out', 'Steering in', 'Forward', 'Brake',
-	'Forward back', 'Brake back'}, 												-- 15
+	'Forward back', 'Brake back'}, 												-- 16
 	{'ABS on', 'Audio-Feedback', 'ABS-PWM', 'Reduction first',
 	'Trigger', 'Reduction', 'Cycles full', 'Cycles reduce',
 	'PWM-Percent', 'Cycles minimum', 'Only on steer',
-	'Steer. threshold',},															-- 16
-	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 18
-	'Basic setup',																		-- 19
-	'min:', 'max:',																	-- 21
-	'Speed-Settings',																	-- 22
+	'Steer. threshold',},															-- 17
+	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 19
+	'Basic setup',																		-- 20
+	'min:', 'max:',																	-- 22
 	'This is only for', 'RadioLink R6FG Receiver',							-- 24
 
 	'Lenkung', 'Vorw.', 'Bremse',
 	nil, nil, nil, nil, nil,
 	'Vorwärts',
 	'Kanal', 'Lenkung', 'Gas', 'Richtung', 'Endpunkte',
+	'Verzögerung',
 	{'Lenkung raus', 'Lenkung rein', 'Vorwärts', 'Bremse',
 	'Vorw. zurück', 'Bremse zurück'},
 	{'ABS an', 'Audio-Feedback', 'ABS-PWM', 'Zuerst reduziert',
@@ -42,7 +43,6 @@ local words = {
 	'Beschleunigung', {'Aktiviert', 'Vorwärts', 'Bremse'},
 	'Das Wichtigste',
 	nil, nil,
-	'Verzögerung',
 	'Dies ist nur für', 'Radiolink R6FG Empfänger'
 }
 
@@ -60,37 +60,18 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	local function getSetParam(i, v)
-		-- i = string.sub(paramA, i, i)
-		-- if v == nil then
-			-- if i == 'a' then return -(model.getOutput(chnStr).min / 10)
-			-- elseif i == 'b' then return model.getOutput(chnStr).max / 10
-			-- else return model.getGlobalVariable(toNum(i), qs_drvMode)
-			-- end
-		-- else
-			-- local out
-			-- if i == 'a' or i == 'b' then out = model.getOutput(chnStr)
-				-- if i == 'a' then out.min = -(v * 10)
-				-- elseif i == 'b' then out.max = v * 10
-				-- end
-			-- model.setOutput(chnStr, out)
-			-- else model.setGlobalVariable(toNum(i), qs_drvMode, v)
-			-- end
-		-- end
-	-- end
-
 		if v == nil then
-			if i == 7 then return -(model.getOutput(chnStr).min / 10)
-			elseif i == 8 then return model.getOutput(chnStr).max / 10
-			else return model.getGlobalVariable(i - 1, qs_drvMode)
-			end
+			return i == 7 and -(model.getOutput(chnStr).min / 10) or
+			i == 8 and model.getOutput(chnStr).max / 10 or
+			model.getGlobalVariable(i - 1, qs_drvMode)
 		else
-			local out
-			if i == 7 or i == 8 then out = model.getOutput(chnStr)
+			if i == 7 or i == 8 then
+				local out = model.getOutput(chnStr)
 				if i == 7 then out.min = -(v * 10)
-				elseif i == 8 then out.max = v * 10
-				end
+				else out.max = v * 10 end
 				model.setOutput(chnStr, out)
-			else model.setGlobalVariable(i - 1, qs_drvMode, v)
+			else
+				model.setGlobalVariable(i - 1, qs_drvMode, v)
 			end
 		end
 	end
@@ -291,9 +272,9 @@ end
 			model.setOutput(chn, output)
 			lcd.drawNumber(129, 22, val, RIGHT + XXLSIZE + PREC1)
 			if chn == chnThr then
-				drawText(0, 4, MinMax == 0 and (getText(3)..' '..getText(20)) or (getText(12)..' '..getText(21)), MIDSIZE)
+				drawText(0, 4, MinMax == 0 and (getText(3)..' '..getText(21)) or (getText(12)..' '..getText(22)), MIDSIZE)
 			else
-				drawText(0, 4, channelText(chn)..' '..(MinMax == 0 and getText(20) or getText(21)), MIDSIZE)
+				drawText(0, 4, channelText(chn)..' '..(MinMax == 0 and getText(21) or getText(22)), MIDSIZE)
 			end
 		elseif editMode == 1 then
 			drawTitel(getText(14), MIDSIZE)
@@ -310,7 +291,7 @@ end
 				for n = 0, 1 do
 					local mark = i * 2 + n + 1
 					local val = n == 0 and model.getOutput(i).min or model.getOutput(i).max
-					drawText(99, n * 8 + y + 1, n == 0 and getText(20) or getText(21), RIGHT)
+					drawText(99, n * 8 + y + 1, n == 0 and getText(21) or getText(22), RIGHT)
 					lcd.drawNumber(128, n * 8 + y + 1, val, PREC1 + RIGHT + (mark == iSel and INVERS or 0))
 					if iSel == mark then editValue = val end
 				end
@@ -326,7 +307,7 @@ end
 		if editMode == 1 then
 			param = {mixStrL.speedDown, mixStrL.speedUp, mixFwd.speedUp, mixBrk.speedDown, mixFwd.speedDown, mixBrk.speedUp}
 		end
-		editMode = drawList(getText(22), iSel, getText(15), event, 5, 14, 10, 64, param,
+		editMode = drawList(getText(15), iSel, getText(16), event, 5, 14, 10, 64, param,
 		'ssssss', {0, 0, 0, 0, 0, 0,   50, 50, 50, 50, 50, 50}, editMode, nil, {2, 2, 2, 2, 2, 2}, PREC1)
 		if editMode == 3 then
 			mixStrL.speedDown = param[1] mixStrR.speedUp = param[1] 
@@ -351,7 +332,7 @@ end
 		local ABS = qs_ABS
 		local v = iSel + (iSel > 6 and ABS[3] * 2 or 0)
 		local disp = ABS[3] == 0 and '++++++++  ++' or '++++++  ++++'
-		editMode = drawList('ABS-System', iSel, getText(16), event, 5, 14, 10, 64, ABS, '||||%%--% |%',
+		editMode = drawList('ABS-System', iSel, getText(17), event, 5, 14, 10, 64, ABS, '||||%%--% |%',
 		{0, 0, 0, 0, 10, 10, 1, 1, 1, 1, 0, 0,  1, 1, 1, 1, 100, 100, 20, 20, 100, 20, 1, 100}, editMode, disp, {1, 1, 1, 1, -10.24, .01})
 		if editMode == 1 then editValue = ABS[v]
 		elseif editMode == 3 and editValue ~= ABS[v] then qs_writeConf()
@@ -359,7 +340,7 @@ end
 
 	elseif siteNum == 6 then
 		local ACC = qs_ACC
-		editMode = drawList(getText(17), iSel, getText(18), event,
+		editMode = drawList(getText(18), iSel, getText(19), event,
 		3, 20, 14, 64, ACC, '|%%', {0, 0, 0,   1, 100, 100}, editMode, nil, {1, .05, .05})
 		if editMode == 1 then editValue = ACC[iSel]
 		elseif editMode == 3 and editValue ~= ACC[iSel] then qs_writeConf()

@@ -71,18 +71,17 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	local fld = qs_glFld
 	if fld > -1 then
 		if valSrcThr > -19 and valSrcThr < 19 and qs_drvMode == drvMode then
-			local val = qs_glVars[fld]
-			if fld == 0 then qs_setPopup({getText(32), val..'%'},7) end
+			local val, d = qs_glVars[fld], 6
+			if fld == 0 then qs_setPopup({getText(32), val..'%'},d) end
 			if fld == 1 then
 				qs_setPopup({getText(33), (val < 0 and 'L ' or val > 0 and 'R ' or '') ..
-				string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'},7)
+				string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'},d)
 			end
-			if fld == 2 then qs_setPopup({getText(34), val..'%'},7) end
-			if fld == 3 then qs_setPopup({getText(35), val..'%'},7) end
+			if fld == 2 then qs_setPopup({getText(34), val..'%'},d) end
+			if fld == 3 then qs_setPopup({getText(35), val..'%'},d) end
 			if fld == 4 then
 				qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
-				' '..string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'})
-				qs_init(1)
+				' '..string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'},d)
 			end
 		end
 	end
@@ -302,7 +301,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		lcd.drawFilledRectangle(x - 19, y, 19, h + h - 1, 0)
 		lcd.drawFilledRectangle(x + w, y, 18, h + h - 1, 0)
 	end
-	local trim = model.getGlobalVariable(1, qs_drvMode) * (w - 5) / 800
+	local trim = qs_glVars[1] * (w - 5) / 800
 	x = x + w / 2
 	for y = y + 3, y + 11, 8 do
 		trim = trim < -43 and -43 or trim > 43 and 43 or trim

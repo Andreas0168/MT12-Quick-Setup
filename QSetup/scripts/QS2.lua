@@ -165,8 +165,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 local function getStdSetTxt(i)
-	local siteStdSetTxt = '112312113454466786119319113'
-	return getText(tonumber(string.sub(siteStdSetTxt, i, i)))
+	i = i * 2
+	return getText(tonumber(string.sub('010102030102010103040504040606070806010109030109010103', i - 1, i)))
 end
 
 	if siteNum == 1 then  -- menue for the most standard setup

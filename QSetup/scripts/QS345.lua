@@ -70,22 +70,12 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 	local modelName = qs_getModelName()
 
-	-- local function lZeroes(v, strg, num)if n == 504 then break end 
-		-- num = num or 1
-		-- local chr = ''
-		-- if num == 2 and v < 100 then chr = strg end
-		-- if v < 10 then chr = chr..strg end
-		-- return chr..v
-	-- end
-
 	local function msStrg(hs)
 		local m = floor(hs / 6000)
 		local cs = hs - m * 6000
 		local s = floor(cs / 100)
 		cs = cs - s * 100
 		return (m < 10 and space or '') .. m .. ':' .. (s < 10 and '0' or '') .. s .. '.' .. (cs < 10 and '0' or '') .. cs
-		-- local strg = '' .. (m < 10 and space or '') .. m .. ':' .. (s < 10 and '0' or '') .. s .. '.' .. (cs < 10 and '0' or '') .. cs
-		-- if hundred then return '' .. (m < 100 and space or '') .. strg else return strg end
 	end
 
 	local function qs_tableSort(t)

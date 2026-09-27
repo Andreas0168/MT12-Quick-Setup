@@ -370,6 +370,22 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		if qs_skin % 2 >= 1 then lcd.drawFilledRectangle(x, y, 16, h * 4 - 3, 0) end
 		if qs_skin % 16 >= 8 then lcd.drawFilledRectangle(81, 13, 47, 33, 0) end
 
+		if editMode == 1 and (event == EVT_ROT_LEFT or event == EVT_ROT_RIGHT) then
+			local pos = 0
+			for n = 55, 63 do
+				if getLogicalSwitchValue(n) == true then pos = n break end
+			end
+			if pos == 0 then pos = 55 end
+			if event == EVT_ROT_RIGHT and pos > 55 then
+				setStickySwitch(pos, false)
+				setStickySwitch(pos -1, true)
+			end
+			if event == EVT_ROT_LEFT and pos < 63 then
+				setStickySwitch(pos, false)
+				setStickySwitch(pos +1, true)
+			end
+		end
+
 		if editMode == 2 then
 			qs_skin = qs_adjVal(qs_skin, 0, 31, floor((getRotEncSpeed() + 3) / 4), event)
 			qs_setPopup({getText(18), qs_skin}) end

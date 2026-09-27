@@ -375,17 +375,6 @@ function qs_getModelName()
 	return name
 end
 
-function qs_writeConf()
-	local f = io.open(qs_path .. 'save/' .. qs_getModelName() .. '.cfg', 'w')
-	local s = ', '
-	io.write(f, qs_username, s, qs_lang, s, qs_skin, s, qs_clock, s, kbSkin)
-	for n = 1, 10 do io.write(f, s, qs_ABS[n]) end
-	for n = 1, 3 do io.write(f, s, qs_ACC[n]) end
-	for n = 1, 8 do io.write(f, s, qs_LED[n]) end
-	io.write(f, s, qs_4wsRev)
-	io.close(f)
-end
-
 -- function qs_readData(fn, d, toNum)
 	-- local i = fstat(fn)
 	-- if i == nil then return false end
@@ -414,6 +403,17 @@ function qs_readData(fn, d, toNum)
 	return true
 end
 
+function qs_writeConf()
+	local f = io.open(qs_path .. 'save/' .. qs_getModelName() .. '.cfg', 'w')
+	local s = ', '
+	io.write(f, qs_username, s, qs_lang, s, qs_skin, s, qs_clock, s, kbSkin)
+	for n = 1, 12 do io.write(f, s, qs_ABS[n]) end
+	for n = 1, 3 do io.write(f, s, qs_ACC[n]) end
+	for n = 1, 8 do io.write(f, s, qs_LED[n]) end
+	io.write(f, s, qs_4wsRev)
+	io.close(f)
+end
+
 local function readConf()
 	local d = {}
 	if qs_readData(qs_path .. 'save/' .. qs_getModelName() .. '.cfg', d) then
@@ -424,12 +424,11 @@ local function readConf()
 		a = d[3] if a < 0 or a > 31 then a = 5 end qs_skin = a
 		a = d[4] if a < 0 or a > 1 then a = 0 end qs_clock = a
 		a = d[5] if a < 0 or a > 3 then a = 0 end kbSkin = a
-		if #d < 26 then qs_writeConf() return end
-		for n = 1, 10 do qs_ABS[n] = d[n + 5] end
-		for n = 1, 3 do qs_ACC[n] = d[n + 15] end
-		for n = 1, 8 do qs_LED[n] = d[n + 18] end
-		if #d < 27 then qs_writeConf() return end
-		qs_4wsRev = d[27]
+		if #d < 29 then qs_writeConf() return end
+		for n = 1, 12 do qs_ABS[n] = d[n + 5] end
+		for n = 1, 3 do qs_ACC[n] = d[n + 17] end
+		for n = 1, 8 do qs_LED[n] = d[n + 20] end
+		qs_4wsRev = d[29]
 	else
 		qs_writeConf()
 	end

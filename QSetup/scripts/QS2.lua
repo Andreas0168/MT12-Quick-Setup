@@ -164,10 +164,12 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		secondLine = x
 	end
 
-local function getStdSetTxt(i)
-	i = i * 2
-	return getText(tonumber(string.sub('010102030102010103040504040606070806010109030109010103', i - 1, i)))
-end
+	local function getStdSetTxt(i)
+		local a = {1,1,2,3,1,2,1,1,3, 4,5,4,4,6,6,7,8,6, 1,1,9,3,1,9,1,1,3}
+		return a[i]
+	end
+--	i = i * 2
+--	return getText(tonumber(string.sub('010102030102010103040504040606070806010109030109010103', i - 1, i)))
 
 	if siteNum == 1 then  -- menue for the most standard setup
 		if editMode == 4 then

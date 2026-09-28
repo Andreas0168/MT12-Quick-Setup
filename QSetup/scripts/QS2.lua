@@ -130,14 +130,14 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	-- Draws a box to display the rate and expo for steering and draws a crosshair on the output line
-	local function expoRateStr()
+	local function expoRateStr(back)
 		local x = 0
 		local y = 19
 		local w = 45
 		local my = w / 2 + y
 		local eH = (w - 1) / 2
 		local expo = getSetParam(5)
-		local scale = getSetParam(1)
+		local scale = getSetParam(back == 0 and 1 or 8)
 		local mx = drawExpoBox(x, y, w, w, expo, 1, scale)
 		local y1 = getOutputValue(chnStr) / 10.24
 		if model.getOutput(chnStr).revert == 1 then y1 = -y1 end
@@ -164,12 +164,13 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		secondLine = x
 	end
 
+		-- local a = {1,1,2,3,1,2,1,1,3, 4,5,4,4,6,6,7,8,6, 1,1,9,3,1,9,1,1,3}
+		-- return getText(a[i])
+	local txtS1 = '010102030102010103'..'040504040606070806'..'010109030109010103'
 	local function getStdSetTxt(i)
-		local a = {1,1,2,3,1,2,1,1,3, 4,5,4,4,6,6,7,8,6, 1,1,9,3,1,9,1,1,3}
-		return a[i]
+		i = i * 2
+		return getText(tonumber(string.sub(txtS1, i - 1, i)))
 	end
---	i = i * 2
---	return getText(tonumber(string.sub('010102030102010103040504040606070806010109030109010103', i - 1, i)))
 
 	if siteNum == 1 then  -- menue for the most standard setup
 		if editMode == 4 then
@@ -194,7 +195,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			lcd.drawNumber(129, 22, getSetParam(iSel), RIGHT + XXLSIZE + (iSel == 2 and PREC1 or 0))
 			drawText(0, 4, getStdSetTxt(iSel + 18)..' '..getStdSetTxt(iSel + 9)..':', MIDSIZE)
 			if iSel == 1 then
-				expoRateStr()
+				expoRateStr(0)
 				if event == evt_PAGER_FIRST then itemChg(2) end
 			elseif iSel == 2 then
 				local x = getOutputValue(chnStr)
@@ -212,7 +213,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				if valSrcThr > 500 then itemChg(3)
 				elseif event == evt_PAGER_FIRST then itemChg(6) end
 			elseif iSel == 5 then
-				expoRateStr()
+				expoRateStr(0)
 				if event == evt_PAGER_FIRST then itemChg(1) end
 			elseif iSel == 6 then
 				expoRateThr(0)
@@ -367,6 +368,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	if event == evt_MDL_FIRST and editMode == 1 then qs_popGroup() groupNum = 3 end
+
+	-- lcd.drawNumber(127, 14, getAvailableMemory(), RIGHT + SMLSIZE)
 
 	return editMode, lcdCnt, iSel, groupNum
 end

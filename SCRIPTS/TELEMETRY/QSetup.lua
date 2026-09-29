@@ -122,8 +122,8 @@ qs_rcCar = {}
 qs_username = "your name"
 
 qs_MinMax = {														--min and max Values for adjusting
-	  20, -200,  10,  10, -100, -100,   0,   0, -100,  -- 9	--min Values
-	 100,  200, 100, 100,  100,  100, 100, 100,  100}  --18	--max Values
+	  20, -200,  10,  10, -100, -100, -100,   0,   0,   0,  -- 9	--min Values
+	 100,  200, 100, 100,  100,  100,  100, 100, 100, 100}  --18	--max Values
 
 qs_tmrDir = {0, 0, 0}
 
@@ -519,7 +519,7 @@ local function qs_run(event)
 	qs_drvMode, qs_drvName = getFlightMode()
 	qs_glFld = -1
 	for n = 0, 4 do
-		local t = model.getGlobalVariable(n < 4 and n or n + 2, qs_drvMode)
+		local t = model.getGlobalVariable(n < 4 and n or n + 4, qs_drvMode)
 		if t ~= qs_glVars[n] then qs_glFld = n end
 		qs_glVars[n] = t
 	end
@@ -628,7 +628,7 @@ function qs_init(ri)
 		csf.name = 'QSLED'
 		model.setCustomFunction(2, csf)
 	end
-	if qs_rcCar.extendedLimits then qs_MinMax[16] = 150 qs_MinMax[17] = 150 end
+	if qs_rcCar.extendedLimits then qs_MinMax[19] = 150 qs_MinMax[20] = 150 end
 	local aux = 1
 	for n = 0, 5 do
 		local buffer = model.getOutput(n)

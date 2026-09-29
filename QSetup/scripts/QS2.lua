@@ -31,7 +31,7 @@ local words = {
 
 	'Lenkung', 'Vorw.', 'Bremse',
 	nil, nil, nil, nil, nil,
-	'Vorwärts', 'Lnk. hint.'
+	'Vorwärts', 'Lnk. hint.',
 	'Kanal', 'Lenkung', 'Gas', 'Richtung', 'Endpunkte',
 	'Verzögerung',
 	{'Lenkung raus', 'Lenkung rein', 'Vorwärts', 'Bremse',
@@ -56,7 +56,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	local drawList = qs_drawList
 
 	local function getText(n)
-		return words[lg * 24 - 24 + n] or words[n]
+		return words[lg * 25 - 25 + n] or words[n]
 	end
 
 	local function getSetParam(i, v)
@@ -65,7 +65,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			i == 10 and model.getOutput(chnStr).max / 10 or
 			model.getGlobalVariable(i - 1, qs_drvMode)
 		else
-			if i == 9 or i == 10 then
+			if i >= 9 then
 				local out = model.getOutput(chnStr)
 				if i == 9 then out.min = -(v * 10)
 				else out.max = v * 10 end
@@ -193,7 +193,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				x = x + 64 if x > 127 then x = 0 y = y + 16 end
 			end
 		elseif editMode == 2 then
-			getSetParam(iSel, qs_adjVal(getSetParam(iSel),qs_MinMax[iSel],qs_MinMax[iSel + 9],getRotEncSpeed(),event))
+			getSetParam(iSel, qs_adjVal(getSetParam(iSel),qs_MinMax[iSel],qs_MinMax[iSel + 10],getRotEncSpeed(),event))
 			lcd.drawNumber(129, 22, getSetParam(iSel), RIGHT + XXLSIZE + (iSel == 2 and PREC1 or 0))
 			drawText(0, 4, getStdSetTxt(iSel + 20)..' '..getStdSetTxt(iSel + 10)..':', MIDSIZE)
 			if iSel == 1 then

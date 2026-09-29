@@ -61,13 +61,13 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 	local function getSetParam(i, v)
 		if v == nil then
-			return i == 7 and -(model.getOutput(chnStr).min / 10) or
-			i == 8 and model.getOutput(chnStr).max / 10 or
+			return i == 9 and -(model.getOutput(chnStr).min / 10) or
+			i == 10 and model.getOutput(chnStr).max / 10 or
 			model.getGlobalVariable(i - 1, qs_drvMode)
 		else
-			if i == 7 or i == 8 then
+			if i == 9 or i == 10 then
 				local out = model.getOutput(chnStr)
-				if i == 7 then out.min = -(v * 10)
+				if i == 9 then out.min = -(v * 10)
 				else out.max = v * 10 end
 				model.setOutput(chnStr, out)
 			else
@@ -166,7 +166,9 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 		-- local a = {1,1,2,3,1,2,1,1,3, 4,5,4,4,6,6,7,8,6, 1,1,9,3,1,9,1,1,3}
 		-- return getText(a[i])
-	local txtS1 = '010102030102010103'..'040504040606070806'..'010109030109010103'
+	local txtS1 = '01010203010203010101'..'04050404060606040708'..'01010903010903010101'
+	-- local txtS1 = '01010203010201010103'..'04050404060607040806'..'01010903010901010103'
+	-- local txtS1 = '010102030102010103'..'040504040606070806'..'010109030109010103'
 	local function getStdSetTxt(i)
 		i = i * 2
 		return getText(tonumber(string.sub(txtS1, i - 1, i)))
@@ -182,18 +184,18 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			elseif iSel - 7 > lf then lf = floor((iSel - 7) / 2) * 2 + 1 end
 			listFirst[2010] = lf
 			local x, y, first, last = 0, 1, lf - 1, lf + 7
-			if last > 9 then last = 9 end
+			if last > 10 then last = 10 end
 			for i = first + 1, last do
 				lcd.drawNumber(x + (x == 0 and 63 or 64), y + 1, getSetParam(i),
 				RIGHT + MIDSIZE + (i == 2 and PREC1 or 0) + (i == iSel and INVERS or 0))
 				drawText(x, y, getStdSetTxt(i), SMLSIZE)
-				drawText(x, y + 7, getStdSetTxt(i + 9)..':', SMLSIZE)
+				drawText(x, y + 7, getStdSetTxt(i + 10)..':', SMLSIZE)
 				x = x + 64 if x > 127 then x = 0 y = y + 16 end
 			end
 		elseif editMode == 2 then
 			getSetParam(iSel, qs_adjVal(getSetParam(iSel),qs_MinMax[iSel],qs_MinMax[iSel + 9],getRotEncSpeed(),event))
 			lcd.drawNumber(129, 22, getSetParam(iSel), RIGHT + XXLSIZE + (iSel == 2 and PREC1 or 0))
-			drawText(0, 4, getStdSetTxt(iSel + 18)..' '..getStdSetTxt(iSel + 9)..':', MIDSIZE)
+			drawText(0, 4, getStdSetTxt(iSel + 20)..' '..getStdSetTxt(iSel + 10)..':', MIDSIZE)
 			if iSel == 1 then
 				expoRateStr(0)
 				if event == evt_PAGER_FIRST then itemChg(2) end
@@ -219,7 +221,14 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				expoRateThr(0)
 				if valSrcThr < -500 then itemChg(9)
 				elseif event == evt_PAGER_FIRST then itemChg(9) end
-			elseif iSel == 7 or iSel == 8 then
+			elseif iSel == 7 then
+				expoRateThr(1)
+				if valSrcThr > 500 then itemChg(6)
+				elseif event == evt_PAGER_FIRST then itemChg(3) end
+			elseif iSel == 8 then
+				expoRateStr(1)
+				if event == evt_PAGER_FIRST then itemChg(2) end
+			elseif iSel == 9 or iSel == 10 then
 				lcd.drawRectangle(0, 19, 56, 45, FORCE)
 				local x = getOutputValue(chnStr)
 				x = x < -7 and x or x > 7 and x or 0
@@ -228,12 +237,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				drawRotRec(35, 21, 10, 40, 1, 2, 20, x * .02 + (x > 5 and x * .005 or 0))
 				lcd.drawLine(15, 20, 15, 60, DOTTED, 0)
 				lcd.drawLine(40, 20, 40, 60, DOTTED, 0)
-				if iSel == 7 and valSrcStr > 500 then itemChg(8)
-				elseif iSel == 8 and valSrcStr < -500 then itemChg(7) end
-			elseif iSel == 9 then
-				expoRateThr(1)
-				if valSrcThr > 500 then itemChg(6)
-				elseif event == evt_PAGER_FIRST then itemChg(3) end
+				if iSel == 9 and valSrcStr > 500 then itemChg(10)
+				elseif iSel == 10 and valSrcStr < -500 then itemChg(9) end
 			end
 		end
 

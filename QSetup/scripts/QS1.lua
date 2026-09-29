@@ -375,7 +375,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			if pos == 0 then pos = 55 end
 			local newPos = pos
 			if event == EVT_ROT_RIGHT and pos > 55 then newPos = pos - 1
-			elseif pos < 63 then newPos = pos + 1 end
+			elseif event == EVT_ROT_LEFT and pos < 63 then newPos = pos + 1 end
 			setStickySwitch(newPos, true)
 			if pos ~= newPos then setStickySwitch(pos, false) end
 			qs_drvModePos = newPos

@@ -23,6 +23,8 @@ local evt_MDL_LONG = 140
 -- evt_ENTER_REPT = 66
 local evt_EXIT_FIRST = 97
 
+qs_drvModePos = 0
+
 qs_ACC = {
 	 0,		-- on =
 	.5,		-- forward =

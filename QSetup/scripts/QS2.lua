@@ -130,17 +130,19 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	-- Draws a box to display the rate and expo for steering and draws a crosshair on the output line
-	local function expoRateStr(back)
+	local function expoRateStr(rate, output)
 		local x = 0
 		local y = 19
 		local w = 45
 		local my = w / 2 + y
 		local eH = (w - 1) / 2
 		local expo = getSetParam(5)
-		local scale = getSetParam(back == 0 and 1 or 8)
+		local scale = getSetParam(rate)
+		local out = model.getOutput(output)
+		scale = scale * ((-out.min / 1024) + (out.max / 1024) / 2)
 		local mx = drawExpoBox(x, y, w, w, expo, 1, scale)
-		local y1 = getOutputValue(chnStr) / 10.24
-		if model.getOutput(chnStr).revert == 1 then y1 = -y1 end
+		local y1 = getOutputValue(output) / 10.24
+		if model.getOutput(output).revert == 1 then y1 = -y1 end
 		lcd.drawNumber(x + w - 2, my + 4, y1, RIGHT)
 		y1 = -(y1 * eH / 100)
 		local x1 = valSrcStr * eH / 1024 + .5
@@ -150,7 +152,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 	-- Draws a box to display the rate and expo of forward and braking
 	local function expoRateThr(brake)
-		local expo = getSetParam(brake == 0 and 6 or 9)
+		local expo = getSetParam(brake == 0 and 6 or 7)
 		local scale = getSetParam(brake == 0 and 3 or 4)
 		drawExpoBox(0, 19, 45, 45, expo, 0, scale)
 		local y = 63 - getSetParam(brake == 0 and 3 or 4) * .44
@@ -166,7 +168,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 		-- local a = {1,1,2,3,1,2,1,1,3, 4,5,4,4,6,6,7,8,6, 1,1,9,3,1,9,1,1,3}
 		-- return getText(a[i])
-	local txtS1 = '01010203010203100101'..'04050404060606040708'..'01010903010903100101'
+	local txtS1 = '010102030102031001010405040406060604070801010903010903100101'
 	-- local txtS1 = '01010203010201010103'..'04050404060607040806'..'01010903010901010103'
 	-- local txtS1 = '010102030102010103'..'040504040606070806'..'010109030109010103'
 	local function getStdSetTxt(i)
@@ -197,7 +199,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			lcd.drawNumber(129, 22, getSetParam(iSel), RIGHT + XXLSIZE + (iSel == 2 and PREC1 or 0))
 			drawText(0, 4, getStdSetTxt(iSel + 20)..' '..getStdSetTxt(iSel + 10)..':', MIDSIZE)
 			if iSel == 1 then
-				expoRateStr(0)
+				expoRateStr(1, chnStr)
 				if event == evt_PAGER_FIRST then itemChg(2) end
 			elseif iSel == 2 then
 				local x = getOutputValue(chnStr)
@@ -215,19 +217,19 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				if valSrcThr > 500 then itemChg(3)
 				elseif event == evt_PAGER_FIRST then itemChg(6) end
 			elseif iSel == 5 then
-				expoRateStr(0)
-				if event == evt_PAGER_FIRST then itemChg(1) end
+				expoRateStr(1, chnStr)
+				if event == evt_PAGER_FIRST then itemChg(8) end
 			elseif iSel == 6 then
 				expoRateThr(0)
 				if valSrcThr < -500 then itemChg(9)
-				elseif event == evt_PAGER_FIRST then itemChg(9) end
+				elseif event == evt_PAGER_FIRST then itemChg(7) end
 			elseif iSel == 7 then
 				expoRateThr(1)
 				if valSrcThr > 500 then itemChg(6)
 				elseif event == evt_PAGER_FIRST then itemChg(3) end
 			elseif iSel == 8 then
-				expoRateStr(1)
-				if event == evt_PAGER_FIRST then itemChg(2) end
+				expoRateStr(8, qs_chnStB)
+				if event == evt_PAGER_FIRST then itemChg(1) end
 			elseif iSel == 9 or iSel == 10 then
 				lcd.drawRectangle(0, 19, 56, 45, FORCE)
 				local x = getOutputValue(chnStr)

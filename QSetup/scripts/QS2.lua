@@ -89,6 +89,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	local function channelText(i)
 		if i == chnStr then return getText(12)
 		elseif i == chnThr then return getText(13)
+		elseif i == qs_chnStB then return getText(10)
 		else return getText(11)..' '..i + 1 end
 	end
 
@@ -137,7 +138,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		local expo = getSetParam(5)
 		local scale = getSetParam(rate)
 		local out = model.getOutput(output)
-		scale = scale * ((-out.min / 1024 + out.max / 1024) / 2)
+		scale = scale * ((-out.min / 1000 + out.max / 1000) / 2)
 		local mx = drawExpoBox(x, y, w, w, expo, 1, scale)
 		local y1 = getOutputValue(output) / 10.24
 		if model.getOutput(output).revert == 1 then y1 = -y1 end
@@ -164,11 +165,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		secondLine = x
 	end
 
-		-- local a = {1,1,2,3,1,2,1,1,3, 4,5,4,4,6,6,7,8,6, 1,1,9,3,1,9,1,1,3}
-		-- return getText(a[i])
 	local txtS1 = '010102030102031001010405040406060604070801010903010903100101'
-	-- local txtS1 = '01010203010201010103'..'04050404060607040806'..'01010903010901010103'
-	-- local txtS1 = '010102030102010103'..'040504040606070806'..'010109030109010103'
 	local function getStdSetTxt(i)
 		i = i * 2
 		return getText(tonumber(string.sub(txtS1, i - 1, i)))

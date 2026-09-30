@@ -124,8 +124,8 @@ qs_rcCar = {}
 qs_username = "your name"
 
 qs_MinMax = {														--min and max Values for adjusting
-	  20, -200,  10,  10, -100, -100, -100,   0,   0,   0,  -- 9	--min Values
-	 100,  200, 100, 100,  100,  100,  100, 100, 100, 100}  --18	--max Values
+	  20, -200,  10,  10, -100, -100, -100,   0,   0,   0,  -- 10	--min Values
+	 100,  200, 100, 100,  100,  100,  100, 100, 100, 100}  -- 20	--max Values
 
 qs_tmrDir = {0, 0, 0}
 
@@ -632,6 +632,7 @@ function qs_init(ri)
 	end
 	if qs_rcCar.extendedLimits then qs_MinMax[19] = 150 qs_MinMax[20] = 150 end
 	local aux = 1
+	setStickySwitch(6, true)
 	for n = 0, 5 do
 		local buffer = model.getOutput(n)
 		if buffer.name == 'Str' then qs_chnStr = n

@@ -629,10 +629,10 @@ function qs_init(ri)
 		local csf = model.getCustomFunction(2)
 		csf.name = 'QSLED'
 		model.setCustomFunction(2, csf)
+		setStickySwitch(6, true)
 	end
 	if qs_rcCar.extendedLimits then qs_MinMax[19] = 150 qs_MinMax[20] = 150 end
 	local aux = 1
-	setStickySwitch(6, true)
 	for n = 0, 5 do
 		local buffer = model.getOutput(n)
 		if buffer.name == 'Str' then qs_chnStr = n
@@ -660,6 +660,7 @@ function qs_init(ri)
 			aux = aux + 1
 		end
 	end
+	if qs_chnStB == -1 then setStickySwitch(7, false) end
 end
 
 return { init = qs_init, run = qs_run }

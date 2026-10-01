@@ -30,7 +30,7 @@ timers:
       extraHaptic: 0
       name: "Tm2"
    2:
-      start: 2100
+      start: 180
       swtch: "NONE"
       value: 0
       mode: OFF
@@ -72,8 +72,8 @@ mixData:
    flightModes: 000000000
    delayUp: 0
    delayDown: 0
-   speedUp: 2
-   speedDown: 8
+   speedUp: 0
+   speedDown: 0
    name: "StrL"
  -
    weight: 100
@@ -88,8 +88,8 @@ mixData:
    flightModes: 000000000
    delayUp: 0
    delayDown: 0
-   speedUp: 8
-   speedDown: 2
+   speedUp: 0
+   speedDown: 0
    name: "StrR"
  -
    weight: 100
@@ -104,7 +104,7 @@ mixData:
    flightModes: 000000000
    delayUp: 0
    delayDown: 0
-   speedUp: 4
+   speedUp: 0
    speedDown: 0
    name: "Forw"
  -
@@ -113,7 +113,7 @@ mixData:
    srcRaw: I1
    carryTrim: 0
    mixWarn: 0
-   mltpx: ADD
+   mltpx: REPL
    speedPrec: 0
    offset: 0
    swtch: "L4"
@@ -125,9 +125,9 @@ mixData:
    name: "Brake"
  -
    weight: 100
-   destCh: 3
-   srcRaw: I2
-   carryTrim: 1
+   destCh: 2
+   srcRaw: P1
+   carryTrim: 0
    mixWarn: 0
    mltpx: ADD
    speedPrec: 0
@@ -141,8 +141,8 @@ mixData:
    name: ""
  -
    weight: 100
-   destCh: 4
-   srcRaw: P1
+   destCh: 3
+   srcRaw: P2
    carryTrim: 0
    mixWarn: 0
    mltpx: ADD
@@ -162,16 +162,16 @@ limitData:
       ppmCenter: 0
       offset: GV2
       symetrical: 0
-      revert: 1
+      revert: 0
       curve: 0
       name: "Str"
    1:
       min: 0
       max: 0
       ppmCenter: 0
-      offset: GV7
+      offset: GV9
       symetrical: 0
-      revert: 1
+      revert: 0
       curve: 0
       name: "Thr"
    2:
@@ -210,15 +210,6 @@ limitData:
       revert: 0
       curve: 0
       name: "AUX4"
-   7:
-      min: 0
-      max: 0
-      ppmCenter: 0
-      offset: -1000
-      symetrical: 0
-      revert: 0
-      curve: 0
-      name: ""
 expoData: 
  -
    mode: 3
@@ -226,10 +217,10 @@ expoData:
    trimSource: 0
    srcRaw: ST
    chn: 0
-   swtch: "NONE"
+   swtch: "L7"
    flightModes: 000000000
    weight: GV1
-   name: "StL"
+   name: "Steer"
    offset: 0
    curve: 
       type: 1
@@ -261,7 +252,7 @@ expoData:
    offset: 0
    curve: 
       type: 1
-      value: GV9
+      value: GV7
  -
    mode: 3
    scale: 0
@@ -311,13 +302,13 @@ logicalSw:
       duration: 0
    2:
       func: FUNC_VPOS
-      def: "TH,2"
+      def: "TH,1"
       andsw: "NONE"
       delay: 0
       duration: 0
    3:
       func: FUNC_VNEG
-      def: "TH,-2"
+      def: "TH,-1"
       andsw: "NONE"
       delay: 0
       duration: 0
@@ -333,11 +324,77 @@ logicalSw:
       andsw: "NONE"
       delay: 0
       duration: 0
+   6:
+      func: FUNC_STICKY
+      def: "NONE,NONE"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
+   7:
+      func: FUNC_STICKY
+      def: "NONE,NONE"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
+   55:
+      func: FUNC_STICKY
+      def: "NONE,NONE"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
+   56:
+      func: FUNC_STICKY
+      def: "NONE,NONE"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
+   57:
+      func: FUNC_STICKY
+      def: "NONE,NONE"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
+   58:
+      func: FUNC_STICKY
+      def: "NONE,NONE"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
+   59:
+      func: FUNC_STICKY
+      def: "NONE,NONE"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
+   60:
+      func: FUNC_STICKY
+      def: "NONE,NONE"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
+   61:
+      func: FUNC_STICKY
+      def: "NONE,NONE"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
+   62:
+      func: FUNC_STICKY
+      def: "NONE,NONE"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
+   63:
+      func: FUNC_STICKY
+      def: "NONE,NONE"
+      andsw: "NONE"
+      delay: 0
+      duration: 0
 customFn: 
    0:
       swtch: "L5"
       func: OVERRIDE_CHANNEL
-      def: "1,0,1"
+      def: "1,4,1"
    1:
       swtch: "ON"
       func: PLAY_SCRIPT
@@ -365,7 +422,7 @@ customFn:
    7:
       swtch: "ON"
       func: ADJUST_GVAR
-      def: "6,Src,T5,1"
+      def: "8,Src,T5,1"
    8:
       swtch: "L6"
       func: PLAY_TRACK
@@ -386,7 +443,7 @@ flightModeData:
       fadeOut: 0
       gvars: 
          0:
-            val: 90
+            val: 100
          1:
             val: 0
          2:
@@ -394,20 +451,20 @@ flightModeData:
          3:
             val: 100
          4:
-            val: 100
+            val: 40
          5:
             val: 40
          6:
-            val: 0
+            val: 40
          7:
-            val: 0
-         8:
             val: 100
+         8:
+            val: 0
    1:
       name: "Mode 2"
       swtch: "SA1"
-      fadeIn: 0
-      fadeOut: 0
+      fadeIn: 10
+      fadeOut: 10
       gvars: 
          0:
             val: 100
@@ -420,11 +477,11 @@ flightModeData:
          4:
             val: 30
          5:
-            val: -10
+            val: 30
          6:
-            val: 0
+            val: 30
          7:
-            val: 0
+            val: 100
          8:
             val: 0
    2:
@@ -434,37 +491,37 @@ flightModeData:
       fadeOut: 0
       gvars: 
          0:
-            val: 72
+            val: 100
          1:
             val: 0
          2:
             val: 100
          3:
-            val: 45
+            val: 100
          4:
-            val: 0
+            val: 20
          5:
-            val: 0
+            val: 20
          6:
-            val: 0
+            val: 20
          7:
-            val: 0
+            val: 100
          8:
             val: 0
    3:
       name: ""
-      swtch: "NONE"
+      swtch: "L59"
       fadeIn: 0
       fadeOut: 0
       gvars: 
          0:
-            val: 0
+            val: 100
          1:
             val: 0
          2:
-            val: 0
+            val: 50
          3:
-            val: 0
+            val: 50
          4:
             val: 0
          5:
@@ -477,18 +534,18 @@ flightModeData:
             val: 0
    4:
       name: ""
-      swtch: "NONE"
+      swtch: "L60"
       fadeIn: 0
       fadeOut: 0
       gvars: 
          0:
-            val: 0
+            val: 100
          1:
             val: 0
          2:
-            val: 0
+            val: 50
          3:
-            val: 0
+            val: 50
          4:
             val: 0
          5:
@@ -501,18 +558,18 @@ flightModeData:
             val: 0
    5:
       name: ""
-      swtch: "NONE"
+      swtch: "L61"
       fadeIn: 0
       fadeOut: 0
       gvars: 
          0:
-            val: 0
+            val: 100
          1:
             val: 0
          2:
-            val: 0
+            val: 50
          3:
-            val: 0
+            val: 50
          4:
             val: 0
          5:
@@ -525,18 +582,18 @@ flightModeData:
             val: 0
    6:
       name: ""
-      swtch: "NONE"
+      swtch: "L62"
       fadeIn: 0
       fadeOut: 0
       gvars: 
          0:
-            val: 0
+            val: 100
          1:
             val: 0
          2:
-            val: 0
+            val: 50
          3:
-            val: 0
+            val: 50
          4:
             val: 0
          5:
@@ -549,18 +606,18 @@ flightModeData:
             val: 0
    7:
       name: ""
-      swtch: "NONE"
+      swtch: "L63"
       fadeIn: 0
       fadeOut: 0
       gvars: 
          0:
-            val: 0
+            val: 100
          1:
             val: 0
          2:
-            val: 0
+            val: 50
          3:
-            val: 0
+            val: 50
          4:
             val: 0
          5:
@@ -573,18 +630,18 @@ flightModeData:
             val: 0
    8:
       name: ""
-      swtch: "NONE"
+      swtch: "L64"
       fadeIn: 0
       fadeOut: 0
       gvars: 
          0:
-            val: 0
+            val: 100
          1:
             val: 0
          2:
-            val: 0
+            val: 50
          3:
-            val: 0
+            val: 50
          4:
             val: 0
          5:
@@ -610,7 +667,7 @@ gvars:
       max: 824
       popup: 1
       prec: 1
-      unit: 1
+      unit: 0
    2:
       name: "FwR"
       min: 1024
@@ -640,25 +697,25 @@ gvars:
       prec: 0
       unit: 0
    6:
-      name: "TrT"
-      min: 824
-      max: 824
+      name: "ExB"
+      min: 1024
+      max: 924
       popup: 0
-      prec: 1
+      prec: 0
       unit: 1
    7:
-      name: ""
+      name: "SbR"
       min: 1024
       max: 924
       popup: 0
       prec: 0
       unit: 1
    8:
-      name: "ExB"
-      min: 924
-      max: 924
+      name: "TrT"
+      min: 824
+      max: 824
       popup: 0
-      prec: 0
+      prec: 1
       unit: 0
 rssiSource: none
 rfAlarms: 

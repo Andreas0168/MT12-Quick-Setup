@@ -138,7 +138,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		local expo = getSetParam(5)
 		local scale = getSetParam(rate)
 		local out = model.getOutput(output)
-		scale = scale * ((-out.min / qs_MinMax [19] / 10 + out.max / qs_MinMax[19] / 10) / 2)
+		scale = scale * ((-out.min / qs_MinMax[19] / 10 + out.max / qs_MinMax[19] / 10) / 2)
 		local mx = drawExpoBox(x, y, w, w, expo, 1, scale)
 		local y1 = getOutputValue(output) / (qs_MinMax[19] / 10 * 1.024)
 		if model.getOutput(output).revert == 1 then y1 = -y1 end

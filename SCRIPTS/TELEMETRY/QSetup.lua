@@ -558,7 +558,7 @@ local function qs_run(event)
 		runScript = {}
 		collectgarbage("collect")
 		local fn = scriptDir..pageLoad  -- to setup your rc car
-		runScript = loadScript(fn)  -- to setup your rc car
+		runScript = loadScript(fn)
 		pageRun = pageLoad
 		runScript = runScript()
 		collectgarbage("collect")

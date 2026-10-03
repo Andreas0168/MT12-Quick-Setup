@@ -9,8 +9,6 @@ local evtActive, evtStart, evtDist, evtRuns = 0, 0, 5, 1
 
 local yn = 0
 
-local drvMode = qs_drvMode
-
 local ws4Text = {'Front only', 'Front/Back', 'Back only', 'Front/Back rev.'}
 
 local monthsWeekdays = {
@@ -58,9 +56,7 @@ if qs_readData(saveDir .. qs_getModelName() .. '.evt', d, 1) then
 end
 d = nil
 
-local lastRtc = 0
-local lastMinute = 0
-local blinkCnt = 0
+local lastRtc, lastMinute, blinkCnt = 0, 0, 0
 local blink
 
 local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chnStr, chnThr, valSrcStr, valSrcThr)
@@ -69,24 +65,20 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	local fld = qs_glFld
-	if fld > -1 then
-		if valSrcThr > -19 and valSrcThr < 19 and qs_drvMode == drvMode then
-			local val, d = qs_glVars[fld], 6
-			if fld == 0 then qs_setPopup({getText(32), val..'%'},d) end
-			if fld == 1 then
-				qs_setPopup({getText(33), (val < 0 and 'L ' or val > 0 and 'R ' or '') ..
-				string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'},d)
-			end
-			if fld == 2 then qs_setPopup({getText(34), val..'%'},d) end
-			if fld == 3 then qs_setPopup({getText(35), val..'%'},d) end
-			if fld == 4 then
-				qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
-				' '..string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'},d)
-			end
+	if fld > -1 and valSrcThr > -19 and valSrcThr < 19 then
+		local val, d = qs_glVars[fld], 8
+		if fld == 0 then qs_setPopup({getText(32), val..'%'},d)
+		elseif fld == 1 then
+			qs_setPopup({getText(33), (val < 0 and 'L ' or val > 0 and 'R ' or '') ..
+			string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'},d)
+		elseif fld == 2 then qs_setPopup({getText(34), val..'%'},d)
+		elseif fld == 3 then qs_setPopup({getText(35), val..'%'},d)
+		elseif fld == 4 then
+			qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
+			' '..string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'},d)
 		end
 	end
 
-	drvMode = qs_drvMode
 	lcdCnt = 0
 
 	local floor = math.floor

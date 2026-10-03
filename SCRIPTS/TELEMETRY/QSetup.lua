@@ -525,11 +525,12 @@ local function qs_run(event)
 		if t ~= qs_glVars[n] then qs_glFld = n end
 		qs_glVars[n] = t
 	end
-
+	if model.getInfo().extendedLimits ~= qs_rcCar.extendedLimits then qs_init(1) end
+	if drvMode ~= qs_drvMode then qs_glFld = -1 lcdCnt = 0 end
 	if event == 0 then
 		if lcdCnt > 1 then
 			lcdCnt = lcdCnt - 1
-			if qs_glFld == -1 and drvMode == qs_drvMode then return 1 end
+			if qs_glFld == -1 then return 1 end
 		else lcdCnt = 72000 end
 	end
 
@@ -605,8 +606,8 @@ end
 
 -- init --
 function qs_init(ri)
+	qs_rcCar = model.getInfo()
 	if not ri then						-- initializes the following once
-		qs_rcCar = model.getInfo()
 		qs_sourceStr = getFieldInfo('ste').id			-- 75
 		qs_sourceThr = getFieldInfo('thr').id			-- 76
 		qs_sourceBat = getFieldInfo('tx-voltage').id	-- 241
@@ -631,12 +632,13 @@ function qs_init(ri)
 		model.setCustomFunction(2, csf)
 		setStickySwitch(6, true)
 	end
-	if qs_rcCar.extendedLimits then qs_MinMax[19] = 150 qs_MinMax[20] = 150 end
+
+	if qs_rcCar.extendedLimits then qs_MinMax[19] = 150 qs_MinMax[20] = 150 else qs_MinMax[19] = 100 qs_MinMax[20] = 100 end
+	
 	local aux = 1
 	for n = 0, 5 do
 		local buffer = model.getOutput(n)
 		if buffer.name == 'Str' then qs_chnStr = n
-
 		elseif buffer.name == 'StB' then
 			qs_chnStB = n
 			local StF, StB = true, false
@@ -645,20 +647,22 @@ function qs_init(ri)
 			setStickySwitch(6, StF)
 			setStickySwitch(7, StB)
 			buffer.revert = qs_4wsMode == 4 and 1 - qs_4wsRev or qs_4wsRev
-			model.setOutput(n, buffer)
-
 		elseif buffer.name == 'Thr' then
 			qs_chnThr = n
-			local offset = model.getGlobalVariable(6, 0) / 10
+			local offset = model.getGlobalVariable(8, 0) / 10
 			local csf = model.getCustomFunction(0)
 			csf.param = n
 			csf.value = buffer.revert == 0 and offset or -offset
 			model.setCustomFunction(0, csf)
 		elseif buffer.name == '' then
 			buffer.name = 'AUX'..aux
-			model.setOutput(n, buffer)
 			aux = aux + 1
 		end
+		if not qs_rcCar.extendedLimits then
+			if buffer.min < -1000 then buffer.min = -1000 end
+			if buffer.max > 1000 then buffer.max = 1000 end
+		end
+		model.setOutput(n, buffer)
 	end
 	if qs_chnStB == -1 then setStickySwitch(7, false) end
 end

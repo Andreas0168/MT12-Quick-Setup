@@ -295,6 +295,7 @@ end
 
 qs_listFirst = {}
 local blinkList = 0
+local oldParam = 0
 function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eMode, disp, c, prc)
 	prc = prc or 0
 	if not sel then return end
@@ -325,6 +326,10 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 			drawText(font or 64, y, txt, (#txt < 22 and 0 or SMLSIZE) + CENTER + (n == sel and INVERS or 0))
 		else
 			local val, convert = p[pl[n]], 1
+			if sel == n then
+				if eMode == 1 then oldParam = val
+					elseif eMode == 3 and val == oldParam then eMode = 4
+					elseif eMode == 4 then val = oldParam end end
 			if c and c[pl[n]] then convert = c[pl[n]] end
 			val = val / convert
 			drawText(font == MIDSIZE and 95 or 99, y, txt..':', RIGHT)

@@ -20,8 +20,8 @@ local words = {
 	'Press SYS to start|or stop timing', 'Laps saved', 'Laps cleared',										-- 29
 	'Timing activated|To start, swing to|the line and then|give at least 95%|throttle.',				-- 30
 	'Waiting to start',																										-- 31
-	'Red 1', 'Green 1', 'Blue 1', 'Red 2', 'Green 2', 'Blue 2', 'Breathing', 'Speed',					-- 39
-	'Language:', 'English',																									-- 41
+	{'Red 1', 'Green 1', 'Blue 1', 'Red 2', 'Green 2', 'Blue 2', 'Breathing', 'Speed'},					-- 32
+	'Language:', 'English',																									-- 34
 
 	'KEINE DATEI GEFUNDEN!',
 	nil,
@@ -38,7 +38,7 @@ local words = {
 	'Drücken sie SYS|zum starten oder|stoppen der Zeitnahme', 'Runden gespeichert', 'Runden gelöscht',
 	'Zeitnahme aktiviert|Zum starten mit|schwung zur Linie|und dann mindestens|95% Gas geben.',
 	'Warte auf Start',
-	'Rot 1', 'Grün 1', 'Blau 1', 'Rot 2', 'Grün 2', 'Blau 2', 'Atmung', 'Geschwindigkeit',
+	{'Rot 1', 'Grün 1', 'Blau 1', 'Rot 2', 'Grün 2', 'Blau 2', 'Atmung', 'Geschwindigkeit'},
 	'Sprache:', 'Deutsch'
 }
 
@@ -86,7 +86,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	local function getText(n)							-- give the right word for selected language
-		return words[lg * 41 - 41 + n] or words[n]
+		return words[lg * 34 - 34 + n] or words[n]
 	end
 
 	local function filesList(titel, filter, event)	-- list setup files to load or write
@@ -250,13 +250,9 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 						-- setup the LED ambient light
 		elseif siteNum == 3 then
-			local text = {}
-			for n = 32, 39 do text[n - 31] = getText(n) end
-			editMode = drawList('LED-Setup', iSel, text, event, 5, 14, 10, 64, qs_LED, '%%%%%%%\64',
+			editMode = drawList('LED-Setup', iSel, getText(32), event, 5, 14, 10, 64, qs_LED, '%%%%%%%\64',
 			{0, 0, 0, 0, 0, 0, 0, 0,   100, 100, 100, 100, 100, 100, 100, 180}, editMode, nil, {2.55, 2.55, 2.55, 2.55, 2.55, 2.55, .01})
-			if editMode == 1 then editValue = qs_LED[iSel]
-			elseif editMode == 3 and editValue ~= qs_LED[iSel] then qs_writeConf()
-			elseif editMode == 4 then qs_LED[iSel] = editValue end
+			if editMode == 3 then qs_writeConf() end
 
 		elseif siteNum == 4 then  -- my about site
 			drawText(64,2, 'Quick Setup MT12', MIDSIZE + CENTER)
@@ -267,8 +263,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			elseif editMode == 2 then qs_lang = qs_adjVal(lg, 1, 2, 1, event, 1000)
 			elseif editMode == 3 then qs_writeConf()
 			elseif editMode == 4 then qs_lang = editValue end
-			drawText(62, 29, getText(40), RIGHT)
-			drawText(65, 29, getText(41), INVERS + (editMode == 2 and BLINK or 0))
+			drawText(62, 29, getText(33), RIGHT)
+			drawText(65, 29, getText(34), INVERS + (editMode == 2 and BLINK or 0))
 			lcd.drawNumber(127, 14, getAvailableMemory(), RIGHT + SMLSIZE)
 
 						-- prints the character set

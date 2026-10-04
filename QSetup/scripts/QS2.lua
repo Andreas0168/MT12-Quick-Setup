@@ -334,30 +334,24 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		end
 
 	elseif siteNum == 5 then		-- setup ABS-System
-		local ABS = qs_ABS
-		local v = iSel + (iSel > 6 and ABS[3] * 2 or 0)
-		local disp = ABS[3] == 0 and '++++++++  ++' or '++++++  ++++'
-		editMode = drawList('ABS-System', iSel, getText(18), event, 5, 14, 10, 64, ABS, '||||%%--% |%',
+		local disp = qs_ABS[3] == 0 and '++++++++  ++' or '++++++  ++++'
+		editMode = drawList('ABS-System', iSel, getText(18), event, 5, 14, 10, 64, qs_ABS, '||||%%--% |%',
 		{0, 0, 0, 0, 10, 10, 1, 1, 1, 1, 0, 0,  1, 1, 1, 1, 100, 100, 20, 20, 100, 20, 1, 100}, editMode, disp, {1, 1, 1, 1, -10.24, .01})
-		if editMode == 1 then editValue = ABS[v]
-		elseif editMode == 3 and editValue ~= ABS[v] then qs_writeConf()
-		elseif editMode == 4 then ABS[v] = editValue end
+		if editMode == 3 then qs_writeConf() end
 
 	elseif siteNum == 6 then
-		local ACC = qs_ACC
 		editMode = drawList(getText(19), iSel, getText(20), event,
-		3, 20, 14, 64, ACC, '|%%', {0, 0, 0,   1, 100, 100}, editMode, nil, {1, .05, .05})
-		if editMode == 1 then editValue = ACC[iSel]
-		elseif editMode == 3 and editValue ~= ACC[iSel] then qs_writeConf()
-			local accFwd = ACC[1] == 0 and 0 or ACC[2] * 10
-			local accBrk = ACC[1] == 0 and 0 or -(ACC[3] * 10)
+		3, 20, 14, 64, qs_ACC, '|%%', {0, 0, 0,   1, 100, 100}, editMode, nil, {1, .05, .05})
+		if editMode == 3 then qs_writeConf()
+			local accFwd = qs_ACC[1] == 0 and 0 or qs_ACC[2] * 10
+			local accBrk = qs_ACC[1] == 0 and 0 or -(qs_ACC[3] * 10)
 			for n = 0, 1 do
 				if iSel == 1 or iSel == n + 2 then
 					local mix = model.getMix(chnThr, n) mix.offset = n == 0 and accFwd or accBrk
-					model.deleteMix(chnThr, n) model.insertMix(chnThr, n, mix)
+					model.deleteMix(chnThr, n) model.insertMix(chnThr, n, mix) 
 				end
 			end
-		elseif editMode == 4 then ACC[iSel] = editValue end
+		end
 
 	elseif siteNum == 7 then
 		local output = model.getOutput(7)

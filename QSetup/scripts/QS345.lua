@@ -36,7 +36,7 @@ local words = {
 	nil, nil, 'Runden anzeigen', 'Schalter: ', 'Mindestzeit: ', 'Runden speichern', 'Runden löschen',
 	'Rundenzeiten', 'Runde ',
 	'Drücken sie SYS|zum starten oder|stoppen der Zeitnahme', 'Runden gespeichert', 'Runden gelöscht',
-	'Zeitnahme aktiviert|Zum starten mit|schwung zur Linie|und dann mindestens|95% Gas geben.',
+	'Zeitnahme aktiviert|Zum starten mit|Schwung zur Linie|und dann mindestens|95% Gas geben.',
 	'Warte auf Start',
 	{'Rot 1', 'Grün 1', 'Blau 1', 'Rot 2', 'Grün 2', 'Blau 2', 'Atmung', 'Geschwindigkeit'},
 	'Sprache:', 'Deutsch'

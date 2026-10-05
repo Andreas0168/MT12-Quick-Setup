@@ -15,7 +15,7 @@ local words = {
 	'DANGER!|Before changing the|channels, first switch|off the vehicle.',									-- 11
 	'Start', 'Stop', 'Show Laps', 'Switch: ', 'Minimum Time: ', 'Save Laps', 'Clear Laps', 			-- 18
 	'Lap Times', 'Lap ',																										-- 20
-	'Press SYS to start|or stop timing', 'Laps saved', 'Laps cleared',										-- 23
+	'[i]|Press SYS to start|or stop timing', '[i]|Laps saved', '[i]|Laps cleared',						-- 23
 	'Timing activated|To start, swing to|the line and then|give at least 95%|throttle.',				-- 24
 	'Waiting to start',																										-- 25
 	{'Red 1', 'Green 1', 'Blue 1', 'Red 2', 'Green 2', 'Blue 2', 'Breathing', 'Speed'},					-- 26
@@ -32,7 +32,7 @@ local words = {
 	'ACHTUNG!|Vor dem Ändern der|Kanäle zuerst|Fahrzeug ausschalten!',
 	nil, nil, 'Runden anzeigen', 'Schalter: ', 'Mindestzeit: ', 'Runden speichern', 'Runden löschen',
 	'Rundenzeiten', 'Runde ',
-	'Drücken sie SYS|zum starten oder|stoppen der Zeitnahme', 'Runden gespeichert', 'Runden gelöscht',
+	'[i]|Drücken sie SYS|zum starten oder|stoppen der Zeitnahme', '[i]|Runden gespeichert', '[i]|Runden gelöscht',
 	'Zeitnahme aktiviert|Zum starten mit|Schwung zur Linie|und dann mindestens|95% Gas geben.',
 	'Warte auf Start',
 	{'Rot 1', 'Grün 1', 'Blau 1', 'Rot 2', 'Grün 2', 'Blau 2', 'Atmung', 'Geschwindigkeit'},
@@ -205,7 +205,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 						end
 						lcd.drawFilledRectangle(0, 0, 128, 12, 0)
 					else drawTitel(getText(19), MIDSIZE) end
-					if ltNumber < 1 and qs_ltActive == 0 then qs_setPopup({'[i]', getText(21)}, 1) end		-- nothing to show
+					if ltNumber < 1 and qs_ltActive == 0 then qs_setPopup({getText(21)}, 1) end		-- nothing to show
 					if event == evt_SYS_FIRST then qs_ltActive = 1 - qs_ltActive
 						playFile(qs_ltActive == 1 and 'trnstart.wav' or '') end
 
@@ -230,7 +230,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					io.close(f1)
 					io.close(f2)
 					editMode = 3
-					qs_setPopup({'[i]', getText(22)})
+					qs_setPopup({getText(22)})
 				elseif iSel == 4 then		-- switch the trigger for laps
 					qs_ltSwitch = 1 - qs_ltSwitch
 					editMode = 3
@@ -240,7 +240,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					qs_ltTW = val * 100
 				elseif iSel == 6 then
 					qs_ltActive, qs_ltList, lapNum, editMode, qs_listFirst[3022][2] = 0, {}, 0, 3, 1
-					qs_setPopup({'[i]', getText(23)})
+					qs_setPopup({getText(23)})
 				end
 			end
 
@@ -311,7 +311,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				if editMode == 1 then
 					local i = iSel - 1
 					if i == chnStr or i == chnThr or i == qs_channelStB then
-						qs_setPopup({getText(8)}, 50)
+						qs_setPopup({getText(10)}, 50)
 					else
 						menue = 1 qs_inputText()
 					end

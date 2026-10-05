@@ -5,29 +5,26 @@ local blink = 0
 local menue, editValue = 0, 0
 
 local words = {
-	'NO FILES FOUND!',																										--  1
-	'Model Setup',																												--  2
-	'Load Setup', 'Save Setup', 'Username',																			--  5
-	'Model Name', 'Setup channels',																						--  7
-	'Save new Setup', 'Overwrite Setup', 'Delete Setup',															-- 10
-	'Description',																												-- 11
-	'File to save', 																											-- 12
-	'Channel ',	'Rename', ' Name',																						-- 15
-	'Notice!|Changing the names|of the channels for|steering and|throttle is blocked.',					-- 16
-	'DANGER!|Before changing the|channels, first switch|off the vehicle.',									-- 17
-	'Start', 'Stop', 'Show Laps', 'Switch: ', 'Minimum Time: ', 'Save Laps', 'Clear Laps', 			-- 24
-	'Lap Times', 'Lap ',																										-- 26
-	'Press SYS to start|or stop timing', 'Laps saved', 'Laps cleared',										-- 29
-	'Timing activated|To start, swing to|the line and then|give at least 95%|throttle.',				-- 30
-	'Waiting to start',																										-- 31
-	{'Red 1', 'Green 1', 'Blue 1', 'Red 2', 'Green 2', 'Blue 2', 'Breathing', 'Speed'},					-- 32
-	'Language:', 'English',																									-- 34
+	'NO FILES FOUND!', 'Model Setup',																					--  2
+	{'Load Setup', 'Save Setup', 'Username', 'Model Name', 'Setup channels'},								--  3
+	{'Save new Setup', 'Overwrite Setup', 'Delete Setup'},														--  4
+	'Description',																												--  5
+	'File to save', 																											--  6
+	'Channel ',	'Rename', ' Name',																						--  9
+	'Notice!|Changing the names|of the channels for|steering and|throttle is blocked.',					-- 10
+	'DANGER!|Before changing the|channels, first switch|off the vehicle.',									-- 11
+	'Start', 'Stop', 'Show Laps', 'Switch: ', 'Minimum Time: ', 'Save Laps', 'Clear Laps', 			-- 18
+	'Lap Times', 'Lap ',																										-- 20
+	'Press SYS to start|or stop timing', 'Laps saved', 'Laps cleared',										-- 23
+	'Timing activated|To start, swing to|the line and then|give at least 95%|throttle.',				-- 24
+	'Waiting to start',																										-- 25
+	{'Red 1', 'Green 1', 'Blue 1', 'Red 2', 'Green 2', 'Blue 2', 'Breathing', 'Speed'},					-- 26
+	'Language:', 'English',																									-- 28
 
 	'KEINE DATEI GEFUNDEN!',
 	nil,
-	'Setup laden', 'Setup speichern', 'Benutzername',
-	'Modellname', 'Setup Kanäle', 
-	'Neues Setup speichern', 'Setup überschreiben', 'Setup löschen',
+	{'Setup laden', 'Setup speichern', 'Benutzername', 'Modellname', 'Setup Kanäle'},
+	{'Neues Setup speichern', 'Setup überschreiben', 'Setup löschen'},
 	'Beschreibung',
 	'Datei auswählen',
 	'Kanal ', 'Name', nil,
@@ -86,7 +83,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	local function getText(n)							-- give the right word for selected language
-		return words[lg * 34 - 34 + n] or words[n]
+		return words[lg * 28 - 28 + n] or words[n]
 	end
 
 	local function filesList(titel, filter, event)	-- list setup files to load or write
@@ -119,21 +116,20 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	if groupNum == 3 then
 		if siteNum == 1 then		-- Load, save, username, modelname and channel setup
 			if editMode == 1 or editMode == 2 and (iSel == 2 or iSel == 5) then
-				local text = {} for n = 1, 5 do text[n] = getText(n + 2) end
-				drawList(getText(2), iSel, text, 0, 5, 15, 10)
+				drawList(getText(2), iSel, getText(3), 0, 5, 15, 10)
 				if iSel == 1 then filesList() end
 				if iSel == 3 then fileName = qs_username qs_inputText() end
 				if iSel == 4 then fileName = qs_rcCar.name qs_inputText() end
 			end
 			if editMode == 2 or editMode == 3 then
 				if iSel == 1 then													--Load Setup selected
-					filesList(getText(3), modelName .. '~', event)
+					filesList(getText(3)[1], modelName .. '~', event)
 					if editMode == 3 and filesOK then
 						rwFN, rwSetup = saveDir .. modelName .. '~' .. fileList[fileSel], 1
 					end
 				elseif iSel == 2 then groupNum = 4 							-- Save Setup selected
 				elseif iSel == 3 then											-- Edit Username
-					drawTitel(getText(5), MIDSIZE)
+					drawTitel(getText(3)[3], MIDSIZE)
 					fileName, editMode = qs_inputText(fileName, 13, editMode, event, ','), 2
 					if event == evt_TELE_FIRST then
 						qs_username = fileName == '' and 'your Name' or fileName
@@ -141,7 +137,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 						qs_writeConf()
 					end
 				elseif iSel == 4 then											-- Edit modelname
-					drawTitel(getText(6), MIDSIZE)
+					drawTitel(getText(3)[4], MIDSIZE)
 					fileName, editMode = qs_inputText(fileName, 10, editMode, event, '+[]<>!"?\\%&/()*|^;:='), 2
 					if event == evt_TELE_FIRST then
 						qs_rcCar.name = fileName
@@ -154,9 +150,9 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 		elseif siteNum == 2 then				-- Lap Timer
 			if editMode == 1 or (editMode == 2 and iSel ~= 2) then		-- Lap Time menue
-				drawList('Lap Timer', iSel, {getText(qs_ltActive ~= 0 and 19 or 18), getText(20),
-					getText(23), getText(21) .. (qs_ltSwitch == 0 and 'SB' or 'SC'),
-					getText(22) .. qs_ltTW / 100 .. 's', getText(24)},
+				drawList('Lap Timer', iSel, {getText(qs_ltActive ~= 0 and 13 or 12), getText(14),
+					getText(17), getText(15) .. (qs_ltSwitch == 0 and 'SB' or 'SC'),
+					getText(16) .. qs_ltTW / 100 .. 's', getText(18)},
 					0, 5, 15, 10)
 			end
 			if editMode == 2 then
@@ -164,7 +160,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					qs_ltActive = 1 - qs_ltActive
 					editMode = 3
 					if qs_ltActive == 1 then
-						qs_setPopup({getText(30)}, 80)
+						qs_setPopup({getText(24)}, 80)
 						playFile('trnstart.wav') end
 
 				elseif iSel == 2 then		-- Show lap times
@@ -186,7 +182,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 						qs_listFirst[3022][1] = lf
 						for n = lf, lf + 4 do
 							local d = qs_ltList[n + 1] - qs_ltList[n]
-							lcd.drawText(42, y, getText(26), RIGHT + SMLSIZE)
+							lcd.drawText(42, y, getText(20), RIGHT + SMLSIZE)
 							local xL = lcd.getLastLeftPos() - 2
 							lcd.drawText(58, y, (n < 100 and space or '') .. (n < 10 and space or '') .. n .. ':', RIGHT + SMLSIZE)
 							lcd.drawText(108, y, msStrg(d), RIGHT + SMLSIZE)
@@ -202,21 +198,21 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					end
 					if qs_ltActive == 1 then
 						if qs_ltLapTime then
-							drawText(1, 0, getText(26) .. ltNumber + 1, MIDSIZE)
+							drawText(1, 0, getText(20) .. ltNumber + 1, MIDSIZE)
 							drawText(127, 0, msStrg(qs_ltLapTime), MIDSIZE + RIGHT)
 						else
-							drawText(64, 0, getText(31), MIDSIZE + CENTER)
+							drawText(64, 0, getText(25), MIDSIZE + CENTER)
 						end
 						lcd.drawFilledRectangle(0, 0, 128, 12, 0)
-					else drawTitel(getText(25), MIDSIZE) end
-					if ltNumber < 1 and qs_ltActive == 0 then qs_setPopup({'[i]', getText(27)}, 1) end		-- nothing to show
+					else drawTitel(getText(19), MIDSIZE) end
+					if ltNumber < 1 and qs_ltActive == 0 then qs_setPopup({'[i]', getText(21)}, 1) end		-- nothing to show
 					if event == evt_SYS_FIRST then qs_ltActive = 1 - qs_ltActive
 						playFile(qs_ltActive == 1 and 'trnstart.wav' or '') end
 
 				elseif iSel == 3 then
 					local f1 = io.open(saveDir .. modelName .. '.lap', 'w')
 					local f2 = io.open(saveDir .. modelName .. '.csv', 'w')
-					io.write(f2, getText(26), ';', getText(25), '\r')
+					io.write(f2, getText(20), ';', getText(19), '\r')
 					local ltNumber = #qs_ltList
 					for n = 1, ltNumber do
 						io.write(f1, qs_ltList[n], ',')
@@ -234,23 +230,23 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					io.close(f1)
 					io.close(f2)
 					editMode = 3
-					qs_setPopup({'[i]', getText(28)})
+					qs_setPopup({'[i]', getText(22)})
 				elseif iSel == 4 then		-- switch the trigger for laps
 					qs_ltSwitch = 1 - qs_ltSwitch
 					editMode = 3
 				elseif iSel == 5 then
 					local val = qs_adjVal(qs_ltTW / 100, 0, 40, 1, event)
-					qs_setPopup({getText(22),'' .. val .. 's'}, 1)
+					qs_setPopup({getText(16),'' .. val .. 's'}, 1)
 					qs_ltTW = val * 100
 				elseif iSel == 6 then
 					qs_ltActive, qs_ltList, lapNum, editMode, qs_listFirst[3022][2] = 0, {}, 0, 3, 1
-					qs_setPopup({'[i]', getText(29)})
+					qs_setPopup({'[i]', getText(23)})
 				end
 			end
 
 						-- setup the LED ambient light
 		elseif siteNum == 3 then
-			editMode = drawList('LED-Setup', iSel, getText(32), event, 5, 14, 10, 64, qs_LED, '%%%%%%%\64',
+			editMode = drawList('LED-Setup', iSel, getText(26), event, 5, 14, 10, 64, qs_LED, '%%%%%%%\64',
 			{0, 0, 0, 0, 0, 0, 0, 0,   100, 100, 100, 100, 100, 100, 100, 180}, editMode, nil, {2.55, 2.55, 2.55, 2.55, 2.55, 2.55, .01})
 			if editMode == 3 then qs_writeConf() end
 
@@ -263,8 +259,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			elseif editMode == 2 then qs_lang = qs_adjVal(lg, 1, 2, 1, event, 1000)
 			elseif editMode == 3 then qs_writeConf()
 			elseif editMode == 4 then qs_lang = editValue end
-			drawText(62, 29, getText(33), RIGHT)
-			drawText(65, 29, getText(34), INVERS + (editMode == 2 and BLINK or 0))
+			drawText(62, 29, getText(27), RIGHT)
+			drawText(65, 29, getText(28), INVERS + (editMode == 2 and BLINK or 0))
 			lcd.drawNumber(127, 14, getAvailableMemory(), RIGHT + SMLSIZE)
 
 						-- prints the character set
@@ -283,24 +279,24 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 	elseif groupNum == 4 then	-- save new, overwrite or delete setup
 		if editMode == 1 then
-			drawList(getText(4), iSel, {getText(8), getText(9), getText(10)}, 0, 3, 20, 12)
+			drawList(getText(3)[2], iSel, getText(4), 0, 3, 20, 12)
 			if iSel == 1 then fileName = qs_inputText() end
 			if iSel == 2 or iSel == 3 then filesList() end
 		elseif editMode == 2 or editMode == 3 then
 			if iSel == 1 then														-- Save new setup
-				drawTitel(getText(11), MIDSIZE)
+				drawTitel(getText(5), MIDSIZE)
 				fileName = qs_inputText(fileName, 21, editMode, event, '"?\\|/*<>:')
 				editMode, lcdCnt = 2, 0
 				if event == evt_TELE_FIRST then
 					rwFN, rwSetup, editMode = saveDir .. modelName .. '~' .. fileName, 2, 3
 				end
 			elseif iSel == 2 then												-- Overwrite setup
-				filesList(getText(12), modelName .. '~', event)
+				filesList(getText(6), modelName .. '~', event)
 				if editMode == 3 and filesOK then
 					rwFN, rwSetup = saveDir .. modelName .. '~' .. fileList[fileSel], 2
 				end
 			elseif iSel == 3 then												-- Delete setup
-				filesList(getText(10), modelName .. '~', event)
+				filesList(getText(4)[3], modelName .. '~', event)
 				if editMode == 3 and filesOK then
 					del(saveDir..modelName .. '~' .. fileList[fileSel])
 				end
@@ -315,17 +311,17 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				if editMode == 1 then
 					local i = iSel - 1
 					if i == chnStr or i == chnThr or i == qs_channelStB then
-						qs_setPopup({getText(16)}, 50)
+						qs_setPopup({getText(8)}, 50)
 					else
 						menue = 1 qs_inputText()
 					end
 				end
 			end
-			drawTitel(getText(7), MIDSIZE)
+			drawTitel(getText(3)[5], MIDSIZE)
 			local x, y, x1 = 74, 14, 0
 			for n = 1, 6 do
 				local name = model.getOutput(n - 1).name
-				drawText(x, y, getText(13)..n..': ', RIGHT)
+				drawText(x, y, getText(7)..n..': ', RIGHT)
 				x1 = lcd.getLastLeftPos()
 				drawText(x, y, name, 0)
 				local x2 = lcd.getLastPos()
@@ -336,11 +332,11 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				end
 				y = y + 8
 			end
-			drawText(1, 113, getText(14), 2048 + SMLSIZE)
+			drawText(1, 113, getText(8), 2048 + SMLSIZE)
 			drawText(2, 121, 'TELE', 2048 + INVERS + SMLSIZE)
 			if editMode == 2 then
 				if getRSSI() > 0 then
-					qs_setPopup({getText(17)}, 50)
+					qs_setPopup({getText(11)}, 50)
 					editMode = 3
 				end
 				if iSel > 1 then drawText(x1 - 10,  2 + iSel * 8, CHAR_UP, 0) end
@@ -351,7 +347,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				if iSel ~= src then blink = 20 end
 			end
 		else
-			drawTitel(getText(13)..iSel..getText(15), MIDSIZE)
+			drawTitel(getText(7)..iSel..getText(9), MIDSIZE)
 			fileName = qs_inputText(fileName, 4, editMode, event, ',')
 			editMode = 2
 			if event == evt_TELE_FIRST then

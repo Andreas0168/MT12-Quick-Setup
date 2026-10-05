@@ -133,7 +133,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	-- Draws a box to display the rate and expo for steering and draws a crosshair on the output line
 	local function expoRateStr(rate, output)
 		local x, y, w = 0, 19, 45
-		local my = w / 2 + y
+		local my, eH = w / 2 + y, (w - 1) / 2
 		local eH = (w - 1) / 2
 		local expo = getSetParam(5)
 		local scale = getSetParam(rate)

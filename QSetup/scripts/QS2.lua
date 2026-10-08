@@ -90,7 +90,16 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		editValue = getSetParam(iSel)
 	end
 
+	local pX = 35
+	local function drLine(x1, y1, x2, y2, p1, p2)
+		lcd.drawLine(pX + x1, y1, pX + x2, y2, p1 or SOLID, p2 or FORCE)
+	end
+	local function drRectangle(x, y, w, h, p1)
+		lcd.drawRectangle(pX + x, y, w, h, p1 or FORCE)
+	end
+
 	local function drawRotRec(x, y, w, h, fill, rx, ry, rot, scale, p, f)
+		x = x + pX
 		qs_setAll(x, y, rx, ry, rot, scale or 1, 1)
 		qs_gfRec(0.5, 0.5, w + .5, h + .5, fill, p, f)
 	end
@@ -117,8 +126,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			y1 = y1 - .5
 			if expo < 0 then y1 = y1 + Height end
 			y1 = y1 * scale
-			lcd.drawLine(x + lastX, y - lastY, x + x1, y - y1, SOLID ,FORCE)
-			if DBL == 1 then lcd.drawLine(x - lastX, y + lastY + 1, x - x1, y + y1 + 1, SOLID ,FORCE) end
+			drLine(x + lastX, y - lastY, x + x1, y - y1, SOLID ,FORCE)
+			if DBL == 1 then drLine(x - lastX, y + lastY + 1, x - x1, y + y1 + 1, SOLID ,FORCE) end
 			lastX, lastY  = x1, y1
 			x1 = x1 + 1
 		end
@@ -127,8 +136,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	-- Draws a box with a dotted vertical line in the mid and optional a expo curve
 	local function drawExpoBox(x, y, w, h, expo, DBL, scale)
 		local mx = floor(w / 2) + x
-		lcd.drawRectangle(x, y, w, h, FORCE)
-		lcd.drawLine(x + mx, y, x + mx, y + h - 1, DOTTED, 0)
+		drRectangle(x, y, w, h, FORCE)
+		drLine(x + mx, y, x + mx, y + h - 1, DOTTED, 0)
 		local my = floor(h / 2) + y
 		if expo == nil then return mx end
 		drawExpo(expo, DBL,
@@ -151,11 +160,11 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		local mx = drawExpoBox(x, y, w, w, expo, 1, scale)
 		local y1 = getOutputValue(output) / (qs_MinMax[19] / 10 * 1.024)
 		if model.getOutput(output).revert == 1 then y1 = -y1 end
-		lcd.drawNumber(x + w - 2, my + 4, y1, RIGHT)
+		lcd.drawNumber(pX + x + w - 2, my + 4, y1, RIGHT)
 		y1 = -(y1 * eH / 100)
 		local x1 = valSrcStr * eH / 1024 + .5
-		lcd.drawLine(mx + x1 - 4, my + y1, mx + x1 + 4, my + y1, SOLID, FORCE)
-		lcd.drawLine(mx + x1, my + y1 - 4, mx + x1, my + y1 + 4, SOLID, FORCE)
+		drLine(mx + x1 - 4, my + y1, mx + x1 + 4, my + y1, SOLID, FORCE)
+		drLine(mx + x1, my + y1 - 4, mx + x1, my + y1 + 4, SOLID, FORCE)
 	end
 
 	-- Draws a box to display the rate and expo of forward and braking
@@ -164,13 +173,13 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		local scale = getSetParam(brake == 0 and 3 or 4)
 		drawExpoBox(0, 19, 45, 45, expo, 0, scale)
 		local y = 63 - getSetParam(brake == 0 and 3 or 4) * .44
-		lcd.drawLine(1, y, 44, y, DOTTED, FORCE)
+		drLine(1, y, 44, y, DOTTED, FORCE)
 		local x = valSrcThr
 		if brake == 1 then x = -x end
 		if x < 0 then x = 0 end
 		x = x * .043945
-		lcd.drawLine(secondLine, 20, secondLine, 62, SOLID, FORCE)
-		lcd.drawLine(x, 20, x, 62, SOLID, FORCE)
+		drLine(secondLine, 20, secondLine, 62, SOLID, FORCE)
+		drLine(x, 20, x, 62, SOLID, FORCE)
 		secondLine = x
 	end
 
@@ -210,7 +219,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				if event == evt_PAGER_FIRST then itemChg(qs_chnStB == -1 and 1 or 8) end
 			elseif pointer == 6 then
 				expoRateThr(0)
-				if valSrcThr < -500 then itemChg(9)
+				if valSrcThr < -500 then itemChg(7)
 				elseif event == evt_PAGER_FIRST then itemChg(7) end
 			elseif pointer == 7 then
 				expoRateThr(1)
@@ -220,14 +229,16 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				expoRateStr(8, qs_chnStB)
 				if event == evt_PAGER_FIRST then itemChg(1) end
 			elseif pointer == 9 or pointer == 10 then
-				lcd.drawRectangle(0, 19, 56, 45, FORCE)
+				local pXold = pX pX = 30
+				drRectangle(0, 19, 56, 45, FORCE)
 				local x = getOutputValue(chnStr)
 				x = x < -7 and x or x > 7 and x or 0
 				if model.getOutput(chnStr).revert == 1 then x = -x end
 				drawRotRec(10, 21, 10, 40, 1, 8, 20, x * .02 + (x < -5 and x * .005 or 0))
 				drawRotRec(35, 21, 10, 40, 1, 2, 20, x * .02 + (x > 5 and x * .005 or 0))
-				lcd.drawLine(15, 20, 15, 60, DOTTED, 0)
-				lcd.drawLine(40, 20, 40, 60, DOTTED, 0)
+				drLine(15, 20, 15, 60, DOTTED, 0)
+				drLine(40, 20, 40, 60, DOTTED, 0)
+				pX = pXold
 				if pointer == 9 and valSrcStr > 500 then itemChg(10)
 				elseif pointer == 10 and valSrcStr < -500 then itemChg( 9) end
 			end

@@ -289,7 +289,7 @@ function qs_drawTitel(text, font)
 	local y = 0
 	if font == MIDSIZE and #text > 16 then font, y = 0, 2 end
 	if font == 0 and #text > 21 then font, y = SMLSIZE, 3 end
-	FilledRectangle(0, 0, 128, 12, 0)
+	FilledRectangle(0, 0, 128, 12, FORCE)
 	drawText(64, y, text, font + CENTER + INVERS)
 end
 

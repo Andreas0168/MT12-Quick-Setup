@@ -296,11 +296,10 @@ end
 qs_listFirst = {}
 local blinkList = 0
 local oldParam = 0
-function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eMode, disp, c, prc)
-	prc = prc or 0
+function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eMode, disp, c)
 	if not sel then return end
 	if titel then qs_drawTitel(titel, MIDSIZE) end
-	local gs = groupNum * 1000 + gsSiteNum() * 10
+	local gs, pointer = groupNum * 1000 + gsSiteNum() * 10, 0
 	if not qs_listFirst[gs] then qs_listFirst[gs] = 1 end
 	local pl, lf = {}, qs_listFirst[gs]
 	if not disp then
@@ -327,6 +326,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 		else
 			local val, convert = p[pl[n]], 1
 			if sel == n then
+				pointer = pl[n]
 				if eMode == 1 then oldParam = val
 					elseif eMode == 3 and val == oldParam then eMode = 4
 					elseif eMode == 4 then val = oldParam end end
@@ -355,8 +355,11 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 					FilledRectangle(103, y + 3, 25, 1, FORCE)
 					FilledRectangle(x > 125 and 125 or x, y, 3, 7, FORCE)
 				else
+					local prc = 0
 					rx, ry, rw, rh = 1, y - 1, 0, 9
 					if font == MIDSIZE then rx, ry, rw, rh = 3, y - 4, 4, 12 end
+					if unit == 'P' then prc = PREC1 unit = '%' end
+					if unit == 'S' then prc = PREC1 unit = 's' end
 					drawText(128, y, unit, RIGHT)
 					lcd.drawNumber(122, y - rw, val, RIGHT + font + prc)
 					rx = lcd.getLastLeftPos() - rx
@@ -370,7 +373,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 		end
 		y = y + dist
 	end
-	if not p then return sel else return eMode end
+	if not p then return sel else return eMode, pointer end
 end
 
 function qs_getModelName()

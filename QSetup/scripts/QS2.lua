@@ -47,7 +47,7 @@ local words = {
 }
 
 
--- local paramA = '012345ab8'
+	local txtS1 = '010102030102031001010405040406060604070801010903010903100101'
 
 local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chnStr, chnThr, valSrcStr, valSrcThr) -- to setup your rc car
 	local floor = math.floor
@@ -165,7 +165,6 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		secondLine = x
 	end
 
-	local txtS1 = '010102030102031001010405040406060604070801010903010903100101'
 	local function getStdSetTxt(i)
 		i = i * 2
 		return getText(tonumber(string.sub(txtS1, i - 1, i)))
@@ -317,7 +316,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			param = {mixStrL.speedDown, mixStrL.speedUp, mixFwd.speedUp, mixBrk.speedDown, mixFwd.speedDown, mixBrk.speedUp}
 		end
 		editMode = drawList(getText(16), iSel, getText(17), event, 5, 14, 10, 64, param,
-		'ssssss', {0, 0, 0, 0, 0, 0,   50, 50, 50, 50, 50, 50}, editMode, nil, {2, 2, 2, 2, 2, 2}, PREC1)
+		'SSSSSS', {0, 0, 0, 0, 0, 0,   50, 50, 50, 50, 50, 50}, editMode, nil, {2, 2, 2, 2, 2, 2})
 		if editMode == 3 then
 			mixStrL.speedDown = param[1] mixStrR.speedUp = param[1] 
 			mixStrL.speedUp = param[2] mixStrR.speedDown = param[2]

@@ -189,7 +189,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		end
 		local disp, pointer = qs_chnStB == -1 and '+++++++ ++' or '++++++++++', 0
 		editMode, pointer = drawList('Basics', iSel, menueS1, event, 5, 14, 10, 64, param, '%P%%%%%%%%',
-		qs_MinMax, editMode, disp, {1, 1})
+		qs_MinMax, editMode, disp, {1, 1}, 4)
 		if editMode == 3 then
 			for n = 1, 10 do getSetParam(n, param[n]) end
 		elseif editMode == 2 then
@@ -200,6 +200,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				expoRateStr(1, chnStr)
 				if event == evt_PAGER_FIRST then itemChg(2) end
 			elseif pointer == 2 then
+				pX = 40
 				local x = getOutputValue(chnStr)
 				x = x < -7 and x or x > 7 and x or 0
 				if model.getOutput(chnStr).revert == 1 then x = -x end
@@ -229,7 +230,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				expoRateStr(8, qs_chnStB)
 				if event == evt_PAGER_FIRST then itemChg(1) end
 			elseif pointer == 9 or pointer == 10 then
-				local pXold = pX pX = 30
+				pX = 30
 				drRectangle(0, 19, 56, 45, FORCE)
 				local x = getOutputValue(chnStr)
 				x = x < -7 and x or x > 7 and x or 0
@@ -238,7 +239,6 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				drawRotRec(35, 21, 10, 40, 1, 2, 20, x * .02 + (x > 5 and x * .005 or 0))
 				drLine(15, 20, 15, 60, DOTTED, 0)
 				drLine(40, 20, 40, 60, DOTTED, 0)
-				pX = pXold
 				if pointer == 9 and valSrcStr > 500 then itemChg(10)
 				elseif pointer == 10 and valSrcStr < -500 then itemChg( 9) end
 			end

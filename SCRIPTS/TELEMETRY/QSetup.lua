@@ -296,7 +296,7 @@ end
 qs_listFirst = {}
 local blinkList = 0
 local oldParam = 0
-function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eMode, disp, c)
+function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eMode, disp, c, pos)
 	if not sel then return end
 	if titel then qs_drawTitel(titel, MIDSIZE) end
 	local gs, pointer = groupNum * 1000 + gsSiteNum() * 10, 0
@@ -332,7 +332,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 					elseif eMode == 4 then val = oldParam end end
 			if c and c[pl[n]] then convert = c[pl[n]] end
 			val = val / convert
-			drawText(font == MIDSIZE and 95 or 99, y, txt..':', RIGHT)
+			drawText(font == MIDSIZE and 95 or 99 - (pos or 0), y, txt..':', RIGHT)
 			local unit = not u and ' ' or sub(u, pl[n], pl[n])
 			if unit == '|' then
 				if sel == n then

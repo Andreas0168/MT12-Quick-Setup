@@ -47,7 +47,16 @@ local words = {
 }
 
 
-	local txtS1 = '010102030102031001010405040406060604070801010903010903100101'
+local txtS1 = '010102030102031001010405040406060604070801010903010903100101'
+local function getStdSetTxt(i)
+	i = i * 2
+	return getText(tonumber(string.sub(txtS1, i - 1, i)))
+end
+
+local menueS1 = {}
+for n = 1, 10 do
+	menueS1[n] = getStdSetTxt(n + 20)..' '..getStdSetTxt(n + 10)
+end
 
 local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chnStr, chnThr, valSrcStr, valSrcThr) -- to setup your rc car
 	local floor = math.floor
@@ -165,82 +174,136 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		secondLine = x
 	end
 
-	local function getStdSetTxt(i)
-		i = i * 2
-		return getText(tonumber(string.sub(txtS1, i - 1, i)))
-	end
-
 	if siteNum == 1 then  -- menue for the most standard setup
-		if editMode == 4 then
-			getSetParam(iSel, editValue)
-		elseif editMode == 1 then
-			editValue = getSetParam(iSel)
-			local lf = listFirst[2010]
-			if iSel < lf then lf = floor((iSel - 1) / 2) * 2 + 1
-			elseif iSel - 7 > lf then lf = floor((iSel - 7) / 2) * 2 + 1 end
-			listFirst[2010] = lf
-			local x, y, first, last = 0, 1, lf - 1, lf + 7
-			if last > 10 then last = 10 end
-			for i = first + 1, last do
-				lcd.drawNumber(x + (x == 0 and 63 or 64), y + 1, getSetParam(i),
-				RIGHT + MIDSIZE + (i == 2 and PREC1 or 0) + (i == iSel and INVERS or 0))
-				drawText(x, y, getStdSetTxt(i), SMLSIZE)
-				drawText(x, y + 7, getStdSetTxt(i + 10)..':', SMLSIZE)
-				x = x + 64 if x > 127 then x = 0 y = y + 16 end
-			end
+		if editMode == 1 then
+			for n = 1, 10 do param[n] = getSetParam(n) end
+		end
+		local disp, pointer = qs_chnStB == -1 and '+++++++ ++' or '++++++++++', 0
+		editMode, pointer = drawList('Basics', iSel, menueS1, event, 5, 14, 10, 64, param, '%P%%%%%%%%',
+		qs_MinMax, editMode, disp, {1, .2})
+		if editMode == 3 then
+			for n = 1, 10 do getSetParam(n, param[n]) end
 		elseif editMode == 2 then
-			if iSel == 8 and qs_chnStB == -1 then
-				editMode = 1
-			else
-				getSetParam(iSel, qs_adjVal(getSetParam(iSel),qs_MinMax[iSel],qs_MinMax[iSel + 10],getRotEncSpeed(),event))
-				lcd.drawNumber(129, 22, getSetParam(iSel), RIGHT + XXLSIZE + (iSel == 2 and PREC1 or 0))
-				drawText(0, 4, getStdSetTxt(iSel + 20)..' '..getStdSetTxt(iSel + 10)..':', MIDSIZE)
-				if iSel == 1 then
-					expoRateStr(1, chnStr)
-					if event == evt_PAGER_FIRST then itemChg(2) end
-				elseif iSel == 2 then
-					local x = getOutputValue(chnStr)
-					x = x < -7 and x or x > 7 and x or 0
-					if model.getOutput(chnStr).revert == 1 then x = -x end
-					drawRotRec(11, 21, 10, 40, 1, x < -7 and 8 or x > 7 and 2 or 5, 20, x * .02)
-					drawExpoBox(0, 19, 33, 45)
-					-- lcd.drawLine(mx + x, 19, mx - x, 63, SOLID ,FORCE)
-					if event == evt_PAGER_FIRST then itemChg(5) end
-				elseif iSel == 3 then
-					expoRateThr(0)
-					if valSrcThr < -500 or event == evt_PAGER_FIRST then itemChg(4) end
-				elseif iSel == 4 then
-					expoRateThr(1)
-					if valSrcThr > 500 then itemChg(3)
-					elseif event == evt_PAGER_FIRST then itemChg(6) end
-				elseif iSel == 5 then
-					expoRateStr(1, chnStr)
-					if event == evt_PAGER_FIRST then itemChg(qs_chnStB == -1 and 1 or 8) end
-				elseif iSel == 6 then
-					expoRateThr(0)
-					if valSrcThr < -500 then itemChg(9)
-					elseif event == evt_PAGER_FIRST then itemChg(7) end
-				elseif iSel == 7 then
-					expoRateThr(1)
-					if valSrcThr > 500 then itemChg(6)
-					elseif event == evt_PAGER_FIRST then itemChg(3) end
-				elseif iSel == 8 then
-					expoRateStr(8, qs_chnStB)
-					if event == evt_PAGER_FIRST then itemChg(1) end
-				elseif iSel == 9 or iSel == 10 then
-					lcd.drawRectangle(0, 19, 56, 45, FORCE)
-					local x = getOutputValue(chnStr)
-					x = x < -7 and x or x > 7 and x or 0
-					if model.getOutput(chnStr).revert == 1 then x = -x end
-					drawRotRec(10, 21, 10, 40, 1, 8, 20, x * .02 + (x < -5 and x * .005 or 0))
-					drawRotRec(35, 21, 10, 40, 1, 2, 20, x * .02 + (x > 5 and x * .005 or 0))
-					lcd.drawLine(15, 20, 15, 60, DOTTED, 0)
-					lcd.drawLine(40, 20, 40, 60, DOTTED, 0)
-					if iSel == 9 and valSrcStr > 500 then itemChg(10)
-					elseif iSel == 10 and valSrcStr < -500 then itemChg(9) end
-				end
+			lcd.drawFilledRectangle(0, 0, 96, 64, ERASE)
+			getSetParam(pointer, param[pointer])
+			if pointer == 1 then
+				expoRateStr(1, chnStr)
+				if event == evt_PAGER_FIRST then itemChg(2) end
+			elseif pointer == 2 then
+				local x = getOutputValue(chnStr)
+				x = x < -7 and x or x > 7 and x or 0
+				if model.getOutput(chnStr).revert == 1 then x = -x end
+				drawRotRec(11, 21, 10, 40, 1, x < -7 and 8 or x > 7 and 2 or 5, 20, x * .02)
+				drawExpoBox(0, 19, 33, 45)
+				-- lcd.drawLine(mx + x, 19, mx - x, 63, SOLID ,FORCE)
+				if event == evt_PAGER_FIRST then itemChg(5) end
+			elseif pointer == 3 then
+				expoRateThr(0)
+				if valSrcThr < -500 or event == evt_PAGER_FIRST then itemChg(4) end
+			elseif pointer == 4 then
+				expoRateThr(1)
+				if valSrcThr > 500 then itemChg(3)
+				elseif event == evt_PAGER_FIRST then itemChg(6) end
+			elseif pointer == 5 then
+				expoRateStr(1, chnStr)
+				if event == evt_PAGER_FIRST then itemChg(qs_chnStB == -1 and 1 or 8) end
+			elseif pointer == 6 then
+				expoRateThr(0)
+				if valSrcThr < -500 then itemChg(9)
+				elseif event == evt_PAGER_FIRST then itemChg(7) end
+			elseif pointer == 7 then
+				expoRateThr(1)
+				if valSrcThr > 500 then itemChg(6)
+				elseif event == evt_PAGER_FIRST then itemChg(3) end
+			elseif pointer == 8 then
+				expoRateStr(8, qs_chnStB)
+				if event == evt_PAGER_FIRST then itemChg(1) end
+			elseif pointer == 9 or pointer == 10 then
+				lcd.drawRectangle(0, 19, 56, 45, FORCE)
+				local x = getOutputValue(chnStr)
+				x = x < -7 and x or x > 7 and x or 0
+				if model.getOutput(chnStr).revert == 1 then x = -x end
+				drawRotRec(10, 21, 10, 40, 1, 8, 20, x * .02 + (x < -5 and x * .005 or 0))
+				drawRotRec(35, 21, 10, 40, 1, 2, 20, x * .02 + (x > 5 and x * .005 or 0))
+				lcd.drawLine(15, 20, 15, 60, DOTTED, 0)
+				lcd.drawLine(40, 20, 40, 60, DOTTED, 0)
+				if pointer == 9 and valSrcStr > 500 then itemChg(10)
+				elseif pointer == 10 and valSrcStr < -500 then itemChg(9) end
 			end
 		end
+
+
+	-- if siteNum == 1 then  -- menue for the most standard setup
+		-- if editMode == 4 then
+			-- getSetParam(iSel, editValue)
+		-- elseif editMode == 1 then
+			-- editValue = getSetParam(iSel)
+			-- local lf = listFirst[2010]
+			-- if iSel < lf then lf = floor((iSel - 1) / 2) * 2 + 1
+			-- elseif iSel - 7 > lf then lf = floor((iSel - 7) / 2) * 2 + 1 end
+			-- listFirst[2010] = lf
+			-- local x, y, first, last = 0, 1, lf - 1, lf + 7
+			-- if last > 10 then last = 10 end
+			-- for i = first + 1, last do
+				-- lcd.drawNumber(x + (x == 0 and 63 or 64), y + 1, getSetParam(i),
+				-- RIGHT + MIDSIZE + (i == 2 and PREC1 or 0) + (i == iSel and INVERS or 0))
+				-- drawText(x, y, getStdSetTxt(i), SMLSIZE)
+				-- drawText(x, y + 7, getStdSetTxt(i + 10)..':', SMLSIZE)
+				-- x = x + 64 if x > 127 then x = 0 y = y + 16 end
+			-- end
+		-- elseif editMode == 2 then
+			-- if iSel == 8 and qs_chnStB == -1 then
+				-- editMode = 1
+			-- else
+				-- getSetParam(iSel, qs_adjVal(getSetParam(iSel),qs_MinMax[iSel],qs_MinMax[iSel + 10],getRotEncSpeed(),event))
+				-- lcd.drawNumber(129, 22, getSetParam(iSel), RIGHT + XXLSIZE + (iSel == 2 and PREC1 or 0))
+				-- drawText(0, 4, getStdSetTxt(iSel + 20)..' '..getStdSetTxt(iSel + 10)..':', MIDSIZE)
+				-- if iSel == 1 then
+					-- expoRateStr(1, chnStr)
+					-- if event == evt_PAGER_FIRST then itemChg(2) end
+				-- elseif iSel == 2 then
+					-- local x = getOutputValue(chnStr)
+					-- x = x < -7 and x or x > 7 and x or 0
+					-- if model.getOutput(chnStr).revert == 1 then x = -x end
+					-- drawRotRec(11, 21, 10, 40, 1, x < -7 and 8 or x > 7 and 2 or 5, 20, x * .02)
+					-- drawExpoBox(0, 19, 33, 45)
+					-- -- lcd.drawLine(mx + x, 19, mx - x, 63, SOLID ,FORCE)
+					-- if event == evt_PAGER_FIRST then itemChg(5) end
+				-- elseif iSel == 3 then
+					-- expoRateThr(0)
+					-- if valSrcThr < -500 or event == evt_PAGER_FIRST then itemChg(4) end
+				-- elseif iSel == 4 then
+					-- expoRateThr(1)
+					-- if valSrcThr > 500 then itemChg(3)
+					-- elseif event == evt_PAGER_FIRST then itemChg(6) end
+				-- elseif iSel == 5 then
+					-- expoRateStr(1, chnStr)
+					-- if event == evt_PAGER_FIRST then itemChg(qs_chnStB == -1 and 1 or 8) end
+				-- elseif iSel == 6 then
+					-- expoRateThr(0)
+					-- if valSrcThr < -500 then itemChg(9)
+					-- elseif event == evt_PAGER_FIRST then itemChg(7) end
+				-- elseif iSel == 7 then
+					-- expoRateThr(1)
+					-- if valSrcThr > 500 then itemChg(6)
+					-- elseif event == evt_PAGER_FIRST then itemChg(3) end
+				-- elseif iSel == 8 then
+					-- expoRateStr(8, qs_chnStB)
+					-- if event == evt_PAGER_FIRST then itemChg(1) end
+				-- elseif iSel == 9 or iSel == 10 then
+					-- lcd.drawRectangle(0, 19, 56, 45, FORCE)
+					-- local x = getOutputValue(chnStr)
+					-- x = x < -7 and x or x > 7 and x or 0
+					-- if model.getOutput(chnStr).revert == 1 then x = -x end
+					-- drawRotRec(10, 21, 10, 40, 1, 8, 20, x * .02 + (x < -5 and x * .005 or 0))
+					-- drawRotRec(35, 21, 10, 40, 1, 2, 20, x * .02 + (x > 5 and x * .005 or 0))
+					-- lcd.drawLine(15, 20, 15, 60, DOTTED, 0)
+					-- lcd.drawLine(40, 20, 40, 60, DOTTED, 0)
+					-- if iSel == 9 and valSrcStr > 500 then itemChg(10)
+					-- elseif iSel == 10 and valSrcStr < -500 then itemChg(9) end
+				-- end
+			-- end
+		-- end
 
 	elseif siteNum == 2 then  -- site to setup revers on each channel
 		drawTitel(getText(14), MIDSIZE)

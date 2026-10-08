@@ -672,7 +672,12 @@ function qs_init(ri)
 		end
 		model.setOutput(n, buffer)
 	end
-	if qs_chnStB == -1 then setStickySwitch(7, false) end
+	if qs_chnStB == -1 then
+		setStickySwitch(7, false)
+		items[2][3] = 9
+	else
+		items[2][3] = 10
+	end
 end
 
 return { init = qs_init, run = qs_run }

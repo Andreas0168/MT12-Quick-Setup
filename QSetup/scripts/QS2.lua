@@ -90,9 +90,9 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		editValue = getSetParam(iSel)
 	end
 
-	local pX = 35
+	local pX, pY = 35, -2
 	local function drLine(x1, y1, x2, y2, p1, p2)
-		lcd.drawLine(pX + x1, y1, pX + x2, y2, p1 or SOLID, p2 or FORCE)
+		lcd.drawLine(pX + x1, pY + y1, pX + x2, pY + y2, p1 or SOLID, p2 or FORCE)
 	end
 
 	local function drawRotRec(x, y, w, h, fill, rx, ry, rot, scale, p, f)
@@ -133,7 +133,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	-- Draws a box with a dotted vertical line in the mid and optional a expo curve
 	local function drawExpoBox(x, y, w, h, expo, DBL, scale)
 		local mx = floor(w / 2) + x
-		lcd.drawRectangle(pX + x, y, w, h, FORCE)
+		lcd.drawRectangle(pX + x, y + pY, w, h, FORCE)
 		drLine(x + mx, y, x + mx, y + h - 1, DOTTED, 0)
 		local my = floor(h / 2) + y
 		if expo == nil then return mx end
@@ -228,7 +228,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				if event == evt_PAGER_FIRST then itemChg(1) end
 			elseif pointer == 9 or pointer == 10 then
 				pX = 30
-				lcd.drawRectangle(pX, 19, 56, 45, FORCE)
+				lcd.drawRectangle(pX, 19 + pY, 56, 45, FORCE)
 				local x = getOutputValue(chnStr)
 				x = x < -7 and x or x > 7 and x or 0
 				if model.getOutput(chnStr).revert == 1 then x = -x end

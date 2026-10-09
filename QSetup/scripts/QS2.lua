@@ -15,27 +15,27 @@ local param = {}
 local words = {
 	'Steering', 'Forward', 'Brake', 												--  3
 	'Rate', 'Trim', 'Expo', 'Endp. L', 'Endp. R', 							--  8
-	'Forward', 'Str. back',															-- 10
-	'Channel', 'Steering', 'Throttle', 'Direction', 'Endpoints', 		-- 15
-	'Speed-Settings',																	-- 16
+	'Str. back',																		--  9
+	'Channel', 'Steering', 'Throttle', 'Direction', 'Endpoints', 		-- 14
+	'Speed-Settings',																	-- 15
 	{'Steering out', 'Steering in', 'Forward', 'Brake',
-	'Forward back', 'Brake back'}, 												-- 17
+	'Forward back', 'Brake back'}, 												-- 16
 	{'ABS on', 'Audio-Feedback', 'ABS-PWM', 'Reduction first',
 	'Trigger', 'Reduction', 'Cycles full', 'Cycles reduce',
 	'PWM-Percent', 'Cycles minimum', 'Only on steer',
-	'Steer. threshold',},															-- 18
-	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 20
-	'Main Setup',																		-- 21
-	'min:', 'max:',																	-- 23
-	'This is only for', 'RadioLink R6FG Receiver',							-- 25
+	'Steer. threshold',},															-- 17
+	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 19
+	'Main Setup',																		-- 20
+	'min:', 'max:',																	-- 22
+	'This is only for', 'RadioLink R6FG Receiver',							-- 24
 
-	'Lenkung', 'Vorw.', 'Bremse',
+	'Lenkung', 'Vorwärts', 'Bremse',
 	nil, nil, nil, nil, nil,
-	'Vorwärts', 'Lnk. hint.',
+	'Lnk. hint.',
 	'Kanal', 'Lenkung', 'Gas', 'Richtung', 'Endpunkte',
 	'Verzögerung',
 	{'Lenkung raus', 'Lenkung rein', 'Vorwärts', 'Bremse',
-	'Vorw. zurück', 'Bremse zurück'},
+	'Vorwärts zurück', 'Bremse zurück'},
 	{'ABS an', 'Audio-Feedback', 'ABS-PWM', 'Zuerst reduziert',
 	'Trigger', 'Reduktion', 'Zyklen voll', 'Zyklen reduziert',
 	'PWM-Percent', 'Zyklen minimum', 'Nur beim lenken',
@@ -48,18 +48,18 @@ local words = {
 
 
 local function getText(n)
-	return words[qs_lang * 25 - 25 + n] or words[n]
+	return words[qs_lang * 24 - 24 + n] or words[n]
 end
 
-local txtS1 = '010102030102031001010405040406060604070801010903010903100101'
+-- local txtS1 = '01 01 02 03 01 02 03 10 01 01  04 05 04 04 06 06 06 04 07 08  01 01 09 03 01 09 03 10 01 01'
+local txtS1 = '11231239114544666478'
 local function getStdSetTxt(i)
-	i = i * 2
-	return getText(tonumber(string.sub(txtS1, i - 1, i)))
+	return getText(tonumber(string.sub(txtS1, i, i)))
 end
 
 local menueS1 = {}
 for n = 1, 10 do
-	menueS1[n] = getStdSetTxt(n + 20)..' '..getStdSetTxt(n + 10)
+	menueS1[n] = getStdSetTxt(n)..' '..getStdSetTxt(n + 10)
 end
 
 local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chnStr, chnThr, valSrcStr, valSrcThr) -- to setup your rc car
@@ -101,10 +101,10 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	local function channelText(i)
-		if i == chnStr then return getText(12)
-		elseif i == chnThr then return getText(13)
-		elseif i == qs_chnStB then return getText(10)
-		else return getText(11)..' '..i + 1 end
+		if i == chnStr then return getText(11)
+		elseif i == chnThr then return getText(12)
+		elseif i == qs_chnStB then return getText(9)
+		else return getText(10)..' '..i + 1 end
 	end
 
 	local function drawExpo(expo, DBL, x, y, Height, scale)
@@ -196,7 +196,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			for n = 1, 10 do param[n] = getSetParam(n) end
 		end
 		local disp, pointer = qs_chnStB == -1 and '+++++++ ++' or '++++++++++', 0
-		editMode, pointer = drawList(getText(21), iSel, menueS1, event, 5, 14, 10, 64, param, '%P%%%%%%%%',
+		editMode, pointer = drawList(getText(20), iSel, menueS1, event, 5, 14, 10, 64, param, '%P%%%%%%%%',
 		qs_MinMax, editMode, disp, {1, 1}, 4)
 		if editMode == 3 then
 			for n = 1, 10 do getSetParam(n, param[n]) end
@@ -239,7 +239,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		end
 
 	elseif siteNum == 2 then  -- site to setup revers on each channel
-		drawTitel(getText(14), MIDSIZE)
+		drawTitel(getText(13), MIDSIZE)
 		if editMode == 2 then
 			local output = model.getOutput(iSel - 1)
 			output.revert = 1 - output.revert
@@ -276,12 +276,12 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			model.setOutput(chn, output)
 			lcd.drawNumber(129, 22, val, RIGHT + XXLSIZE + PREC1)
 			if chn == chnThr then
-				drawText(0, 4, MinMax == 0 and (getText(3)..' '..getText(22)) or (getText(13)..' '..getText(23)), MIDSIZE)
+				drawText(0, 4, MinMax == 0 and (getText(3)..' '..getText(21)) or (getText(12)..' '..getText(22)), MIDSIZE)
 			else
-				drawText(0, 4, channelText(chn)..' '..(MinMax == 0 and getText(22) or getText(23)), MIDSIZE)
+				drawText(0, 4, channelText(chn)..' '..(MinMax == 0 and getText(21) or getText(22)), MIDSIZE)
 			end
 		elseif editMode == 1 then
-			drawTitel(getText(15), MIDSIZE)
+			drawTitel(getText(14), MIDSIZE)
 			local y, lf = 13, listFirst[2030]
 			if iSel - 1 < lf then lf = floor((iSel - 1) / 2) * 2
 			elseif iSel - 6 > lf then lf = floor((iSel - 5) / 2) * 2 end
@@ -290,12 +290,12 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			for i = first, first + 2 do
 				if i == chnThr then
 					drawText(75, y + 1, getText(3), RIGHT)
-					drawText(75, y + 9, getText(13), RIGHT)
+					drawText(75, y + 9, getText(12), RIGHT)
 				else drawText(75, y + 3, channelText(i), MIDSIZE + RIGHT) end
 				for n = 0, 1 do
 					local mark = i * 2 + n + 1
 					local val = n == 0 and model.getOutput(i).min or model.getOutput(i).max
-					drawText(99, n * 8 + y + 1, n == 0 and getText(22) or getText(23), RIGHT)
+					drawText(99, n * 8 + y + 1, n == 0 and getText(21) or getText(22), RIGHT)
 					lcd.drawNumber(128, n * 8 + y + 1, val, PREC1 + RIGHT + (mark == iSel and INVERS or 0))
 					if iSel == mark then editValue = val end
 				end
@@ -311,7 +311,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		if editMode == 1 then
 			param = {mixStrL.speedDown, mixStrL.speedUp, mixFwd.speedUp, mixBrk.speedDown, mixFwd.speedDown, mixBrk.speedUp}
 		end
-		editMode = drawList(getText(16), iSel, getText(17), event, 5, 14, 10, 64, param,
+		editMode = drawList(getText(15), iSel, getText(16), event, 5, 14, 10, 64, param,
 		'SSSSSS', {0, 0, 0, 0, 0, 0,   50, 50, 50, 50, 50, 50}, editMode, nil, {2, 2, 2, 2, 2, 2})
 		if editMode == 3 then
 			mixStrL.speedDown = param[1] mixStrR.speedUp = param[1] 
@@ -334,12 +334,12 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 	elseif siteNum == 5 then		-- setup ABS-System
 		local disp = qs_ABS[3] == 0 and '++++++++  ++' or '++++++  ++++'
-		editMode = drawList('ABS-System', iSel, getText(18), event, 5, 14, 10, 64, qs_ABS, '||||%%--% |%',
+		editMode = drawList('ABS-System', iSel, getText(17), event, 5, 14, 10, 64, qs_ABS, '||||%%--% |%',
 		{0, 0, 0, 0, 10, 10, 1, 1, 1, 1, 0, 0,  1, 1, 1, 1, 100, 100, 20, 20, 100, 20, 1, 100}, editMode, disp, {1, 1, 1, 1, -10.24, .01})
 		if editMode == 3 then qs_writeConf() end
 
 	elseif siteNum == 6 then
-		editMode = drawList(getText(19), iSel, getText(20), event,
+		editMode = drawList(getText(18), iSel, getText(19), event,
 		3, 20, 14, 64, qs_ACC, '|%%', {0, 0, 0,   1, 100, 100}, editMode, nil, {1, .05, .05})
 		if editMode == 3 then qs_writeConf()
 			local accFwd = qs_ACC[1] == 0 and 0 or qs_ACC[2] * 10
@@ -359,7 +359,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		1, 30, 14, MIDSIZE, p, '%', {0,   100}, editMode, nil, {20})
 		local t = p[1] - 1000
 		if t ~= output.offset then output.offset = t model.setOutput(7, output) end
-		for n = 0, 1 do drawText(64, n * 8 + 48, getText(n + 24), SMLSIZE + CENTER) end
+		for n = 0, 1 do drawText(64, n * 8 + 48, getText(n + 23), SMLSIZE + CENTER) end
 	end
 
 	if event == evt_MDL_FIRST and editMode == 1 then qs_popGroup() groupNum = 3 end

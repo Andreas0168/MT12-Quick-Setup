@@ -25,7 +25,7 @@ local words = {
 	'PWM-Percent', 'Cycles minimum', 'Only on steer',
 	'Steer. threshold',},															-- 18
 	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 20
-	'Basic setup',																		-- 21
+	'Main Setup',																		-- 21
 	'min:', 'max:',																	-- 23
 	'This is only for', 'RadioLink R6FG Receiver',							-- 25
 
@@ -41,7 +41,7 @@ local words = {
 	'PWM-Percent', 'Zyklen minimum', 'Nur beim lenken',
 	'Lenkungsschwelle'},
 	'Beschleunigung', {'Aktiviert', 'Vorwärts', 'Bremse'},
-	'Das Wichtigste',
+	nil,
 	nil, nil,
 	'Dies ist nur für', 'Radiolink R6FG Empfänger'
 }
@@ -188,12 +188,12 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			for n = 1, 10 do param[n] = getSetParam(n) end
 		end
 		local disp, pointer = qs_chnStB == -1 and '+++++++ ++' or '++++++++++', 0
-		editMode, pointer = drawList('Basics', iSel, menueS1, event, 5, 14, 10, 64, param, '%P%%%%%%%%',
+		editMode, pointer = drawList(getText(21), iSel, menueS1, event, 5, 14, 10, 64, param, '%P%%%%%%%%',
 		qs_MinMax, editMode, disp, {1, 1}, 4)
 		if editMode == 3 then
 			for n = 1, 10 do getSetParam(n, param[n]) end
 		elseif editMode == 2 then
-			lcd.drawFilledRectangle(0, 12, 98, 52, ERASE)
+			lcd.drawFilledRectangle(0, 12, 95, 52, ERASE)
 			qs_drawTitel(menueS1[pointer], MIDSIZE)
 			getSetParam(pointer, param[pointer])
 			if pointer == 1 then

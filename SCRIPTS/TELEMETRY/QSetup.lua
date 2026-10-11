@@ -346,7 +346,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 				FilledRectangle(val == 0 and 115 or 119, y + 2, 4, 3, FORCE)
 			else
 				if eMode == 2 and sel == n then
-					val = qs_adjVal(val, minmax[pl[n]], minmax[pl[n] + #minmax / 2], getRotEncSpeed(), event)
+					val = qs_adjVal(val, minmax[pl[n]], minmax[pl[n] + #minmax / 2], floor((getRotEncSpeed() + 1) / 2), event)
 					if event == EVT_ROT_LEFT or event == EVT_ROT_RIGHT then blinkList = 20 end
 				end
 				local rx, ry, rw, rh = 103, y - 1, 25, 9

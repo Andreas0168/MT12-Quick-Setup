@@ -51,7 +51,6 @@ local function getText(n)
 	return words[qs_lang * 24 - 24 + n] or words[n]
 end
 
--- local txtS1 = '01 01 02 03 01 02 03 10 01 01  04 05 04 04 06 06 06 04 07 08  01 01 09 03 01 09 03 10 01 01'
 local txtS1 = '11231239114544666478'
 local function getStdSetTxt(i)
 	return getText(tonumber(string.sub(txtS1, i, i)))
@@ -67,6 +66,13 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	local drawText = lcd.drawText
 	local drawTitel = qs_drawTitel
 	local drawList = qs_drawList
+
+	local function channelText(i)
+		if i == chnStr then return getText(11)
+		elseif i == chnThr then return getText(12)
+		elseif i == qs_chnStB then return getText(9)
+		else return getText(10)..' '..i + 1 end
+	end
 
 	local function getSetParam(i, v)
 		if v == nil then
@@ -98,13 +104,6 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	local function drawRotRec(x, y, w, h, fill, rx, ry, rot, scale, p, f)
 		qs_setAll(pX + x, pY + y, rx, ry, rot, scale or 1, 1)
 		qs_gfRec(0.5, 0.5, w + .5, h + .5, fill, p, f)
-	end
-
-	local function channelText(i)
-		if i == chnStr then return getText(11)
-		elseif i == chnThr then return getText(12)
-		elseif i == qs_chnStB then return getText(9)
-		else return getText(10)..' '..i + 1 end
 	end
 
 	local function drawExpo(expo, DBL, x, y, Height, scale)
@@ -264,43 +263,37 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		end
 
 	elseif siteNum == 3 then  -- setup endpoints for each channel
-		if editMode == 2 or editMode == 4 then
-			local chn = floor((iSel - 1) / 2)
-			local MinMax = floor(iSel / 2 - chn)
-			local output = model.getOutput(chn)
-			local val = MinMax == 0 and output.min or output.max
-			if editMode == 4 then val = editValue end
-			local limit = qs_rcCar.extendedLimits and 1500 or 1000
-			val = qs_adjVal(val, MinMax == 0 and -limit or 0, MinMax == 0 and 0 or limit, getRotEncSpeed(), event)
-			if MinMax == 0 then output.min = val else output.max = val end
-			model.setOutput(chn, output)
-			lcd.drawNumber(129, 22, val, RIGHT + XXLSIZE + PREC1)
+		local limit = qs_rcCar.extendedLimits and 1500 or 1000
+		drawTitel(getText(14), MIDSIZE)
+		local y, lf = 13, listFirst[2030]
+		if iSel - 1 < lf then lf = floor((iSel - 1) / 2) * 2
+		elseif iSel - 6 > lf then lf = floor((iSel - 5) / 2) * 2 end
+		listFirst[2030] = lf
+		local first = floor(lf / 2)
+		for chn = first, first + 2 do
 			if chn == chnThr then
-				drawText(0, 4, MinMax == 0 and (getText(3)..' '..getText(21)) or (getText(12)..' '..getText(22)), MIDSIZE)
-			else
-				drawText(0, 4, channelText(chn)..' '..(MinMax == 0 and getText(21) or getText(22)), MIDSIZE)
-			end
-		elseif editMode == 1 then
-			drawTitel(getText(14), MIDSIZE)
-			local y, lf = 13, listFirst[2030]
-			if iSel - 1 < lf then lf = floor((iSel - 1) / 2) * 2
-			elseif iSel - 6 > lf then lf = floor((iSel - 5) / 2) * 2 end
-			listFirst[2030] = lf
-			local first = floor(lf / 2)
-			for i = first, first + 2 do
-				if i == chnThr then
-					drawText(75, y + 1, getText(3), RIGHT)
-					drawText(75, y + 9, getText(12), RIGHT)
-				else drawText(75, y + 3, channelText(i), MIDSIZE + RIGHT) end
-				for n = 0, 1 do
-					local mark = i * 2 + n + 1
-					local val = n == 0 and model.getOutput(i).min or model.getOutput(i).max
-					drawText(99, n * 8 + y + 1, n == 0 and getText(21) or getText(22), RIGHT)
-					lcd.drawNumber(128, n * 8 + y + 1, val, PREC1 + RIGHT + (mark == iSel and INVERS or 0))
-					if iSel == mark then editValue = val end
+				drawText(71, y + 1, getText(3), RIGHT)
+				drawText(71, y + 9, getText(12), RIGHT)
+			else drawText(71, y + 3, channelText(chn), MIDSIZE + RIGHT) end
+			local output = model.getOutput(chn)
+			for n = 0, 1 do
+				local mark = chn * 2 + n + 1
+				local val = n == 0 and output.min or output.max
+				if iSel == mark then
+					if editMode == 1 then editValue = val
+					elseif editMode == 4 then val = editValue
+					elseif editMode == 2 then val = qs_adjVal(val, n == 0 and -limit or 0, n == 0 and 0 or limit, getRotEncSpeed(), event)
+					end
 				end
-				y = y + 17
+				if mark == iSel and (editMode == 2 or editMode == 4) then
+					if n == 0 then output.min = val else output.max = val end
+					model.setOutput(chn, output)
+				end
+				drawText(95, n * 8 + y + 1, n == 0 and getText(21) or getText(22), RIGHT)
+				local selector = editMode == 1 and INVERS or editMode == 2 and BLINK + INVERS or 0
+				lcd.drawNumber(128, n * 8 + y + 1, val, BOLD + PREC1 + RIGHT + (mark == iSel and selector or 0))
 			end
+			y = y + 17
 		end
 
 	elseif siteNum == 4 then  -- speed setting to slow down steering, forward and brake

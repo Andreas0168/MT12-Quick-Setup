@@ -26,7 +26,7 @@ local words = {
 	'Steer. threshold',},															-- 17
 	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 19
 	'Main Setup',																		-- 20
-	'min:', 'max:',																	-- 22
+	'min', 'max',																		-- 22
 	'This is only for', 'RadioLink R6FG Receiver',							-- 24
 
 	'Lenkung', 'Vorwärts', 'Bremse',
@@ -60,6 +60,10 @@ local menueS1 = {}
 for n = 1, 10 do
 	menueS1[n] = getStdSetTxt(n)..' '..getStdSetTxt(n + 10)
 end
+-- local menueS3 = {}
+-- for n = 1, 32, 2 do
+	-- menueS3[n] = getText(21) menueS3[n + 1] = getText(22)
+-- end
 
 local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chnStr, chnThr, valSrcStr, valSrcThr) -- to setup your rc car
 	local floor = math.floor
@@ -264,6 +268,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 	elseif siteNum == 3 then  -- setup endpoints for each channel
 		local limit = qs_rcCar.extendedLimits and 1500 or 1000
+		local selector = editMode == 1 and INVERS or editMode == 2 and BLINK + INVERS or 0
 		drawTitel(getText(14), MIDSIZE)
 		local y, lf = 13, listFirst[2030]
 		if iSel - 1 < lf then lf = floor((iSel - 1) / 2) * 2
@@ -284,13 +289,10 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					elseif editMode == 4 then val = editValue
 					elseif editMode == 2 then val = qs_adjVal(val, n == 0 and -limit or 0, n == 0 and 0 or limit, getRotEncSpeed(), event)
 					end
-				end
-				if mark == iSel and (editMode == 2 or editMode == 4) then
-					if n == 0 then output.min = val else output.max = val end
-					model.setOutput(chn, output)
-				end
-				drawText(95, n * 8 + y + 1, n == 0 and getText(21) or getText(22), RIGHT)
-				local selector = editMode == 1 and INVERS or editMode == 2 and BLINK + INVERS or 0
+					if editMode == 2 or editMode == 4 then
+						if n == 0 then output.min = val else output.max = val end
+						model.setOutput(chn, output) end end
+				drawText(95, n * 8 + y + 1, (n == 0 and getText(21) or getText(22))..':', RIGHT)
 				lcd.drawNumber(128, n * 8 + y + 1, val, BOLD + PREC1 + RIGHT + (mark == iSel and selector or 0))
 			end
 			y = y + 17

@@ -1,7 +1,7 @@
 ﻿local drawText = lcd.drawText
 local drawList = qs_drawList
 local saveDir = qs_path..'save/'
-local blink = 0
+local blinken, marker = 0, 0
 local menue, editValue = 0, 0
 
 local words = {
@@ -59,11 +59,12 @@ end
 local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chnStr, chnThr)
 	local floor = math.floor
 	local drawTitel = qs_drawTitel
-	blink = blink > 0 and blink - 1 or 20
 	local rwSetup = 0
 	local rwFN = ''
 	local swapSrc, swapDest = 0, 0
 	local space = ' '
+	if editMode == 2 then blinken = blinken > 0 and blinken - 1 or 20 else blinken = 20 end
+	marker = blinken > 8 and INVERS or 0
 
 	local modelName = qs_getModelName()
 
@@ -327,8 +328,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				local x2 = lcd.getLastPos()
 				if iSel == n then
 					fileName = name
-					if editMode == 1 or (editMode == 2 and blink > 8) then
-						lcd.drawFilledRectangle(x1 - 2, y - 1, x2 - x1 + 3, 9, 0) end
+					-- if editMode == 1 or (editMode == 2 and blinken > 8) then
+					if marker == INVERS then lcd.drawFilledRectangle(x1 - 2, y - 1, x2 - x1 + 3, 9, 0) end
 				end
 				y = y + 8
 			end
@@ -344,7 +345,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				local src = iSel
 				iSel = qs_adjVal(iSel, 1, 6, -1, event)
 				swapSrc, swapDest = src - 1, iSel - 1
-				if iSel ~= src then blink = 20 end
+				if iSel ~= src then blinken = 20 end
 			end
 		else
 			drawTitel(getText(7)..iSel..getText(9), MIDSIZE)

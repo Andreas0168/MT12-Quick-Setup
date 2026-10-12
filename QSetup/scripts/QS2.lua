@@ -11,6 +11,7 @@ if not listFirst[2010] then
 end
 
 local param = {}
+local MinMax = {}
 
 local words = {
 	'Steering', 'Forward', 'Brake', 												--  3
@@ -65,11 +66,16 @@ end
 	-- menueS3[n] = getText(21) menueS3[n + 1] = getText(22)
 -- end
 
+local blinken, marker = 0, 0
+
 local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chnStr, chnThr, valSrcStr, valSrcThr) -- to setup your rc car
 	local floor = math.floor
 	local drawText = lcd.drawText
 	local drawTitel = qs_drawTitel
 	local drawList = qs_drawList
+
+	if editMode == 2 then blinken = blinken > 0 and blinken -1 or 20 else blinken = 20 end
+	marker = blinken > 8 and INVERS or 0
 
 	local function channelText(i)
 		if i == chnStr then return getText(11)
@@ -242,6 +248,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		end
 
 	elseif siteNum == 2 then  -- site to setup revers on each channel
+		param = {}
 		drawTitel(getText(13), MIDSIZE)
 		if editMode == 2 then
 			local output = model.getOutput(iSel - 1)
@@ -266,9 +273,21 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			x = x + 64 if x > 127 then x = 49 y = y + 13 end
 		end
 
+		-- local limit = qs_rcCar.extendedLimits and 1500 or 1000
+		-- if editMode == 1 and #param ~= 64 then
+			-- for n = 1, 64, 2 do
+				-- local output = model.getOutput(n)
+				-- param[n] = output.min
+				-- param[n + 1] = output.max
+				-- MinMax[n] = -limit MinMax[n + 1] = 0
+				-- MinMax[n + 64] = 0 MinMax[n + 65] = limit
+			-- end
+		-- end
+		-- editMode = drawList(menueS3, iSel, getText(16), event, 6, 14, 8, 64, param,
+		-- 'PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP', MinMax, editMode, , , -4)
+
 	elseif siteNum == 3 then  -- setup endpoints for each channel
 		local limit = qs_rcCar.extendedLimits and 1500 or 1000
-		local selector = editMode == 1 and INVERS or editMode == 2 and BLINK + INVERS or 0
 		drawTitel(getText(14), MIDSIZE)
 		local y, lf = 13, listFirst[2030]
 		if iSel - 1 < lf then lf = floor((iSel - 1) / 2) * 2
@@ -293,7 +312,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 						if n == 0 then output.min = val else output.max = val end
 						model.setOutput(chn, output) end end
 				drawText(95, n * 8 + y + 1, getText(21 + n)..':', RIGHT)
-				lcd.drawNumber(128, n * 8 + y + 1, val, BOLD + PREC1 + RIGHT + (mark == iSel and selector or 0))
+				lcd.drawNumber(128, n * 8 + y + 1, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0))
 			end
 			y = y + 17
 		end

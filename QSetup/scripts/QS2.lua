@@ -62,7 +62,7 @@ for n = 1, 10 do
 	menueS1[n] = getStdSetTxt(n)..' '..getStdSetTxt(n + 10)
 end
 -- local menueS3 = {}
--- for n = 1, 32, 2 do
+-- for n = 1, 64, 2 do
 	-- menueS3[n] = getText(21) menueS3[n + 1] = getText(22)
 -- end
 

@@ -61,10 +61,6 @@ local menueS1 = {}
 for n = 1, 10 do
 	menueS1[n] = getStdSetTxt(n)..' '..getStdSetTxt(n + 10)
 end
--- local menueS3 = {}
--- for n = 1, 64, 2 do
-	-- menueS3[n] = getText(21) menueS3[n + 1] = getText(22)
--- end
 
 local blinken, marker = 0, 0
 
@@ -274,19 +270,6 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			lcd.drawFilledRectangle(x1, y + 2, 5, 6, FORCE)
 			x = x + 64 if x > 127 then x = 49 y = y + 13 end
 		end
-
-		-- local limit = qs_rcCar.extendedLimits and 1500 or 1000
-		-- if editMode == 1 and #param ~= 64 then
-			-- for n = 1, 64, 2 do
-				-- local output = model.getOutput(n)
-				-- param[n] = output.min
-				-- param[n + 1] = output.max
-				-- MinMax[n] = -limit MinMax[n + 1] = 0
-				-- MinMax[n + 64] = 0 MinMax[n + 65] = limit
-			-- end
-		-- end
-		-- editMode = drawList(menueS3, iSel, getText(16), event, 6, 14, 8, 64, param,
-		-- 'PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP', MinMax, editMode, , , -4)
 
 	elseif siteNum == 3 then  -- setup endpoints for each channel
 		local limit = qs_rcCar.extendedLimits and 1500 or 1000

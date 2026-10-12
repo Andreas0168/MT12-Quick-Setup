@@ -74,7 +74,9 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	local drawTitel = qs_drawTitel
 	local drawList = qs_drawList
 
-	if editMode == 2 then blinken = blinken > 0 and blinken -1 or 20 else blinken = 20 end
+	if editMode == 2 then blinken = blinken > 0 and blinken -1 or 20
+		if event == EVT_ROT_LEFT or event == EVT_ROT_RIGHT then blinken = 20 end
+	else blinken = 10 end
 	marker = blinken > 8 and INVERS or 0
 
 	local function channelText(i)
@@ -296,9 +298,9 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		local first = floor(lf / 2)
 		for chn = first, first + 2 do
 			if chn == chnThr then
-				drawText(71, y + 1, getText(3), RIGHT)
-				drawText(71, y + 9, getText(12), RIGHT)
-			else drawText(71, y + 3, channelText(chn), MIDSIZE + RIGHT) end
+				drawText(75, y + 1, getText(3), RIGHT)
+				drawText(75, y + 9, getText(12), RIGHT)
+			else drawText(75, y + 3, channelText(chn), MIDSIZE + RIGHT) end
 			local output = model.getOutput(chn)
 			for n = 0, 1 do
 				local mark = chn * 2 + n + 1
@@ -311,8 +313,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					if editMode == 2 or editMode == 4 then
 						if n == 0 then output.min = val else output.max = val end
 						model.setOutput(chn, output) end end
-				drawText(95, n * 8 + y + 1, getText(21 + n)..':', RIGHT)
-				lcd.drawNumber(128, n * 8 + y + 1, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0))
+				drawText(99, n * 8 + y + 1, getText(21 + n)..':', RIGHT)
+				lcd.drawNumber(128, n * 8 + y + 1, val, PREC1 + RIGHT + (mark == iSel and marker or 0))
 			end
 			y = y + 17
 		end

@@ -63,7 +63,10 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	local rwFN = ''
 	local swapSrc, swapDest = 0, 0
 	local space = ' '
-	if editMode == 2 then blinken = blinken > 0 and blinken - 1 or 20 else blinken = 20 end
+
+	if editMode == 2 then blinken = blinken > 0 and blinken -1 or 20
+		if event == EVT_ROT_LEFT or event == EVT_ROT_RIGHT then blinken = 20 end
+	else blinken = 10 end
 	marker = blinken > 8 and INVERS or 0
 
 	local modelName = qs_getModelName()

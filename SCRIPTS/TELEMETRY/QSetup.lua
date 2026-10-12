@@ -294,7 +294,7 @@ function qs_drawTitel(text, font)
 end
 
 qs_listFirst = {}
-local blinkList = 0
+local blinken = 0
 local oldParam = 0
 function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eMode, disp, c, pos)
 	if not sel then return end
@@ -311,7 +311,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 	rows = rows - 1
 	local y = y or 14
 	local dist = dist or 8
-	blinkList = blinkList > 0 and blinkList - 1 or 20
+	blinken = blinken > 0 and blinken - 1 or 20
 	if not p then sel = qs_adjVal(sel, 1, #t, -floor((getRotEncSpeed() + 2) / 3), event, 800) end
 	if sel < lf then lf = sel
 	elseif sel - rows > lf then lf = sel - rows
@@ -347,7 +347,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 			else
 				if eMode == 2 and sel == n then
 					val = qs_adjVal(val, minmax[pl[n]], minmax[pl[n] + #minmax / 2], floor((getRotEncSpeed() + 1) / 2), event)
-					if event == EVT_ROT_LEFT or event == EVT_ROT_RIGHT then blinkList = 20 end
+					if event == EVT_ROT_LEFT or event == EVT_ROT_RIGHT then blinken = 20 end
 				end
 				local rx, ry, rw, rh = 103, y - 1, 25, 9
 				if unit == '-' then
@@ -365,7 +365,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 					rx = lcd.getLastLeftPos() - rx
 					rw = 128 - rx
 				end
-				if sel == n then if eMode == 1 or (eMode == 2 and blinkList > 8) then FilledRectangle(rx, ry, rw, rh) end end
+				if sel == n then if eMode == 1 or (eMode == 2 and blinken > 8) then FilledRectangle(rx, ry, rw, rh) end end
 			end
 			p[pl[n]] = val * convert
 		end

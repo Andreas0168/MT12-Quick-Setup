@@ -365,9 +365,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 					rx = lcd.getLastLeftPos() - rx
 					rw = 128 - rx
 				end
-				if sel == n then
-					if eMode == 1 or (eMode == 2 and blinkList > 8) then FilledRectangle(rx, ry, rw, rh) end
-				end
+				if sel == n then if eMode == 1 or (eMode == 2 and blinkList > 8) then FilledRectangle(rx, ry, rw, rh) end end
 			end
 			p[pl[n]] = val * convert
 		end

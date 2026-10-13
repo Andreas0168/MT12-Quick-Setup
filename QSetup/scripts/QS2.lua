@@ -27,7 +27,7 @@ local words = {
 	'Steer. threshold',},															-- 17
 	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 19
 	'Main Setup',																		-- 20
-	'min', 'max',																		-- 22
+	'min:', 'max:',																		-- 22
 	'This is only for', 'RadioLink R6FG Receiver',							-- 24
 
 	'Lenkung', 'Vorwärts', 'Bremse',
@@ -296,7 +296,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					if editMode == 2 or editMode == 4 then
 						if n == 0 then output.min = val else output.max = val end
 						model.setOutput(chn, output) end end
-				drawText(99, n * 8 + y + 1, getText(21 + n)..':', RIGHT)
+				drawText(99, n * 8 + y + 1, getText(21 + n), RIGHT)
 				lcd.drawNumber(128, n * 8 + y + 1, val, PREC1 + RIGHT + (mark == iSel and marker or 0))
 			end
 			y = y + 17

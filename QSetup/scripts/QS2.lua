@@ -75,6 +75,25 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	else blinken = 10 end
 	marker = blinken > 8 and INVERS or 0
 
+	local function drawBar(x, y, w, h, out, src, rev)
+		lcd.drawRectangle(x, y, w, h, FORCE)
+		local h2 = h / 2
+		lcd.drawLine(x + 1, y + h2, x + w - 2, y + h2, DOTTED ,FORCE)
+		w = w / 2
+		local xc = w + x
+		w = w - 1.6
+		if qs_rcCar.extendedLimits then lcd.drawPoint(xc - w / 1.5, y + 2 + h2, FORCE)
+			lcd.drawPoint(xc + w / 1.5, y + 2 + h2, FORCE)
+			if not src then lcd.drawPoint(xc - w / 1.5, y - 2 + h2, FORCE)
+				lcd.drawPoint(xc + w / 1.5, y - 2 + h2, FORCE) end end
+		lcd.drawLine(xc, y + 1, xc, y + h - 2, SOLID ,FORCE)
+		out = out * w / (qs_rcCar.extendedLimits and 1536 or 1024)
+		local src = not src and out or src * w / 1024
+		if rev == 1 then out = -out end
+		y = y + 1 for y = y, y + h2 - 2 do lcd.drawLine(xc, y, xc + src, y, SOLID, FORCE) end
+		for y = y + h2, y + h2 + 2 do lcd.drawLine(xc, y, xc + out, y, SOLID, FORCE) end
+	end
+
 	local function channelText(i)
 		if i == chnStr then return getText(11)
 		elseif i == chnThr then return getText(12)
@@ -301,6 +320,37 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			end
 			y = y + 17
 		end
+
+	-- elseif siteNum == 3 then  -- setup endpoints for each channel
+		-- local limit = qs_rcCar.extendedLimits and 1500 or 1000
+		-- drawTitel(getText(14), MIDSIZE)
+		-- local y, lf = 13, listFirst[2030]
+		-- if iSel - 1 < lf then lf = floor((iSel - 1) / 2) * 2
+		-- elseif iSel - 6 > lf then lf = floor((iSel - 5) / 2) * 2 end
+		-- listFirst[2030] = lf
+		-- local first = floor(lf / 2)
+		-- for chn = first, first + 2 do
+			-- if chn == chnThr then
+				-- drawText(75, y + 1, getText(3), RIGHT)
+				-- drawText(75, y + 9, getText(12), RIGHT)
+			-- else drawText(75, y + 3, channelText(chn), MIDSIZE + RIGHT) end
+			-- local output = model.getOutput(chn)
+			-- for n = 0, 1 do
+				-- local mark = chn * 2 + n + 1
+				-- local val = n == 0 and output.min or output.max
+				-- if iSel == mark then
+					-- if editMode == 1 then editValue = val
+					-- elseif editMode == 4 then val = editValue
+					-- elseif editMode == 2 then val = qs_adjVal(val, n == 0 and -limit or 0, n == 0 and 0 or limit, getRotEncSpeed(), event)
+					-- end
+					-- if editMode == 2 or editMode == 4 then
+						-- if n == 0 then output.min = val else output.max = val end
+						-- model.setOutput(chn, output) end end
+				-- drawText(99, n * 8 + y + 1, getText(21 + n), RIGHT)
+				-- lcd.drawNumber(128, n * 8 + y + 1, val, PREC1 + RIGHT + (mark == iSel and marker or 0))
+			-- end
+			-- y = y + 17
+		-- end
 
 	elseif siteNum == 4 then  -- speed setting to slow down steering, forward and brake
 		local mixStrL = model.getMix(chnStr, 0)

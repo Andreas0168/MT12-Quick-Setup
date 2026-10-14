@@ -311,7 +311,9 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 	rows = rows - 1
 	local y = y or 14
 	local dist = dist or 8
-	blinken = blinken > 0 and blinken - 1 or 20
+	if editMode == 2 then blinken = blinken > 0 and blinken -1 or 20
+		if event == EVT_ROT_LEFT or event == EVT_ROT_RIGHT then blinken = 20 end
+	else blinken = 10 end
 	if not p then sel = qs_adjVal(sel, 1, #t, -floor((getRotEncSpeed() + 2) / 3), event, 800) end
 	if sel < lf then lf = sel
 	elseif sel - rows > lf then lf = sel - rows
@@ -345,10 +347,7 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 				Rectangle(113, y, 12, 7, FORCE)
 				FilledRectangle(val == 0 and 115 or 119, y + 2, 4, 3, FORCE)
 			else
-				if eMode == 2 and sel == n then
-					val = qs_adjVal(val, minmax[pl[n]], minmax[pl[n] + #minmax / 2], floor((getRotEncSpeed() + 1) / 2), event)
-					if event == EVT_ROT_LEFT or event == EVT_ROT_RIGHT then blinken = 20 end
-				end
+				if eMode == 2 and sel == n then val = qs_adjVal(val, minmax[pl[n]], minmax[pl[n] + #minmax / 2], floor((getRotEncSpeed() + 1) / 2), event) end
 				local rx, ry, rw, rh = 103, y - 1, 25, 9
 				if unit == '-' then
 					local x = (val - minmax[pl[n]]) * 20 / (minmax[pl[n] + #minmax / 2] - minmax[pl[n]]) + 104

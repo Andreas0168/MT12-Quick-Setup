@@ -318,7 +318,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					if editMode == 2 or editMode == 4 then
 						if n == 0 then output.min = -val else output.max = val end
 						model.setOutput(chn, output) end end
-				lcd.drawNumber(n * 104 + 23, y, val, PREC1 + RIGHT + (mark == iSel and marker or 0))
+				lcd.drawNumber(n * 99 + 28, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0))
 			end
 			y = y + 17
 		end

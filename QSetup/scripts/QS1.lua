@@ -107,8 +107,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				lcd.drawPoint(xc + w / 1.5, y - 2 + h2, FORCE) end end
 		lcd.drawLine(xc, y + 1, xc, y + h - 2, SOLID ,FORCE)
 		out = out * w / (qs_rcCar.extendedLimits and 1536 or 1024)
-		local src = not src and out or src * w / 1024
 		if rev == 1 then out = -out end
+		local src = not src and out or src * w / 1024
 		y = y + 1 for y = y, y + h2 - 2 do lcd.drawLine(xc, y, xc + src, y, SOLID, FORCE) end
 		for y = y + h2, y + h2 + 2 do lcd.drawLine(xc, y, xc + out, y, SOLID, FORCE) end
 	end
@@ -355,7 +355,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		for i = 0, 5 do
 			if i ~= chnStr and i ~= chnThr then
 				drawText(x + 16, y1 + 2, getText(12)..i + 1, RIGHT + SMLSIZE)
-				drawDualBar(x + 16, y1, w, h, getOutputValue(i), StB == i and sStr or nil, StB == i and 0 or nil) --model.getOutput(i).revert)
+				drawDualBar(x + 16, y1, w, h, getOutputValue(i), StB == i and sStr or nil, model.getOutput(i).revert)
 				y1 = y1 + h - 1
 			end
 		end

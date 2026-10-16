@@ -191,6 +191,7 @@ end
 
 local adjCnt, adjSndCnt = 0, 0
 function qs_adjVal(value, vMin, vMax, step, event, freq)
+	local oldVal = value
 	adjCnt = adjCnt - 1
 	adjSndCnt = adjSndCnt - 1
 	if adjCnt > 0 then return value end
@@ -217,7 +218,7 @@ function qs_adjVal(value, vMin, vMax, step, event, freq)
 	elseif value > vMax then value = freq and vMin or vMax
 	end
 	qs_playSignal(not freq and (value - vMin) / (vMax - vMin) * 400 + 600 or freq, 15)
-	return value
+	return value, oldVal
 end
 
 local degre, gfx, gfy, gfrx, gfry, gfscale, gfsin, gfcos = math.pi / 180, 0, 0, 10, 8, 1, 1, 1
@@ -295,7 +296,7 @@ end
 
 qs_listFirst = {}
 local blinken = 0
-local oldParam = 0
+qs_oldVal = 0
 function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eMode, disp, c, pos)
 	if not sel then return end
 	if titel then qs_drawTitel(titel, MIDSIZE) end
@@ -329,9 +330,9 @@ function qs_drawList(titel, sel, t, event, rows, y, dist, font, p, u, minmax, eM
 			local val, convert = p[pl[n]], 1
 			if sel == n then
 				pointer = pl[n]
-				if eMode == 1 then oldParam = val
-					elseif eMode == 3 and val == oldParam then eMode = 4
-					elseif eMode == 4 then val = oldParam end end
+				if eMode == 1 then qs_oldVal = val
+				elseif eMode == 3 and val == qs_oldVal then eMode = 4
+				elseif eMode == 4 then val = qs_oldVal end end
 			if c and c[pl[n]] then convert = c[pl[n]] end
 			val = val / convert
 			drawText(font == MIDSIZE and 95 or 99 - (pos or 0), y, txt..':', RIGHT)

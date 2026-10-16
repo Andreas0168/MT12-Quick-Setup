@@ -119,8 +119,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	local function itemChg(site)
-		iSel = (qs_chnStB == -1 and site > 8) and site - 1 or site
-		editValue = getSetParam(iSel)
+		iSel = site
+		qs_oldVal = param[site]
 	end
 
 	local pX, pY = 35, -2
@@ -224,6 +224,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		local disp, pointer = qs_chnStB == -1 and '+++++++ ++' or '++++++++++', 0
 		editMode, pointer = drawList(getText(20), iSel, menueS1, event, 5, 14, 10, 64, param, '%P%%%%%%%%',
 		qs_MinMax, editMode, disp, {1, 1}, 4)
+		if editMode == 4 then param[pointer] = qs_oldVal editMode = 3 end
 		if editMode == 3 then
 			for n = 1, 10 do getSetParam(n, param[n]) end
 		elseif editMode == 2 then
@@ -309,13 +310,13 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			drawText(63, y, channelText(chn), BOLD + CENTER)
 			for n = 0, 1 do
 				local mark = chn * 2 + n + 1
-				local val = n == 0 and -output.min or output.max
+				local val, oldVal = n == 0 and -output.min or output.max, 0
 				if iSel == mark then
 					if editMode == 1 then editValue = val
 					elseif editMode == 4 then val = editValue
-					elseif editMode == 2 then val = qs_adjVal(val, 0, limit, getRotEncSpeed(), event)
+					elseif editMode == 2 then val, oldVal = qs_adjVal(val, 0, limit, getRotEncSpeed(), event)
 					end
-					if editMode == 2 or editMode == 4 then
+					if (val ~= oldVal and editMode == 2) or editMode == 4 then
 						if n == 0 then output.min = -val else output.max = val end
 						model.setOutput(chn, output) end end
 				lcd.drawNumber(n * 99 + 28, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0))
@@ -385,7 +386,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 	if event == evt_MDL_FIRST and editMode == 1 then qs_popGroup() groupNum = 3 end
 
-	-- lcd.drawNumber(127, 14, getAvailableMemory(), RIGHT + SMLSIZE)
+	-- lcd.drawNumber(0, 14, getAvailableMemory(), MIDSIZE)
 
 	return editMode, lcdCnt, iSel, groupNum
 end

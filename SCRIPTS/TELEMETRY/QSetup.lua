@@ -532,7 +532,7 @@ local function qs_run(event)
 		qs_glVars[n] = t
 	end
 	if model.getInfo().extendedLimits ~= qs_rcCar.extendedLimits then qs_init(1) end
-	if drvMode ~= qs_drvMode then qs_glFld = -1 lcdCnt = 0 end
+	if drvMode ~= qs_drvMode then qs_glFld = -1 lcdCnt = 0 editMode = 1 end
 	if event == 0 then
 		if lcdCnt > 1 then
 			lcdCnt = lcdCnt - 1

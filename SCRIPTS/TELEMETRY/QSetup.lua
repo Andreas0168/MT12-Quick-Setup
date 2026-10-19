@@ -32,20 +32,24 @@ qs_ACC = {
 }
 
 qs_ABS = {
-	0,			-- on = 
-	0,			-- audio = 
-	1,			-- type = 
-	0,			-- dir = 
-	-512,		-- trigger = 
+	 0,		-- on = 
+	 0,		-- audio = 
+	 1,		-- type = 
+	 0,		-- dir = 
+ -512,		-- trigger = 
 	.5,		-- mul = 
-	1,			-- full = 
-	1,			-- reduce = 
+	 1,		-- full = 
+	 1,		-- reduce = 
 	50,		-- pwmPercent = 
-	2,			-- pwmFreq = 
-	0,			-- only on steering = 
-	0			-- steering threshold (0 = automatic) =
+	 2,		-- pwmFreq = 
+	 0,		-- only on steering = 
+	 0			-- steering threshold (0 = automatic) =
 }
 
+qs_VSC = {
+	 0,		-- on
+	.8			-- VSC-Rate
+}
 qs_ltActive = -1
 qs_ltList = {}
 qs_ltSwitch = 0
@@ -76,12 +80,13 @@ local items = {
 	15, 1,
 	 3, 1}
 ,
-	{7, 1,
-	 10, 1,
+	{8, 1,
+	10, 1,
 	32, 1,
 	64, 1,
 	 6, 1,
-	 10, 1,
+	 2, 1,
+	10, 1,
 	 3, 1,
 	 1, 1}
 ,
@@ -382,20 +387,6 @@ function qs_getModelName()
 	end
 	return name
 end
-
--- function qs_readData(fn, d, toNum)
-	-- local i = fstat(fn)
-	-- if i == nil then return false end
-	-- local f = io.open(fn, 'r')
-	-- local c = io.read(f, i.size)
-	-- io.close(f)
-	-- for v in string.gmatch(c, '([^,]+)') do
-		-- d[#d + 1] = toNum == 1 and tonumber(v) or v
-	-- end
-	-- c = nil
-	-- collectgarbage('collect')
-	-- return true
--- end
 
 function qs_readData(fn, d, toNum)
 	local f = io.open(fn, 'r')

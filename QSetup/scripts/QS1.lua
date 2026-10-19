@@ -94,7 +94,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		return v < 10 and '0'..v or ''..v
 	end
 
-	local function drawDualBar(x, y, w, h, out, src, rev)
+	local function drawDualBar(x, y, w, h, out, src, rev, trim)
 		lcd.drawRectangle(x, y, w, h, FORCE)
 		local h2 = h / 2
 		lcd.drawLine(x + 1, y + h2, x + w - 2, y + h2, DOTTED ,FORCE)
@@ -111,6 +111,12 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		local src = not src and out or src * w / 1024
 		y = y + 1 for y = y, y + h2 - 2 do lcd.drawLine(xc, y, xc + src, y, SOLID, FORCE) end
 		for y = y + h2, y + h2 + 2 do lcd.drawLine(xc, y, xc + out, y, SOLID, FORCE) end
+		if trim then
+			trim = trim * w / 1000
+			trim = trim < -w and -w or trim > w and w or trim
+			local x2 = xc + (trim < 0 and -1 or trim > 0 and 1 or 0) + trim
+			for y = y + h2 - 2, y + h2 - 1 do lcd.drawLine(xc, y, x2, y, SOLID, FORCE) end
+		end
 	end
 
 	local run, tm, txt, txt2, dist = 0, floor(rtc / 60), getText(26), '', 0
@@ -287,19 +293,11 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	drawText(x, y + h, getText(12)..chnThr + 1, RIGHT)
 	lcd.drawNumber(x + w + 17, y + 1, (oStr < 0 and -oStr or oStr) / 10.24, RIGHT)
 	lcd.drawNumber(x + w + 17, y + h, (oThr < 0 and -oThr or oThr) / 10.24, RIGHT)
-	drawDualBar(x, y, w, h, oStr, sStr, model.getOutput(chnStr).revert)
-	drawDualBar(x, y + h - 1, w, h, oThr, sThr, model.getOutput(chnThr).revert)
+	drawDualBar(x, y, w, h, oStr, sStr, model.getOutput(chnStr).revert, qs_glVars[1] * 2.5)
+	drawDualBar(x, y + h - 1, w, h, oThr, sThr, model.getOutput(chnThr).revert, qs_glVars[4] * 2.5)
 	if qs_skin % 8  >= 4 then
 		lcd.drawFilledRectangle(x - 19, y, 19, h + h - 1, 0)
 		lcd.drawFilledRectangle(x + w, y, 18, h + h - 1, 0)
-	end
-	local trim = qs_glVars[1] * (w - 5) / 800
-	x = x + w / 2
-	for y = y + 3, y + 11, 8 do
-		trim = trim < -43 and -43 or trim > 43 and 43 or trim
-		local x2 = x + (trim < 0 and -1 or trim > 0 and 1 or 0) + trim
-		for y = y, y + 1 do lcd.drawLine(x, y, x2, y, SOLID, FORCE) end
-		trim = qs_glVars[4] * (w - 5) / 800
 	end
 	if qs_skin % 16 >= 8 then lcd.drawFilledRectangle(19, 47, 91, 17, 0) end
 

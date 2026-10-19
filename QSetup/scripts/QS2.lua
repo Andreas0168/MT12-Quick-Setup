@@ -3,15 +3,14 @@ local editValue = 0
 
 local listFirst = qs_listFirst
 
-if not listFirst[2010] then
-	listFirst[2010] = 1
+if not listFirst[2020] then
 	listFirst[2020] = 0
 	listFirst[2030] = 0
-	listFirst[2040] = 1
 end
 
 local param = {}
 local MinMax = {}
+local menueS1 = {}
 
 local words = {
 	'Steering', 'Forward', 'Brake', 												--  3
@@ -27,8 +26,9 @@ local words = {
 	'Steer. threshold',},															-- 17
 	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 19
 	'Main Setup',																		-- 20
-	'min:', 'max:',																		-- 22
+	'min:', 'max:',																	-- 22
 	'This is only for', 'RadioLink R6FG Receiver',							-- 24
+	{'VSC on', 'min. corn. speed'},												-- 25
 
 	'Lenkung', 'Vorwärts', 'Bremse',
 	nil, nil, nil, nil, nil,
@@ -44,38 +44,36 @@ local words = {
 	'Beschleunigung', {'Aktiviert', 'Vorwärts', 'Bremse'},
 	nil,
 	nil, nil,
-	'Dies ist nur für', 'Radiolink R6FG Empfänger'
+	'Dies ist nur für', 'Radiolink R6FG Empfänger',
+	{'VSC an', 'min. Kurveng.'}
 }
 
 
-local function getText(n)
-	return words[qs_lang * 24 - 24 + n] or words[n]
-end
-
-local txtS1 = '11231239114544666478'
-local function getStdSetTxt(i)
-	return getText(tonumber(string.sub(txtS1, i, i)))
-end
-
-local menueS1 = {}
-for n = 1, 10 do
-	menueS1[n] = getStdSetTxt(n)..' '..getStdSetTxt(n + 10)
-end
-
-local blinken, marker = 0, 0
+local blinken = 0
+local marker = 0
 
 local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chnStr, chnThr, valSrcStr, valSrcThr) -- to setup your rc car
 	local floor = math.floor
 	local drawText = lcd.drawText
 	local drawTitel = qs_drawTitel
 	local drawList = qs_drawList
+	local writeConf = qs_writeConf
 
 	if editMode == 2 then blinken = blinken > 0 and blinken -1 or 20
 		if event == EVT_ROT_LEFT or event == EVT_ROT_RIGHT then blinken = 20 end
 	else blinken = 10 end
 	marker = blinken > 8 and INVERS or 0
 
-	local function drawDualBar(x, y, w, h, out, src, rev)
+	local function getText(n)
+		return words[qs_lang * 25 - 25 + n] or words[n]
+	end
+
+	local txtS1 = '11231239114544666478'
+	local function getStdSetTxt(i)
+		return getText(tonumber(string.sub(txtS1, i, i)))
+	end
+
+	local function drawDualBar(x, y, w, h, out, src, rev, trim)
 		lcd.drawRectangle(x, y, w, h, FORCE)
 		local h2 = h / 2
 		lcd.drawLine(x + 1, y + h2, x + w - 2, y + h2, DOTTED ,FORCE)
@@ -87,11 +85,18 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			if not src then lcd.drawPoint(xc - w / 1.5, y - 2 + h2, FORCE)
 				lcd.drawPoint(xc + w / 1.5, y - 2 + h2, FORCE) end end
 		lcd.drawLine(xc, y + 1, xc, y + h - 2, SOLID ,FORCE)
-		out = out * w / (qs_rcCar.extendedLimits and 1536 or 1024)
+		out = out * w / (qs_rcCar.extendedLimits and 1500 or 1000)
 		if rev == 1 then out = -out end
 		local src = not src and out or src * w / 1024
 		y = y + 1 for y = y, y + h2 - 2 do lcd.drawLine(xc, y, xc + src, y, SOLID, FORCE) end
 		for y = y + h2, y + h2 + 2 do lcd.drawLine(xc, y, xc + out, y, SOLID, FORCE) end
+
+		if trim then
+			trim = trim * w / 1000
+			trim = trim < -w and -w or trim > w and w or trim
+			local x2 = xc + (trim < 0 and -1 or trim > 0 and 1 or 0) + trim
+			for y = y + h2 - 2, y + h2 - 1 do lcd.drawLine(xc, y, x2, y, SOLID, FORCE) end
+		end
 	end
 
 	local function channelText(i)
@@ -219,6 +224,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 	if siteNum == 1 then  -- menue for the most standard setup
 		if editMode == 1 then
+			for n = 1, 10 do menueS1[n] = getStdSetTxt(n)..' '..getStdSetTxt(n + 10) end
 			for n = 1, 10 do param[n] = getSetParam(n) end
 		end
 		local disp, pointer = qs_chnStB == -1 and '+++++++ ++' or '++++++++++', 0
@@ -306,7 +312,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			lcd.drawText(0, y + 8, lL)
 			lcd.drawText(127, y + 8, lR, RIGHT)
 			local output = model.getOutput(chn)
-			drawDualBar(6, y + 8, 113, 7, getOutputValue(chn), nil, output.revert)
+			local trim = chn == chnStr and qs_glVars[1] or chn == chnThr and qs_glVars[4] or output.offset
+			drawDualBar(6, y + 8, 113, 7, getOutputValue(chn), nil, output.revert, trim)
 			drawText(63, y, channelText(chn), BOLD + CENTER)
 			for n = 0, 1 do
 				local mark = chn * 2 + n + 1
@@ -354,16 +361,21 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			end
 		end
 
-	elseif siteNum == 5 then		-- setup ABS-System
+	elseif siteNum == 5 then		-- setup VSC-System
+		editMode, editValue = drawList('VSC-System', iSel, getText(25), event, 2, 20, 14, 64, qs_VSC, '|%',
+		{0, 20,  1, 99}, editMode, nil, {1, .01})
+		if editMode == 3 then writeConf() end
+
+	elseif siteNum == 6 then		-- setup ABS-System
 		local disp = qs_ABS[3] == 0 and '++++++++  ++' or '++++++  ++++'
 		editMode = drawList('ABS-System', iSel, getText(17), event, 5, 14, 10, 64, qs_ABS, '||||%%--% |%',
 		{0, 0, 0, 0, 10, 10, 1, 1, 1, 1, 0, 0,  1, 1, 1, 1, 100, 100, 20, 20, 100, 20, 1, 100}, editMode, disp, {1, 1, 1, 1, -10.24, .01})
-		if editMode == 3 then qs_writeConf() end
+		if editMode == 3 then writeConf() end
 
-	elseif siteNum == 6 then
-		editMode = drawList(getText(18), iSel, getText(19), event,
-		3, 20, 14, 64, qs_ACC, '|%%', {0, 0, 0,   1, 100, 100}, editMode, nil, {1, .05, .05})
-		if editMode == 3 then qs_writeConf()
+	elseif siteNum == 7 then		-- setup ACC-System
+		editMode = drawList(getText(18), iSel, getText(19), event, 3, 20, 14, 64, qs_ACC, '|%%',
+		{0, 0, 0,   1, 100, 100}, editMode, nil, {1, .05, .05})
+		if editMode == 3 then writeConf()
 			local accFwd = qs_ACC[1] == 0 and 0 or qs_ACC[2] * 10
 			local accBrk = qs_ACC[1] == 0 and 0 or -(qs_ACC[3] * 10)
 			for n = 0, 1 do
@@ -374,7 +386,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			end
 		end
 
-	elseif siteNum == 7 then
+	elseif siteNum == 8 then
 		local output = model.getOutput(7)
 		local p = {(output.offset + 1000)}
 		editMode = drawList('Gyro Setup', iSel, {'Gyro Gain'}, event,

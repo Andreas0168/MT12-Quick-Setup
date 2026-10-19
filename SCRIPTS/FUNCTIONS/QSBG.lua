@@ -1,7 +1,6 @@
 ﻿local absPWM = 100
 local absFreq = 2
 local absActive = 0
-
 local brakeState = 1
 local brakeRate = 100
 local brakeCnt = 0
@@ -11,10 +10,14 @@ local ltLastSwitch = 0
 local ltDiff = 0
 local speakCnt = 0
 
+local vscActive = 0
+local forwardRate = 0
+
 --if fstat('/SCRIPTS/FUNCTIONS/QSBG.lua') then del('/SCRIPTS/FUNCTIONS/QSBG.lua') end
 
 local function qs_run()
 	if not qs_sourceThr or not qs_drvMode then return end
+	local srcStrVal = getSourceValue(qs_sourceStr)
 	local srcThrVal = getSourceValue(qs_sourceThr)
 
 	if qs_ltActive == 1 then			-- Laptime active?
@@ -73,10 +76,31 @@ local function qs_run()
 		end
 	end
 
+	if qs_VSC[1] == 1 then
+		if srcThrVal > 50 then
+			local reduce = 1026 - (srcStrVal < 0 and -srcStrVal or srcStrVal)
+			reduce = forwardRate * ((1 - qs_VSC[2]) * reduce / 1024 + qs_VSC[2])
+			model.setGlobalVariable(2, qs_drvMode, reduce)
+			vscActive = 1
+		else
+			if vscActive == 1 then
+				model.setGlobalVariable(2, qs_drvMode, forwardRate)
+				vscActive = 0
+			end
+			forwardRate = model.getGlobalVariable(2, qs_drvMode)
+		end
+	else
+		if vscActive == 1 then
+			model.setGlobalVariable(2, qs_drvMode, forwardRate)
+			vscActive = 0
+		end
+		forwardRate = model.getGlobalVariable(2, qs_drvMode)
+	end
+
 	if qs_ABS[1] == 1 then
 		local Reduce = qs_ABS[6]
 		if qs_ABS[11] == 1 then
-			Reduce = getOutputValue(qs_chnStr)
+			Reduce = srcStrVal
 			if qs_ABS[12] > 0 then
 				Reduce = ((Reduce < 0 and -Reduce or Reduce) / 10.24) >= qs_ABS[12] and qs_ABS[6] or brakeRate
 			else
@@ -132,6 +156,7 @@ local function qs_run()
 		end
 		brakeRate = model.getGlobalVariable(3, qs_drvMode)
 	end
+
 	srcThrVal = (srcThrVal < 0 and -srcThrVal or srcThrVal) / 1024
 	setRGBLedColor(0, r * srcThrVal, g * srcThrVal, b * srcThrVal)
 end

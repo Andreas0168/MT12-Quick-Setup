@@ -98,13 +98,13 @@ local function qs_run()
 	end
 
 	if qs_ABS[1] == 1 then
-		local Reduce = qs_ABS[6]
+		local reduce = qs_ABS[6]
 		if qs_ABS[11] == 1 then
-			Reduce = srcStrVal
+			reduce = srcStrVal < 0 and -srcStrVal or srcStrVal
 			if qs_ABS[12] > 0 then
-				Reduce = ((Reduce < 0 and -Reduce or Reduce) / 10.24) >= qs_ABS[12] and qs_ABS[6] or brakeRate
+				reduce = (reduce / 10.24) >= qs_ABS[12] and qs_ABS[6] or brakeRate
 			else
-				Reduce = (1 - qs_ABS[6]) * ((1024 - (Reduce < 0 and -Reduce or Reduce)) / 1024) + qs_ABS[6]
+				reduce = (1 - qs_ABS[6]) * ((1024 - reduce) / 1024) + qs_ABS[6]
 			end
 		end
 		if srcThrVal <= qs_ABS[5] then
@@ -131,7 +131,7 @@ local function qs_run()
 					brakeCnt = qs_ABS[7]
 					brakeState = 0
 				else
-					model.setGlobalVariable(3, qs_drvMode, brakeRate * Reduce)
+					model.setGlobalVariable(3, qs_drvMode, brakeRate * reduce)
 					brakeCnt = qs_ABS[8]
 					brakeState = 1
 				end

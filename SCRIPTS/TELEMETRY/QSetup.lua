@@ -558,11 +558,11 @@ local function qs_run(event)
 
 	local pageLoad = pages[groupNum]
 	if pageLoad ~= pageRun then
+		pageRun = pageLoad
 		runScript = {}
 		collectgarbage("collect")
 		local fn = scriptDir..pageLoad  -- to setup your rc car
 		runScript = loadScript(fn)
-		pageRun = pageLoad
 		runScript = runScript()
 		collectgarbage("collect")
 		--if fstat(fn..'.lua') then del(fn..'.lua') end

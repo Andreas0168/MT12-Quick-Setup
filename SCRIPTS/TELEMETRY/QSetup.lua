@@ -2,23 +2,23 @@
 local evt_PAGEL_REPT = 68
 -- evt_PAGEL_BREAK = 36
 
- evt_PAGER_FIRST = 101
+evt_PAGER_FIRST = 101
 local evt_PAGER_REPT = 69
 -- evt_PAGER_BREAK = 37
 
- evt_MDL_FIRST = 108
+evt_MDL_FIRST = 108
 local evt_MDL__BREAK = 44
 local evt_MDL_LONG = 140
 -- evt_MDL_REPT = 76
 
- evt_TELE_FIRST = 109
+evt_TELE_FIRST = 109
 -- evt_TELE_BREAK = 45
 -- evt_TELE_LONG = 141
 -- evt_TELE_REPT = 77
 
- evt_SYS_FIRST = 110
+evt_SYS_FIRST = 110
 -- evt_SYS_BREAK = 46
- evt_SYS_LONG = 142
+evt_SYS_LONG = 142
 
 -- evt_ENTER_REPT = 66
 local evt_EXIT_FIRST = 97

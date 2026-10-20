@@ -109,7 +109,7 @@ local Start = 0
 qs_drvMode, qs_drvName = getFlightMode()
 
 qs_sourceStr = 75		-- 75
-qs_sourceThr = 76				-- 76
+qs_sourceThr = 76		-- 76
 
 qs_sourceBat = 0
 qs_sourceSB = 0
@@ -410,6 +410,9 @@ function qs_writeConf()
 	for n = 1, 3 do io.write(f, s, qs_ACC[n]) end
 	for n = 1, 8 do io.write(f, s, qs_LED[n]) end
 	io.write(f, s, qs_4wsRev)
+	io.write(f, s, qs_4wsMode)
+	io.write(f, s, qs_VSC[1])
+	io.write(f, s, qs_VSC[2])
 	io.close(f)
 end
 
@@ -423,11 +426,14 @@ local function readConf()
 		a = d[3] if a < 0 or a > 31 then a = 5 end qs_skin = a
 		a = d[4] if a < 0 or a > 1 then a = 0 end qs_clock = a
 		a = d[5] if a < 0 or a > 3 then a = 0 end kbSkin = a
-		if #d < 29 then qs_writeConf() return end
 		for n = 1, 12 do qs_ABS[n] = d[n + 5] end
 		for n = 1, 3 do qs_ACC[n] = d[n + 17] end
 		for n = 1, 8 do qs_LED[n] = d[n + 20] end
+		if #d < 32 then qs_writeConf() return end
 		qs_4wsRev = d[29]
+		qs_4wsMode = d[30]
+		qs_VSC[1] = d[31]
+		qs_VSC[2] = d[32]
 	else
 		qs_writeConf()
 	end

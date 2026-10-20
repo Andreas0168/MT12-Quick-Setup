@@ -382,8 +382,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			qs_setPopup({'!|No setup for 4WS'}, 1)
 			editMode = 1
 		else
-			local buffer = model.getOutput(qs_chnStB)
-			local offset = buffer.offset
+			local output = model.getOutput(qs_chnStB)
+			local offset = output.offset
 			local ws4Mode = qs_4wsMode
 			drawText(0, 10, '4W-Steering', MIDSIZE)
 			drawText(27, 22, 'Mode:', RIGHT)
@@ -396,6 +396,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				if iSel == 1 then
 					qs_4wsMode = ws4Mode < 4 and ws4Mode + 1 or 1
 					editMode = 3
+					qs_writeConf()
 					qs_init(1) ws4Mode = qs_4wsMode
 				elseif iSel == 2 then
 					qs_4wsRev = 1 - qs_4wsRev
@@ -403,9 +404,9 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 					qs_init(1)
 					editMode = 3
 				elseif iSel == 3 then
-					buffer.offset = qs_adjVal(offset, -200, 200, getRotEncSpeed(), event)
-					qs_setPopup({'Steer-Trim', buffer.offset}, 1)
-					if offset ~= buffer.offset then model.setOutput(qs_chnStB, buffer) end
+					output.offset = qs_adjVal(offset, -200, 200, getRotEncSpeed(), event)
+					qs_setPopup({'Steer-Trim', output.offset}, 1)
+					if offset ~= output.offset then model.setOutput(qs_chnStB, output) end
 				end
 			end
 			local fLine, bLine = -3, 0

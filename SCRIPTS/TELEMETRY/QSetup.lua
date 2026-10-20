@@ -565,7 +565,7 @@ local function qs_run(event)
 		runScript = loadScript(fn)
 		runScript = runScript()
 		collectgarbage("collect")
-		--if fstat(fn..'.lua') then del(fn..'.lua') end
+		if fstat(fn..'.lua') then del(fn..'.lua') end
 	end
 
 	lcd.clear()
@@ -619,7 +619,7 @@ function qs_init(ri)
 		qs_ltSwitch = 1
 		readConf()
 
-		--local fn = '/SCRIPTS/TELEMETRY/QSetup.lua' if fstat(fn) then del(fn) end
+		local fn = '/SCRIPTS/TELEMETRY/QSetup.lua' if fstat(fn) then del(fn) end
 
 		local trims = {94, 93, 92, 95}
 		for n = 3, 6 do

@@ -256,7 +256,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 		elseif siteNum == 4 then  -- my about site
 			drawText(64,2, 'Quick Setup MT12', MIDSIZE + CENTER)
-			drawText(63,14, 'v26.10.19', CENTER)
+			drawText(63,14, 'v26.10.20', CENTER)
 			drawText(63,44, 'Developed 2026 by', CENTER)
 			drawText(64,51, 'Andreas Kassner', MIDSIZE + CENTER)
 			if editMode == 1 then editValue = lg
@@ -279,7 +279,10 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			if iSel == 1 then drawText(128, 0, getAvailableMemory(), RIGHT + SMLSIZE) end
 		end
 
-		if event == evt_TELE_FIRST and editMode == 1 then qs_popGroup() groupNum = 2 end
+		if editMode == 1 then
+			if event == evt_TELE_FIRST then qs_popGroup() groupNum = 2 end
+			if event == evt_MDL_FIRST then qs_popGroup() groupNum = 1 end
+		end
 
 	elseif groupNum == 4 then	-- save new, overwrite or delete setup
 		if editMode == 1 then

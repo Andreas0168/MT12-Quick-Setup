@@ -396,7 +396,10 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		for n = 0, 1 do drawText(64, n * 8 + 48, getText(n + 23), SMLSIZE + CENTER) end
 	end
 
-	if event == evt_MDL_FIRST and editMode == 1 then qs_popGroup() groupNum = 3 end
+	if editMode == 1 then
+		if event == evt_MDL_FIRST then qs_popGroup() groupNum = 3 end
+		if event == evt_TELE_FIRST then qs_popGroup() groupNum = 1 end
+	end
 
 	-- lcd.drawNumber(0, 14, getAvailableMemory(), MIDSIZE)
 

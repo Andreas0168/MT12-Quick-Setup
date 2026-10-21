@@ -70,7 +70,7 @@ local editMode = 1
 local lcdCnt = 1
 
 local groupNum = 1
-local groups = {1}
+local groups = {}
 
 local items = {
 	{5, 1,
@@ -160,13 +160,12 @@ function qs_gsItems(num)
 	items[groupNum][items[groupNum][2] * 2 + 1] = num
 end
 local function pushGroup(group)
-	groups[1] = groups[1] + 1
-	groups[groups[1]] = groupNum
+	groups[#groups + 1] = groupNum
 	groupNum = group
 end
 function qs_popGroup()
-	groupNum = groups[groups[1]]
-	groups[1] = groups[1] - 1
+	groupNum = groups[#groups]
+	groups[#groups] = nil
 end
 
 function qs_playSignal(Frq, Dur)
@@ -541,7 +540,7 @@ local function qs_run(event)
 	elseif event == evt_EXIT_FIRST then
 		if editMode == 2 then editMode = 4
 		elseif editMode == 1 then
-			if groups[1] == 1 then return 2
+			if #groups == 0 then return 2
 			else qs_popGroup()
 			end
 		end

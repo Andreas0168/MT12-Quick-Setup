@@ -539,10 +539,7 @@ local function qs_run(event)
 	if event == EVT_ENTER_FIRST then editMode = editMode + 1
 	elseif event == evt_EXIT_FIRST then
 		if editMode == 2 then editMode = 4
-		elseif editMode == 1 then
-			if #groups == 0 then return 2
-			else qs_popGroup()
-			end
+		elseif editMode == 1 and #groups > 0 then qs_popGroup()
 		end
 	elseif editMode == 1 then
 		local i, sn, sites = qs_gsItems(), gsSiteNum(), getSites()

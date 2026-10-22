@@ -13,7 +13,7 @@ local speakCnt = 0
 local vscActive = 0
 local forwardRate = 0
 
-local function qs_run()
+local function run()
 	if not qs_sourceThr or not qs_drvMode then return end
 	local srcStrVal = getSourceValue(qs_sourceStr)
 	local srcThrVal = getSourceValue(qs_sourceThr)
@@ -166,4 +166,4 @@ local function init()
 	local fn = '/SCRIPTS/FUNCTIONS/QSBG.lua' if fstat(fn) then del(fn) end
 end
 
-return { run = qs_run, init = init, background = background}
+return { run = run, init = init, background = background}

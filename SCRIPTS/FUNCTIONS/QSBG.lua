@@ -163,7 +163,7 @@ local function background()
 end
 
 local function init()
-	if fstat('/SCRIPTS/FUNCTIONS/QSBG.lua') then del('/SCRIPTS/FUNCTIONS/QSBG.lua') end
+	local fn = '/SCRIPTS/FUNCTIONS/QSBG.lua' if fstat(fn) then del(fn) end
 end
 
 return { run = qs_run, init = init, background = background}

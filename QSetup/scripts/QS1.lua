@@ -285,16 +285,14 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	x, y, w, h = 19, 47, 91, 9 -- Mainbar with steering and throttle
-	local sStr = valSrcStr
-	local oStr = getOutputValue(chnStr)
-	local sThr = valSrcThr
-	local oThr = getOutputValue(chnThr)
+	local oStr = qs_chnStrVal
+	local oThr = qs_chnThrVal
 	drawText(x, y + 1, getText(12)..chnStr + 1, RIGHT)
 	drawText(x, y + h, getText(12)..chnThr + 1, RIGHT)
 	lcd.drawNumber(x + w + 17, y + 1, (oStr < 0 and -oStr or oStr) / 10.24, RIGHT)
 	lcd.drawNumber(x + w + 17, y + h, (oThr < 0 and -oThr or oThr) / 10.24, RIGHT)
-	drawDualBar(x, y, w, h, oStr, sStr, model.getOutput(chnStr).revert, qs_glVars[1] * 2.5)
-	drawDualBar(x, y + h - 1, w, h, oThr, sThr, model.getOutput(chnThr).revert, qs_glVars[4] * 2.5)
+	drawDualBar(x, y, w, h, oStr, valSrcStr, model.getOutput(chnStr).revert, qs_glVars[1] * 2.5)
+	drawDualBar(x, y + h - 1, w, h, oThr, valSrcThr, model.getOutput(chnThr).revert, qs_glVars[4] * 2.5)
 	if qs_skin % 8  >= 4 then
 		lcd.drawFilledRectangle(x - 19, y, 19, h + h - 1, 0)
 		lcd.drawFilledRectangle(x + w, y, 18, h + h - 1, 0)
@@ -353,7 +351,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		for i = 0, 5 do
 			if i ~= chnStr and i ~= chnThr then
 				drawText(x + 16, y1 + 2, getText(12)..i + 1, RIGHT + SMLSIZE)
-				drawDualBar(x + 16, y1, w, h, getOutputValue(i), StB == i and sStr or nil, model.getOutput(i).revert)
+				drawDualBar(x + 16, y1, w, h, getOutputValue(i), StB == i and valSrcStr or nil, model.getOutput(i).revert)
 				y1 = y1 + h - 1
 			end
 		end

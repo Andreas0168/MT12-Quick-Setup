@@ -567,7 +567,7 @@ local function qs_run(event)
 	lcd.clear()
 	local iSel, grp = gsItemSel(), groupNum
 	editMode, lcdCnt, iSel, grp = runScript(groupNum, event, gsSiteNum(), iSel, qs_lang, editMode, lcdCnt,
-	qs_chnStr, qs_chnThr, getSourceValue(qs_sourceStr), getSourceValue(qs_sourceThr))
+	qs_chnStr, qs_chnThr, qs_srcStrVal, qs_srcThrVal)
 	gsItemSel(iSel)
 
 	if grp ~= groupNum then pushGroup(grp) lcdCnt = 1 editMode = 1 end

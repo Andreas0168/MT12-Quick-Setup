@@ -13,10 +13,17 @@ local speakCnt = 0
 local vscActive = 0
 local forwardRate = 0
 
+qs_srcStrVal = 0
+qs_srcThrVal = 0
+qs_chnStrVal = 0
+qs_chnThrVal = 0
+
 local function run()
 	if not qs_sourceThr or not qs_drvMode then return end
-	local srcStrVal = getSourceValue(qs_sourceStr)
-	local srcThrVal = getSourceValue(qs_sourceThr)
+	qs_srcStrVal = getSourceValue(qs_sourceStr)
+	qs_srcThrVal = getSourceValue(qs_sourceThr)
+	qs_chnStrVal = getOutputValue(qs_chnStr)
+	qs_chnThrVal = getOutputValue(qs_chnThr)
 
 	if qs_ltActive == 1 then			-- Laptime active?
 		local Time = getTime()
@@ -25,7 +32,7 @@ local function run()
 		local ltNum = #qs_ltList + 1
 		if ltNum <= 1000 then
 			if ltRun == 0 then				-- waiting to start
-				if srcThrVal >= 950 then
+				if qs_srcThrVal >= 950 then
 					ltRun = 1
 					if ltNum == 1 then
 						qs_ltList[ltNum] = Time
@@ -69,14 +76,14 @@ local function run()
 	local r, g, b = 0, 0, 0
 
 	if qs_ACC[1] == 1 then
-		if srcThrVal >= 20 then r, b = 255, 255
-		elseif srcThrVal <= -20 then r = 255
+		if qs_srcThrVal >= 20 then r, b = 255, 255
+		elseif qs_srcThrVal <= -20 then r = 255
 		end
 	end
 
 	if qs_VSC[1] == 1 then
-		if srcThrVal > 50 then
-			local reduce = 1026 - (srcStrVal < 0 and -srcStrVal or srcStrVal)
+		if qs_srcThrVal > 50 then
+			local reduce = 1026 - (qs_srcStrVal < 0 and -qs_srcStrVal or qs_srcStrVal)
 			reduce = forwardRate * ((1 - qs_VSC[2]) * reduce / 1024 + qs_VSC[2])
 			model.setGlobalVariable(2, qs_drvMode, reduce)
 			vscActive = 1
@@ -98,14 +105,14 @@ local function run()
 	if qs_ABS[1] == 1 then
 		local reduce = qs_ABS[6]
 		if qs_ABS[11] == 1 then
-			reduce = srcStrVal < 0 and -srcStrVal or srcStrVal
+			reduce = qs_srcStrVal < 0 and -qs_srcStrVal or qs_srcStrVal
 			if qs_ABS[12] > 0 then
 				reduce = (reduce / 10.24) >= qs_ABS[12] and qs_ABS[6] or brakeRate
 			else
 				reduce = (1 - qs_ABS[6]) * ((1024 - reduce) / 1024) + qs_ABS[6]
 			end
 		end
-		if srcThrVal <= qs_ABS[5] then
+		if qs_srcThrVal <= qs_ABS[5] then
 			absActive = 1
 			if qs_ABS[3] == 1 then
 				if absFreq > 1 then
@@ -155,8 +162,8 @@ local function run()
 		brakeRate = model.getGlobalVariable(3, qs_drvMode)
 	end
 
-	srcThrVal = (srcThrVal < 0 and -srcThrVal or srcThrVal) / 1024
-	setRGBLedColor(0, r * srcThrVal, g * srcThrVal, b * srcThrVal)
+	local bright = (qs_srcThrVal < 0 and -qs_srcThrVal or qs_srcThrVal) / 1024
+	setRGBLedColor(0, r * bright, g * bright, b * bright)
 end
 
 local function background()

@@ -124,7 +124,6 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	end
 
 	local function itemChg(site)
-		iSel = site
 		iSel = (qs_chnStB == -1 and site > 7) and site -1 or site
 		qs_oldVal = param[site]
 	end

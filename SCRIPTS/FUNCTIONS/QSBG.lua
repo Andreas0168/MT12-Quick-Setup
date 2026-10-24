@@ -21,8 +21,8 @@ qs_chnThrVal = 0
 local function run()
 	if not qs_sourceThr or not qs_drvMode then return end
 	qs_srcStrVal = getSourceValue(qs_sourceStr)
-	qs_srcThrVal = getSourceValue(qs_sourceThr)
 	qs_chnStrVal = getOutputValue(qs_chnStr)
+	qs_srcThrVal = getSourceValue(qs_sourceThr)
 	qs_chnThrVal = getOutputValue(qs_chnThr)
 
 	if qs_ltActive == 1 then			-- Laptime active?

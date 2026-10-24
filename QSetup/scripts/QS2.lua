@@ -13,27 +13,27 @@ local MinMax = {}
 local menueS1 = {}
 
 local words = {
-	'Steering', 'Forward', 'Brake', 												--  3
-	'Rate', 'Trim', 'Expo', 'Endp. L', 'Endp. R', 							--  8
-	'Str. back',																		--  9
-	'Channel', 'Steering', 'Throttle', 'Direction', 'Endpoints', 		-- 14
-	'Speed-Settings',																	-- 15
+	'Steering', 'Forward', 'Brake', 													--  3
+	'Rate', 'Trim', 'Expo', 'Endp. L', 'Endp. R', 								--  8
+	'Str. back',																			--  9
+	'Channel', 'Steering', 'Throttle', 'Direction', 'Endpoints & Trims',	-- 14
+	'Speed-Settings',																		-- 15
 	{'Steering out', 'Steering in', 'Forward', 'Brake',
-	'Forward back', 'Brake back'}, 												-- 16
+	'Forward back', 'Brake back'}, 													-- 16
 	{'ABS on', 'Audio-Feedback', 'ABS-PWM', 'Reduction first',
 	'Trigger', 'Reduction', 'Cycles full', 'Cycles reduce',
 	'PWM-Percent', 'Cycles minimum', 'Only on steer',
-	'Steer. threshold',},															-- 17
-	'Acceleration', {'Active', 'Forward', 'Brake'},							-- 19
-	'Main Setup',																		-- 20
-	'min:', 'max:',																	-- 22
-	'This is only for', 'RadioLink R6FG Receiver',							-- 24
-	{'VSC on', 'min. corn. speed'},												-- 25
+	'Steer. threshold',},																-- 17
+	'Acceleration', {'Active', 'Forward', 'Brake'},								-- 19
+	'Main Setup',																			-- 20
+	'min:', 'max:',																		-- 22
+	'This is only for', 'RadioLink R6FG Receiver',								-- 24
+	{'VSC on', 'min. corn. speed'},													-- 25
 
 	'Lenkung', 'Vorwärts', 'Bremse',
 	nil, nil, nil, nil, nil,
 	'Lnk. hint.',
-	'Kanal', 'Lenkung', 'Gas', 'Richtung', 'Endpunkte',
+	'Kanal', 'Lenkung', 'Gas', 'Richtung', 'Endpunkte & Trims',
 	'Verzögerung',
 	{'Lenkung raus', 'Lenkung rein', 'Vorwärts', 'Bremse',
 	'Vorwärts zurück', 'Bremse zurück'},
@@ -297,14 +297,14 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			x = x + 64 if x > 127 then x = 49 y = y + 13 end
 		end
 
-	elseif siteNum == 3 then  -- setup endpoints for each channel
+	elseif siteNum == 3 then  -- setup endpoints and trims for each channel
 		local limit = qs_rcCar.extendedLimits and 1500 or 1000
 		drawTitel(getText(14), MIDSIZE)
 		local y, lf = 14, listFirst[2030]
-		if iSel - 1 < lf then lf = floor((iSel - 1) / 2) * 2
-		elseif iSel - 6 > lf then lf = floor((iSel - 5) / 2) * 2 end
+		if iSel - 1 < lf then lf = floor((iSel - 1) / 3) * 3
+		elseif iSel - 9 > lf then lf = floor((iSel - 7) / 3) * 3 end
 		listFirst[2030] = lf
-		local first = floor(lf / 2)
+		local first = floor(lf / 3)
 		for chn = first, first + 2 do
 			local lL, lR = 'L', 'H'
 			if chn == chnThr then lL, lR = 'B', 'F'
@@ -315,18 +315,32 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			local trim = chn == chnStr and qs_glVars[1] or chn == chnThr and qs_glVars[4] or output.offset
 			drawDualBar(6, y + 8, 113, 7, getOutputValue(chn), nil, output.revert, trim)
 			drawText(63, y, channelText(chn), BOLD + CENTER)
-			for n = 0, 1 do
-				local mark = chn * 2 + n + 1
-				local val, oldVal = n == 0 and -output.min or output.max, 0
+			for n = 0, 2 do
+				local mark = chn * 3 + n + 1
+				local val, oldVal
+				if n == 2 then val = chn == chnStr and qs_glVars[1] or chn == chnThr and qs_glVars[4] or output.offset
+				else val = n == 0 and -output.min or output.max end
 				if iSel == mark then
 					if editMode == 1 then editValue = val
 					elseif editMode == 4 then val = editValue
-					elseif editMode == 2 then val, oldVal = qs_adjVal(val, 0, limit, getRotEncSpeed(), event)
-					end
+					elseif editMode == 2 then
+						if n == 2 then val, oldVal = qs_adjVal(val, -1000, 1000, getRotEncSpeed(), event)
+						else val, oldVal = qs_adjVal(val, 0, limit, getRotEncSpeed(), event)
+						end end
 					if (val ~= oldVal and editMode == 2) or editMode == 4 then
-						if n == 0 then output.min = -val else output.max = val end
-						model.setOutput(chn, output) end end
-				lcd.drawNumber(n * 99 + 28, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0))
+						if n == 2 then
+							local glV = chn == chnStr and 1 or chn == chnThr and 8 or -1
+							if glV == -1 then output.offset = val else model.setGlobalVariable(glV, qs_drvMode, val) end
+						else
+							if n == 0 then output.min = -val else output.max = val end
+						end
+						model.setOutput(chn, output)
+					end end
+				if n == 2 then 
+					if mark == iSel then lcd.drawText(0, y, 'Trim: ', BOLD)
+						lcd.drawText(127, y, '       ', RIGHT + BOLD)
+						lcd.drawNumber(127, y, val, BOLD + PREC1 + RIGHT + marker) end
+				else lcd.drawNumber(n * 99 + 28, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0)) end
 			end
 			y = y + 17
 		end

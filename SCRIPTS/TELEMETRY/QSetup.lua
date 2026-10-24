@@ -129,8 +129,8 @@ qs_rcCar = {}
 qs_username = "your name"
 
 qs_MinMax = {														--min and max Values for adjusting
-	  20, -200,  10,  10, -100, -100, -100,   0,   0,   0,  -- 10	--min Values
-	 100,  200, 100, 100,  100,  100,  100, 100, 100, 100}  -- 20	--max Values
+	  20, -500,  10,  10, -100, -100, -100,   0,   0,   0,  -- 10	--min Values
+	 100,  500, 100, 100,  100,  100,  100, 100, 100, 100}  -- 20	--max Values
 
 qs_tmrDir = {0, 0, 0}
 
@@ -292,7 +292,7 @@ end
 
 function qs_drawTitel(text, font)
 	local y = 0
-	if font == MIDSIZE and #text > 16 then font, y = BOLD, 2 end
+	if font == MIDSIZE and #text > 16 then font, y = BOLD, 3 end
 	if font == BOLD and #text > 21 then font, y = SMLSIZE, 3 end
 	FilledRectangle(0, 0, 128, 12, FORCE)
 	drawText(64, y, text, font + CENTER + INVERS)

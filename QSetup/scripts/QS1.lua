@@ -70,12 +70,12 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		if fld == 0 then qs_setPopup({getText(32), val..'%'},d)
 		elseif fld == 1 then
 			qs_setPopup({getText(33), (val < 0 and 'L ' or val > 0 and 'R ' or '') ..
-			string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'},d)
+			string.format('%.1f', (val < 0 and -val or val) * .2) .. '%'},d)
 		elseif fld == 2 then qs_setPopup({getText(34), val..'%'},d)
 		elseif fld == 3 then qs_setPopup({getText(35), val..'%'},d)
 		elseif fld == 4 then
 			qs_setPopup({getText(19), (val < 0 and getText(20) or val > 0 and getText(21) or '')..
-			' '..string.format('%.1f', (val < 0 and -val or val) * .5) .. '%'},d)
+			' '..string.format('%.1f', (val < 0 and -val or val) * .2) .. '%'},d)
 		end
 	end
 
@@ -112,7 +112,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		y = y + 1 for y = y, y + h2 - 2 do lcd.drawLine(xc, y, xc + src, y, SOLID, FORCE) end
 		for y = y + h2, y + h2 + 2 do lcd.drawLine(xc, y, xc + out, y, SOLID, FORCE) end
 		if trim then
-			trim = trim * w / 1000
+			trim = trim * w / 500
 			trim = trim < -w and -w or trim > w and w or trim
 			local x2 = xc + (trim < 0 and -1 or trim > 0 and 1 or 0) + trim
 			for y = y + h2 - 2, y + h2 - 1 do lcd.drawLine(xc, y, x2, y, SOLID, FORCE) end
@@ -291,8 +291,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 	drawText(x, y + h, getText(12)..chnThr + 1, RIGHT)
 	lcd.drawNumber(x + w + 17, y + 1, (oStr < 0 and -oStr or oStr) / 10.24, RIGHT)
 	lcd.drawNumber(x + w + 17, y + h, (oThr < 0 and -oThr or oThr) / 10.24, RIGHT)
-	drawDualBar(x, y, w, h, oStr, valSrcStr, model.getOutput(chnStr).revert, qs_glVars[1] * 2.5)
-	drawDualBar(x, y + h - 1, w, h, oThr, valSrcThr, model.getOutput(chnThr).revert, qs_glVars[4] * 2.5)
+	drawDualBar(x, y, w, h, oStr, valSrcStr, model.getOutput(chnStr).revert, qs_glVars[1])
+	drawDualBar(x, y + h - 1, w, h, oThr, valSrcThr, model.getOutput(chnThr).revert, qs_glVars[4])
 	if qs_skin % 8  >= 4 then
 		lcd.drawFilledRectangle(x - 19, y, 19, h + h - 1, 0)
 		lcd.drawFilledRectangle(x + w, y, 18, h + h - 1, 0)
@@ -334,7 +334,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		drawText(x + 36, y, 'M'..qs_drvMode + 1, SMLSIZE + INVERS)
 		drawText(x + 49, y, getText(6), SMLSIZE + (qs_ABS[1] == 1 and INVERS or 0))
 		drawText(x, y + 8, getText(7), SMLSIZE)
-		local trim = qs_glVars[1] * .5
+		local trim = qs_glVars[1] * .2
 		drawText(x + 38, y + 8, trim < 0 and getText(8) or trim > 0 and getText(9) or '', SMLSIZE)
 		lcd.drawNumber(x + w, y + 8, (trim < 0 and -trim or trim) * 10, SMLSIZE + RIGHT + PREC1)
 		drawText(x, y + 16, getText(10), SMLSIZE)

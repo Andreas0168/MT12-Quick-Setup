@@ -9,7 +9,6 @@ if not listFirst[2020] then
 end
 
 local param = {}
-local MinMax = {}
 local menueS1 = {}
 
 local words = {
@@ -90,9 +89,8 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		local src = not src and out or src * w / 1024
 		y = y + 1 for y = y, y + h2 - 2 do lcd.drawLine(xc, y, xc + src, y, SOLID, FORCE) end
 		for y = y + h2, y + h2 + 2 do lcd.drawLine(xc, y, xc + out, y, SOLID, FORCE) end
-
 		if trim then
-			trim = trim * w / 1000
+			trim = trim * w / 500
 			trim = trim < -w and -w or trim > w and w or trim
 			local x2 = xc + (trim < 0 and -1 or trim > 0 and 1 or 0) + trim
 			for y = y + h2 - 2, y + h2 - 1 do lcd.drawLine(xc, y, x2, y, SOLID, FORCE) end
@@ -298,39 +296,36 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		end
 
 	elseif siteNum == 3 then  -- setup endpoints and trims for each channel
-		local limit = qs_rcCar.extendedLimits and 1500 or 1000
+		local limit, val, oldVal = qs_rcCar.extendedLimits and 1500 or 1000, 0, 0
 		drawTitel(getText(14), MIDSIZE)
 		local y, lf = 14, listFirst[2030]
 		if iSel - 1 < lf then lf = floor((iSel - 1) / 3) * 3
 		elseif iSel - 9 > lf then lf = floor((iSel - 7) / 3) * 3 end
 		listFirst[2030] = lf
-		local first = floor(lf / 3)
-		for chn = first, first + 2 do
+		lf = floor(lf / 3)
+		for chn = lf, lf + 2 do
 			local lL, lR = 'L', 'H'
 			if chn == chnThr then lL, lR = 'B', 'F'
 			elseif chn == chnStr or chn == qs_chnStB then lR = 'R' end
 			lcd.drawText(0, y + 8, lL)
 			lcd.drawText(127, y + 8, lR, RIGHT)
 			local output = model.getOutput(chn)
-			local trim = chn == chnStr and qs_glVars[1] or chn == chnThr and qs_glVars[4] or output.offset
+			local glV = chn == chnStr and 1 or chn == chnThr and 4 or -1
+			local trim = glV == -1 and (output.offset) or qs_glVars[glV]
 			drawDualBar(6, y + 8, 113, 7, getOutputValue(chn), nil, output.revert, trim)
 			drawText(63, y, channelText(chn), BOLD + CENTER)
 			for n = 0, 2 do
 				local mark = chn * 3 + n + 1
-				local val, oldVal
-				if n == 2 then val = chn == chnStr and qs_glVars[1] or chn == chnThr and qs_glVars[4] or output.offset
-				else val = n == 0 and -output.min or output.max end
+				if n == 2 then val = trim else val = n == 0 and -output.min or output.max end
 				if iSel == mark then
 					if editMode == 1 then editValue = val
 					elseif editMode == 4 then val = editValue
 					elseif editMode == 2 then
-						if n == 2 then val, oldVal = qs_adjVal(val, -1000, 1000, getRotEncSpeed(), event)
-						else val, oldVal = qs_adjVal(val, 0, limit, getRotEncSpeed(), event)
-						end end
+						val, oldVal = qs_adjVal(val, n == 2 and -1000 or 0, n == 2 and 1000 or limit, getRotEncSpeed(), event)
+					end
 					if (val ~= oldVal and editMode == 2) or editMode == 4 then
 						if n == 2 then
-							local glV = chn == chnStr and 1 or chn == chnThr and 8 or -1
-							if glV == -1 then output.offset = val else model.setGlobalVariable(glV, qs_drvMode, val) end
+							if glV == -1 then output.offset = val else model.setGlobalVariable(glV == 4 and 8 or glV, qs_drvMode, val) end
 						else
 							if n == 0 then output.min = -val else output.max = val end
 						end

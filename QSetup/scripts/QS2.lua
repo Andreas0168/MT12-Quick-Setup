@@ -299,10 +299,10 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		local limit, val, oldVal = qs_rcCar.extendedLimits and 1500 or 1000, 0, 0
 		drawTitel(getText(14), MIDSIZE)
 		local y, lf = 14, listFirst[2030]
-		if iSel - 1 < lf then lf = floor((iSel - 1) / 3) * 3
-		elseif iSel - 9 > lf then lf = floor((iSel - 7) / 3) * 3 end
+		if iSel - 1 < lf then lf = floor((iSel - 1) / 4) * 4
+		elseif iSel - 12 > lf then lf = floor((iSel - 9) / 4) * 4 end
 		listFirst[2030] = lf
-		lf = floor(lf / 3)
+		lf = floor(lf / 4)
 		for chn = lf, lf + 2 do
 			local lL, lR = 'L', 'H'
 			if chn == chnThr then lL, lR = 'B', 'F'
@@ -314,27 +314,32 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			local trim = glV == -1 and (output.offset) or qs_glVars[glV]
 			drawDualBar(6, y + 8, 113, 7, getOutputValue(chn), nil, output.revert, trim)
 			drawText(63, y, channelText(chn), BOLD + CENTER)
-			for n = 0, 2 do
-				local mark = chn * 3 + n + 1
-				if n == 2 then val = trim else val = n == 0 and -output.min or output.max end
+			for n = 0, 3 do
+				local mark = chn * 4 + n + 1
+				if n == 2 then val = trim
+				elseif n == 3 then val = output.ppmCenter
+				else val = n == 0 and -output.min or output.max
+				end
 				if iSel == mark then
 					if editMode == 1 then editValue = val
 					elseif editMode == 4 then val = editValue
 					elseif editMode == 2 then
-						val, oldVal = qs_adjVal(val, n == 2 and -1000 or 0, n == 2 and 1000 or limit, getRotEncSpeed(), event)
+						val, oldVal = qs_adjVal(val, n == 2 and -1000 or n == 3 and -500 or 0, n == 2 and 1000 or n == 3 and 500 or limit, getRotEncSpeed(), event)
 					end
 					if (val ~= oldVal and editMode == 2) or editMode == 4 then
-						if n == 2 then
-							if glV == -1 then output.offset = val else model.setGlobalVariable(glV == 4 and 8 or glV, qs_drvMode, val) end
-						else
-							if n == 0 then output.min = -val else output.max = val end
+						if n == 2 then if glV == -1 then output.offset = val else model.setGlobalVariable(glV == 4 and 8 or glV, qs_drvMode, val) end
+						elseif n == 3 then output.ppmCenter = val
+						else if n == 0 then output.min = -val else output.max = val end
 						end
 						model.setOutput(chn, output)
-					end end
-				if n == 2 then 
-					if mark == iSel then lcd.drawText(0, y, 'Trim: ', BOLD)
+					end
+				end
+				if n == 2 and mark == iSel then lcd.drawText(99, y, '         Trim:', RIGHT + BOLD)
+					lcd.drawText(127, y, '       ', RIGHT + BOLD)
+					lcd.drawNumber(127, y, val, BOLD + PREC1 + RIGHT + marker)
+				elseif n == 3 and mark == iSel then lcd.drawText(99, y, '  PPM-Center:', RIGHT + BOLD)
 						lcd.drawText(127, y, '       ', RIGHT + BOLD)
-						lcd.drawNumber(127, y, val, BOLD + PREC1 + RIGHT + marker) end
+						lcd.drawNumber(127, y, val + 1500, BOLD + PREC1 + RIGHT + marker)
 				else lcd.drawNumber(n * 99 + 28, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0)) end
 			end
 			y = y + 17

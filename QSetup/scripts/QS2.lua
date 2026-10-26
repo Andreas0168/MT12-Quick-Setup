@@ -334,12 +334,10 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 						model.setOutput(chn, output)
 					end
 				end
-				if n == 2 and mark == iSel then lcd.drawText(99, y, '         Trim:', RIGHT + BOLD)
-					lcd.drawText(127, y, '       ', RIGHT + BOLD)
+				if n == 2 and mark == iSel then lcd.drawText(127, y, '         Trim:       ', RIGHT + BOLD)
 					lcd.drawNumber(127, y, val, BOLD + PREC1 + RIGHT + marker)
-				elseif n == 3 and mark == iSel then lcd.drawText(99, y, '  PPM-Center:', RIGHT + BOLD)
-						lcd.drawText(127, y, '       ', RIGHT + BOLD)
-						lcd.drawNumber(127, y, val + 1500, BOLD + PREC1 + RIGHT + marker)
+				elseif n == 3 and mark == iSel then lcd.drawText(127, y, '  PPM-Center:       ', RIGHT + BOLD)
+					lcd.drawNumber(127, y, val + 1500, BOLD + PREC1 + RIGHT + marker)
 				else lcd.drawNumber(n * 99 + 28, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0)) end
 			end
 			y = y + 17

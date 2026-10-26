@@ -314,26 +314,66 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			local trim = glV == -1 and (output.offset) or qs_glVars[glV]
 			drawDualBar(6, y + 8, 113, 7, getOutputValue(chn), nil, output.revert, trim)
 			drawText(63, y, channelText(chn), BOLD + CENTER)
-			for n = 0, 3 do
-				local mark = chn * 4 + n + 1
-				val = n == 0 and -output.min or n == 1 and output.max or n == 2 and trim or output.ppmCenter
+			for n = 1, 4 do
+				local mark = chn * 4 + n
+				val = n == 1 and -output.min or n == 2 and output.max or n == 3 and trim or output.ppmCenter
 				if iSel == mark then
 					if editMode == 1 then editValue = val
 					elseif editMode == 4 then val = editValue
 					elseif editMode == 2 then
-						val, oldVal = qs_adjVal(val, n == 2 and -1000 or n == 3 and -500 or 0, n == 2 and 1000 or n == 3 and 500 or limit, getRotEncSpeed(), event) end
+						val, oldVal = qs_adjVal(val, n == 3 and -1000 or n == 4 and -500 or 0, n == 3 and 1000 or n == 4 and 500 or limit, getRotEncSpeed(), event) end
 					if (val ~= oldVal and editMode == 2) or editMode == 4 then
-						if n == 2 then if glV == -1 then output.offset = val else model.setGlobalVariable(glV == 4 and 8 or glV, qs_drvMode, val) end
-						elseif n == 3 then output.ppmCenter = val
-						elseif n == 0 then output.min = -val else output.max = val end
+						if n == 3 then if glV == -1 then output.offset = val else model.setGlobalVariable(glV == 4 and 8 or glV, qs_drvMode, val) end
+						elseif n == 4 then output.ppmCenter = val
+						elseif n == 1 then output.min = -val else output.max = val end
 						model.setOutput(chn, output) end end
-				if mark == iSel and n > 1 then
-					lcd.drawText(127, y, n == 2 and '         Trim:       ' or '  PPM-Center:       ', RIGHT + BOLD)
-					lcd.drawNumber(127, y, n == 2 and val or val + 1500, BOLD + PREC1 + RIGHT + marker)
+				if mark == iSel and n > 2 then
+					lcd.drawText(127, y, n == 3 and '         Trim:       ' or '  PPM-Center:       ', RIGHT + BOLD)
+					lcd.drawNumber(127, y, n == 3 and val or val + 1500, BOLD + PREC1 + RIGHT + marker)
 				else lcd.drawNumber(n * 99 + 28, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0)) end end
 			y = y + 17
 		end
 		lcdCnt = 0
+
+	-- elseif siteNum == 3 then  -- setup endpoints and trims for each channel
+		-- local limit, val, oldVal = qs_rcCar.extendedLimits and 1500 or 1000, 0, 0
+		-- drawTitel(getText(14), MIDSIZE)
+		-- local y, lf = 14, listFirst[2030]
+		-- if iSel - 1 < lf then lf = floor((iSel - 1) / 4) * 4
+		-- elseif iSel - 12 > lf then lf = floor((iSel - 9) / 4) * 4 end
+		-- listFirst[2030] = lf
+		-- lf = floor(lf / 4)
+		-- for chn = lf, lf + 2 do
+			-- local lL, lR = 'L', 'H'
+			-- if chn == chnThr then lL, lR = 'B', 'F'
+			-- elseif chn == chnStr or chn == qs_chnStB then lR = 'R' end
+			-- lcd.drawText(0, y + 8, lL)
+			-- lcd.drawText(127, y + 8, lR, RIGHT)
+			-- local output = model.getOutput(chn)
+			-- local glV = chn == chnStr and 1 or chn == chnThr and 4 or -1
+			-- local trim = glV == -1 and (output.offset) or qs_glVars[glV]
+			-- drawDualBar(6, y + 8, 113, 7, getOutputValue(chn), nil, output.revert, trim)
+			-- drawText(63, y, channelText(chn), BOLD + CENTER)
+			-- for n = 0, 3 do
+				-- local mark = chn * 4 + n + 1
+				-- val = n == 0 and -output.min or n == 1 and output.max or n == 2 and trim or output.ppmCenter
+				-- if iSel == mark then
+					-- if editMode == 1 then editValue = val
+					-- elseif editMode == 4 then val = editValue
+					-- elseif editMode == 2 then
+						-- val, oldVal = qs_adjVal(val, n == 2 and -1000 or n == 3 and -500 or 0, n == 2 and 1000 or n == 3 and 500 or limit, getRotEncSpeed(), event) end
+					-- if (val ~= oldVal and editMode == 2) or editMode == 4 then
+						-- if n == 2 then if glV == -1 then output.offset = val else model.setGlobalVariable(glV == 4 and 8 or glV, qs_drvMode, val) end
+						-- elseif n == 3 then output.ppmCenter = val
+						-- elseif n == 0 then output.min = -val else output.max = val end
+						-- model.setOutput(chn, output) end end
+				-- if mark == iSel and n > 1 then
+					-- lcd.drawText(127, y, n == 2 and '         Trim:       ' or '  PPM-Center:       ', RIGHT + BOLD)
+					-- lcd.drawNumber(127, y, n == 2 and val or val + 1500, BOLD + PREC1 + RIGHT + marker)
+				-- else lcd.drawNumber(n * 99 + 28, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0)) end end
+			-- y = y + 17
+		-- end
+		-- lcdCnt = 0
 
 	elseif siteNum == 4 then  -- speed setting to slow down steering, forward and brake
 		local mixStrL = model.getMix(chnStr, 0)

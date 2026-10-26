@@ -316,30 +316,21 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			drawText(63, y, channelText(chn), BOLD + CENTER)
 			for n = 0, 3 do
 				local mark = chn * 4 + n + 1
-				if n == 2 then val = trim
-				elseif n == 3 then val = output.ppmCenter
-				else val = n == 0 and -output.min or output.max
-				end
+				val = n == 2 and trim or n == 3 and output.ppmCenter or n == 0 and -output.min or output.max
 				if iSel == mark then
 					if editMode == 1 then editValue = val
 					elseif editMode == 4 then val = editValue
 					elseif editMode == 2 then
-						val, oldVal = qs_adjVal(val, n == 2 and -1000 or n == 3 and -500 or 0, n == 2 and 1000 or n == 3 and 500 or limit, getRotEncSpeed(), event)
-					end
+						val, oldVal = qs_adjVal(val, n == 2 and -1000 or n == 3 and -500 or 0, n == 2 and 1000 or n == 3 and 500 or limit, getRotEncSpeed(), event) end
 					if (val ~= oldVal and editMode == 2) or editMode == 4 then
 						if n == 2 then if glV == -1 then output.offset = val else model.setGlobalVariable(glV == 4 and 8 or glV, qs_drvMode, val) end
 						elseif n == 3 then output.ppmCenter = val
-						else if n == 0 then output.min = -val else output.max = val end
-						end
-						model.setOutput(chn, output)
-					end
-				end
-				if n == 2 and mark == iSel then lcd.drawText(127, y, '         Trim:       ', RIGHT + BOLD)
-					lcd.drawNumber(127, y, val, BOLD + PREC1 + RIGHT + marker)
-				elseif n == 3 and mark == iSel then lcd.drawText(127, y, '  PPM-Center:       ', RIGHT + BOLD)
-					lcd.drawNumber(127, y, val + 1500, BOLD + PREC1 + RIGHT + marker)
-				else lcd.drawNumber(n * 99 + 28, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0)) end
-			end
+						elseif n == 0 then output.min = -val else output.max = val end
+						model.setOutput(chn, output) end end
+				if mark == iSel and n > 1 then
+					lcd.drawText(127, y, n == 2 and '         Trim:       ' or '  PPM-Center:       ', RIGHT + BOLD)
+					lcd.drawNumber(127, y, n == 2 and val or val + 1500, BOLD + PREC1 + RIGHT + marker)
+				else lcd.drawNumber(n * 99 + 28, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0)) end end
 			y = y + 17
 		end
 		lcdCnt = 0

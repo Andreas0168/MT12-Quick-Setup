@@ -330,7 +330,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 				if mark == iSel and n > 2 then
 					lcd.drawText(127, y, n == 3 and '         Trim:       ' or '  PPM-Center:       ', RIGHT + BOLD)
 					lcd.drawNumber(127, y, n == 3 and val or val + 1500, BOLD + PREC1 + RIGHT + marker)
-				else lcd.drawNumber(n * 99 - 99 + 28, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0)) end end
+				else lcd.drawNumber(n * 99 - 71, y, val, BOLD + PREC1 + RIGHT + (mark == iSel and marker or 0)) end end
 			y = y + 17
 		end
 		lcdCnt = 0

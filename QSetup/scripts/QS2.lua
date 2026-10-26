@@ -316,7 +316,7 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 			drawText(63, y, channelText(chn), BOLD + CENTER)
 			for n = 0, 3 do
 				local mark = chn * 4 + n + 1
-				val = n == 2 and trim or n == 3 and output.ppmCenter or n == 0 and -output.min or output.max
+				val = n == 0 and -output.min or n == 1 and output.max or n == 2 and trim or output.ppmCenter
 				if iSel == mark then
 					if editMode == 1 then editValue = val
 					elseif editMode == 4 then val = editValue

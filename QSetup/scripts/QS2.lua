@@ -270,7 +270,6 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		end
 
 	elseif siteNum == 2 then  -- site to setup revers on each channel
-		param = {}
 		drawTitel(getText(13), MIDSIZE)
 		if editMode == 2 then
 			local output = model.getOutput(iSel - 1)
@@ -335,32 +334,36 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 		end
 		lcdCnt = 0
 
+local getMix = model.getMix
+local delMix = model.deleteMix
+local insMix = model.insertMix
+
 	elseif siteNum == 4 then  -- speed setting to slow down steering, forward and brake
-		local mixStrL = model.getMix(chnStr, 0)
-		local mixStrR = model.getMix(chnStr, 1)
-		local mixFwd = model.getMix(chnThr, 0)
-		local mixBrk = model.getMix(chnThr, 1)
+		local mixStrL, p = getMix(chnStr, 0), param
+		local mixStrR = getMix(chnStr, 1)
+		local mixFwd = getMix(chnThr, 0)
+		local mixBrk = getMix(chnThr, 1)
 		if editMode == 1 then
-			param = {mixStrL.speedDown, mixStrL.speedUp, mixFwd.speedUp, mixBrk.speedDown, mixFwd.speedDown, mixBrk.speedUp}
+			p = {mixStrL.speedDown, mixStrL.speedUp, mixFwd.speedUp, mixBrk.speedDown, mixFwd.speedDown, mixBrk.speedUp}
 		end
-		editMode = drawList(getText(15), iSel, getText(16), event, 5, 14, 10, 64, param,
+		editMode = drawList(getText(15), iSel, getText(16), event, 5, 14, 10, 64, p,
 		'SSSSSS', {0, 0, 0, 0, 0, 0,   50, 50, 50, 50, 50, 50}, editMode, nil, {2, 2, 2, 2, 2, 2})
 		if editMode == 3 then
-			mixStrL.speedDown = param[1] mixStrR.speedUp = param[1] 
-			mixStrL.speedUp = param[2] mixStrR.speedDown = param[2]
-			mixFwd.speedUp = param[3]
-			mixBrk.speedDown = param[4]
-			mixFwd.speedDown = param[5]
-			mixBrk.speedUp = param[6]
-			model.deleteMix(chnStr, 0) model.insertMix(chnStr, 0, mixStrL) model.deleteMix(chnStr, 1) model.insertMix(chnStr, 1, mixStrR)
-			model.deleteMix(chnThr, 0) model.insertMix(chnThr, 0, mixFwd)
-			model.deleteMix(chnThr, 1) model.insertMix(chnThr, 1, mixBrk)
+			mixStrL.speedDown = p[1] mixStrR.speedUp = p[1] 
+			mixStrL.speedUp = p[2] mixStrR.speedDown = p[2]
+			mixFwd.speedUp = p[3]
+			mixBrk.speedDown = p[4]
+			mixFwd.speedDown = p[5]
+			mixBrk.speedUp = p[6]
+			delMix(chnStr, 0) insMix(chnStr, 0, mixStrL) delMix(chnStr, 1) insMix(chnStr, 1, mixStrR)
+			delMix(chnThr, 0) insMix(chnThr, 0, mixFwd)
+			delMix(chnThr, 1) insMix(chnThr, 1, mixBrk)
 			if qs_chnStB ~= -1 then
-				mixStrL = model.getMix(qs_chnStB, 0)
-				mixStrR = model.getMix(qs_chnStB, 1)
-				mixStrL.speedDown = param[1] mixStrR.speedUp = param[1] 
-				mixStrL.speedUp = param[2] mixStrR.speedDown = param[2]
-				model.deleteMix(qs_chnStB, 0) model.insertMix(qs_chnStB, 0, mixStrL) model.deleteMix(qs_chnStB, 1) model.insertMix(qs_chnStB, 1, mixStrR) 
+				mixStrL = getMix(qs_chnStB, 0)
+				mixStrR = getMix(qs_chnStB, 1)
+				mixStrL.speedDown = p[1] mixStrR.speedUp = p[1] 
+				mixStrL.speedUp = p[2] mixStrR.speedDown = p[2]
+				delMix(qs_chnStB, 0) insMix(qs_chnStB, 0, mixStrL) delMix(qs_chnStB, 1) insMix(qs_chnStB, 1, mixStrR) 
 			end
 		end
 

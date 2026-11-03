@@ -377,10 +377,10 @@ local function display(groupNum, event, siteNum, iSel, lg, editMode, lcdCnt, chn
 
 	elseif siteNum == 7 then		-- setup ACC-System
 		editMode = drawList(getText(18), iSel, getText(19), event, 3, 20, 14, 64, qs_ACC, '|%%',
-		{0, 0, 0,   1, 100, 100}, editMode, nil, {1, .05, .05})
+		{0, 0, 0,   1, 100, 100}, editMode, nil, {1, .5, .5})
 		if editMode == 3 then writeConf()
-			local accFwd = qs_ACC[1] == 0 and 0 or qs_ACC[2] * 10
-			local accBrk = qs_ACC[1] == 0 and 0 or -(qs_ACC[3] * 10)
+			local accFwd = qs_ACC[1] == 0 and 0 or qs_ACC[2]
+			local accBrk = qs_ACC[1] == 0 and 0 or -qs_ACC[3]
 			for n = 0, 1 do
 				if iSel == 1 or iSel == n + 2 then
 					local mix = model.getMix(chnThr, n) mix.offset = n == 0 and accFwd or accBrk
